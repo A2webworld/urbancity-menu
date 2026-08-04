@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>UrbanCity Restaurant - Welcome</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <style>
+        /* ============================================ */
+        /* ALL YOUR EXISTING STYLES - KEEP AS IS */
+        /* ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #111;
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .background-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .background-slide.active {
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            padding: 15px 0;
+            margin-bottom: 15px;
+        }
+
+        .restaurant-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            margin-bottom: 8px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .restaurant-name::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ff9800, transparent);
+        }
+
+        .tagline {
+            font-size: 0.8rem;
+            font-style: italic;
+            color: #ddd;
+            margin-top: 8px;
+        }
+
+        .phone-rams-container {
+            margin: 15px auto 20px;
+            height: 50px;
+            position: relative;
+            overflow: hidden;
+            max-width: 380px;
+            width: 90%;
+        }
+
+        .phone-ram {
+            position: absolute;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(255,152,0,0.4);
+            border: 2px solid white;
+            cursor: pointer;
+            width: 150px;
+        }
+
+        .phone-ram i {
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+
+        /* ============================================ */
+        /* PWA INSTALL BUTTON - HEADER (BESIDE PHONE) */
+        /* ============================================ */
+        .pwa-install-btn-header {
+            position: absolute;
+            right: -85px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            box-shadow: 0 3px 15px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: pulseGlow 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .pwa-install-btn-header:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        .pwa-install-btn-header i {
+            font-size: 0.8rem;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 3px 15px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 3px 25px rgba(37, 211, 102, 0.7); }
+            100% { box-shadow: 0 3px 15px rgba(37, 211, 102, 0.3); }
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 480px) {
+            .phone-rams-container {
+                max-width: 320px;
+            }
+            .pwa-install-btn-header {
+                right: -65px;
+                padding: 4px 10px;
+                font-size: 0.55rem;
+            }
+            .pwa-install-btn-header i {
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Desktop fix for PWA button - ensure it's fully visible */
+        @media (min-width: 1024px) {
+            .phone-rams-container {
+                max-width: 420px;
+            }
+            .pwa-install-btn-header {
+                right: -95px;
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+            .pwa-install-btn-header i {
+                font-size: 0.9rem;
+            }
+        }
+
+        .takeaway-notice {
+            margin-top: 10px;
+            padding: 6px;
+            background-color: #f8d7da;
+            color: #721c24;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.65rem;
+            border: 1px solid #f5c6cb;
+            text-align: center;
+        }
+
+        /* ============================================ */
+        /* ANIMATED ORDER BUTTON */
+        /* ============================================ */
+        .order-btn-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+        }
+
+        .order-btn {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 20px rgba(255,152,0,0.6);
+            animation: bounceRotate 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .order-btn i {
+            font-size: 36px;
+            color: white;
+            text-shadow: 0 0 3px rgba(0,0,0,0.3);
+        }
+
+        .order-btn-text {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            top: -40px;
+            left: -40px;
+            pointer-events: none;
+        }
+
+        .order-btn-text span {
+            position: absolute;
+            left: 50%;
+            font-size: 20px;
+            font-weight: 900;
+            font-family: 'Segoe UI', 'Arial Black', sans-serif;
+            text-shadow: 0 0 3px #000, 0 0 5px #ff5722;
+            white-space: nowrap;
+            transform-origin: 0 80px;
+            letter-spacing: 3px;
+            -webkit-text-stroke: 0.5px #000;
+            animation: colorChange 4s ease-in-out infinite;
+        }
+
+        @keyframes colorChange {
+            0% { color: #ff9800; text-shadow: 0 0 3px #ff5722; }
+            33% { color: #25D366; text-shadow: 0 0 3px #128C7E; }
+            66% { color: #ffffff; text-shadow: 0 0 3px #ff9800; }
+            100% { color: #ff9800; text-shadow: 0 0 3px #ff5722; }
+        }
+
+        @keyframes spinText {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .order-btn-text {
+            animation: spinText 18s linear infinite;
+        }
+
+        @keyframes bounceRotate {
+            0% { transform: translateY(0) rotate(0deg) scale(1); }
+            30% { transform: translateY(-8px) rotate(8deg) scale(1.05); }
+            50% { transform: translateY(-4px) rotate(0deg) scale(1.02); }
+            70% { transform: translateY(-8px) rotate(-8deg) scale(1.05); }
+            100% { transform: translateY(0) rotate(0deg) scale(1); }
+        }
+
+        .order-btn.click-animation {
+            animation: clickRoll 0.5s ease-in-out;
+        }
+
+        @keyframes clickRoll {
+            0% { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(180deg) scale(1.2); }
+            50% { transform: rotate(360deg) scale(1.3); }
+            75% { transform: rotate(540deg) scale(1.1); }
+            100% { transform: rotate(720deg) scale(1); }
+        }
+
+        @media (min-width: 768px) {
+            .order-btn { width: 90px; height: 90px; }
+            .order-btn i { font-size: 42px; }
+            .order-btn-text { width: 180px; height: 180px; top: -45px; left: -45px; }
+            .order-btn-text span { font-size: 22px; transform-origin: 0 90px; letter-spacing: 4px; -webkit-text-stroke: 1px #000; }
+        }
+
+        @media (min-width: 1024px) {
+            .order-btn { width: 100px; height: 100px; }
+            .order-btn i { font-size: 48px; }
+            .order-btn-text { width: 200px; height: 200px; top: -50px; left: -50px; }
+            .order-btn-text span { font-size: 24px; transform-origin: 0 100px; letter-spacing: 5px; -webkit-text-stroke: 1px #000; }
+        }
+
+        @media (max-width: 480px) {
+            .order-btn { width: 65px; height: 65px; }
+            .order-btn i { font-size: 28px; }
+            .order-btn-text { width: 130px; height: 130px; top: -32px; left: -32px; }
+            .order-btn-text span { font-size: 16px; transform-origin: 0 65px; letter-spacing: 2px; -webkit-text-stroke: 0.5px #000; }
+        }
+
+        /* ============================================ */
+        /* SLIDER SECTION TITLES */
+        /* ============================================ */
+        .slider-section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #ff9800;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .slider-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #ff9800, transparent);
+        }
+
+        .slider-section-title i {
+            margin-right: 10px;
+        }
+
+        @media (max-width: 480px) {
+            .slider-section-title {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+            .slider-section-title::after {
+                width: 50px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .slider-section-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        /* ============================================ */
+/* PIZZA SLIDER */
+/* ============================================ */
+.pizza-slider {
+    margin: 15px 0 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.15);
+}
+
+.pizza-slider .swiper {
+    height: 180px;
+}
+
+.pizza-slider .swiper-slide {
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.pizza-slider .swiper-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.pizza-slider .slide-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 10px;
+    max-width: 85%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.pizza-slider .slide-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 5px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    font-weight: bold;
+    color: #ff6b6b;
+}
+
+.pizza-slider .slide-content p {
+    font-size: 0.8rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.pizza-slider .slide-content .order-now-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 8px 25px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    border: none;
+    cursor: pointer;
+}
+
+.pizza-slider .slide-content .order-now-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(231, 76, 60, 0.6);
+}
+
+.pizza-slider .slide-content .order-now-btn i {
+    margin-right: 8px;
+}
+
+.pizza-slider .swiper-pagination-bullet {
+    background: white;
+    opacity: 0.5;
+}
+
+.pizza-slider .swiper-pagination-bullet-active {
+    background: #e74c3c;
+}
+
+@media (max-width: 480px) {
+    .pizza-slider .swiper { height: 150px; }
+    .pizza-slider .slide-content { padding: 10px 12px; max-width: 95%; }
+    .pizza-slider .slide-content h2 { font-size: 0.9rem; }
+    .pizza-slider .slide-content p { font-size: 0.6rem; display: none; }
+    .pizza-slider .slide-content .order-now-btn { padding: 5px 15px; font-size: 0.65rem; }
+}
+
+@media (min-width: 768px) {
+    .pizza-slider .swiper { height: 220px; }
+    .pizza-slider .slide-content h2 { font-size: 1.8rem; }
+    .pizza-slider .slide-content p { font-size: 1rem; }
+}
+
+@media (min-width: 1024px) {
+    .pizza-slider .swiper { height: 280px; }
+    .pizza-slider .slide-content h2 { font-size: 2.2rem; }
+    .pizza-slider .slide-content p { font-size: 1.1rem; }
+    .pizza-slider .slide-content .order-now-btn { padding: 12px 40px; font-size: 1rem; }
+}
+
+        /* ============================================ */
+        /* CHOPS CENTRAL SLIDER */
+        /* ============================================ */
+        .chops-slider {
+            margin: 10px 0 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ff9800;
+            box-shadow: 0 0 30px rgba(255, 152, 0, 0.15);
+        }
+
+        .chops-slider .swiper {
+            width: 100%;
+            height: 200px;
+        }
+
+        .chops-slider .swiper-slide {
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .chops-slider .swiper-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .chops-slider .slide-content {
+            position: relative;
+            z-index: 2;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 10px;
+            max-width: 85%;
+            margin: 0 auto;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+
+        .chops-slider .slide-content h2 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: bold;
+            color: #ff9800;
+        }
+
+        .chops-slider .slide-content p {
+            font-size: 0.8rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: #fff;
+            margin-bottom: 8px;
+        }
+
+        .chops-slider .slide-content .order-now-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .chops-slider .slide-content .order-now-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 152, 0, 0.6);
+        }
+
+        .chops-slider .slide-content .order-now-btn i {
+            margin-right: 8px;
+        }
+
+        .chops-slider .swiper-button-next,
+        .chops-slider .swiper-button-prev {
+            width: 25px;
+            height: 25px;
+        }
+
+        .chops-slider .swiper-button-next:after,
+        .chops-slider .swiper-button-prev:after {
+            font-size: 16px;
+            color: #ff9800;
+            font-weight: bold;
+        }
+
+        .chops-slider .swiper-pagination-bullet {
+            background: white;
+            opacity: 0.5;
+        }
+
+        .chops-slider .swiper-pagination-bullet-active {
+            background: #ff9800;
+        }
+
+        @media (min-width: 768px) {
+            .chops-slider .swiper { height: 320px; }
+            .chops-slider .slide-content { padding: 20px; max-width: 70%; }
+            .chops-slider .slide-content h2 { font-size: 1.8rem; }
+            .chops-slider .slide-content p { font-size: 1rem; }
+            .chops-slider .slide-content .order-now-btn { padding: 10px 30px; font-size: 0.9rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .chops-slider .swiper { height: 450px; }
+            .chops-slider .slide-content { padding: 25px; max-width: 60%; }
+            .chops-slider .slide-content h2 { font-size: 2.2rem; }
+            .chops-slider .slide-content p { font-size: 1.1rem; }
+            .chops-slider .slide-content .order-now-btn { padding: 12px 40px; font-size: 1rem; }
+            .chops-slider .swiper-button-next, .chops-slider .swiper-button-prev { width: 35px; height: 35px; }
+            .chops-slider .swiper-button-next:after, .chops-slider .swiper-button-prev:after { font-size: 24px; }
+        }
+
+        @media (max-width: 480px) {
+            .chops-slider .swiper { height: 160px; }
+            .chops-slider .slide-content { padding: 8px 12px; max-width: 90%; }
+            .chops-slider .slide-content h2 { font-size: 0.9rem; }
+            .chops-slider .slide-content p { font-size: 0.6rem; display: none; }
+            .chops-slider .slide-content .order-now-btn { padding: 5px 15px; font-size: 0.65rem; }
+        }
+
+        /* ============================================ */
+        /* STUDENT DISCOUNT SLIDER */
+        /* ============================================ */
+        .student-discount-slider {
+            margin: 15px 0 25px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #ff9800;
+            box-shadow: 0 0 30px rgba(255, 152, 0, 0.15);
+        }
+
+        .student-discount-slider .swiper {
+            height: 180px;
+        }
+
+        .student-discount-slider .swiper-slide {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .student-discount-slider .swiper-slide::before {
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .student-discount-slider .slide-content {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 152, 0, 0.3);
+            padding: 20px 25px;
+            max-width: 90%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .student-discount-slider .slide-content h2 {
+            font-size: 1.6rem;
+            color: #ff9800;
+            margin-bottom: 5px;
+            text-shadow: 0 0 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .student-discount-slider .slide-content h2 i {
+            margin-right: 10px;
+        }
+
+        .student-discount-slider .slide-content p {
+            font-size: 0.9rem;
+            color: #fff;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .student-discount-slider .slide-content .discount-highlight {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #ff9800;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .student-discount-slider .slide-content .order-now-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            padding: 10px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+
+        .student-discount-slider .slide-content .order-now-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(255, 152, 0, 0.6);
+        }
+
+        .student-discount-slider .slide-content .order-now-btn i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 480px) {
+            .student-discount-slider .swiper { height: 150px; }
+            .student-discount-slider .slide-content { padding: 12px 15px; max-width: 95%; }
+            .student-discount-slider .slide-content h2 { font-size: 1.0rem; }
+            .student-discount-slider .slide-content p { font-size: 0.65rem; margin-bottom: 6px; }
+            .student-discount-slider .slide-content .discount-highlight { font-size: 0.8rem; margin-bottom: 5px; }
+            .student-discount-slider .slide-content .order-now-btn { padding: 6px 18px; font-size: 0.7rem; }
+        }
+
+        @media (min-width: 768px) {
+            .student-discount-slider .swiper { height: 220px; }
+            .student-discount-slider .slide-content h2 { font-size: 2.0rem; }
+            .student-discount-slider .slide-content p { font-size: 1.0rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .student-discount-slider .swiper { height: 280px; }
+            .student-discount-slider .slide-content h2 { font-size: 2.5rem; }
+            .student-discount-slider .slide-content p { font-size: 1.1rem; }
+            .student-discount-slider .slide-content .order-now-btn { padding: 12px 40px; font-size: 1.0rem; }
+        }
+
+        /* ============================================ */
+/* PASTRIES SLIDER - BALANCED IMAGE DISPLAY */
+/* ============================================ */
+.pastries-slider {
+    margin: 15px 0 25px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #e74c3c;
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.15);
+}
+
+.pastries-slider .swiper {
+    height: 180px;
+}
+
+.pastries-slider .swiper-slide {
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    position: relative;
+    background-color: #1a1a2e;
+}
+
+/* Add a dark overlay for better text readability */
+.pastries-slider .swiper-slide::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 1;
+}
+
+.pastries-slider .slide-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: center;
+    padding: 18px 22px;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: 10px;
+    max-width: 75%;
+    margin: 0 auto;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.pastries-slider .slide-content h2 {
+    font-size: 1.5rem;
+    color: #e74c3c;
+    margin-bottom: 3px;
+    text-shadow: 0 0 20px rgba(231, 76, 60, 0.3);
+}
+
+.pastries-slider .slide-content h2 i {
+    margin-right: 10px;
+}
+
+.pastries-slider .slide-content p {
+    font-size: 0.85rem;
+    color: #fff;
+    margin-bottom: 5px;
+    opacity: 0.95;
+}
+
+.pastries-slider .slide-content .pastries-highlight {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #e74c3c;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.pastries-slider .slide-content .order-now-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+    padding: 8px 28px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.85rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+    border: none;
+    cursor: pointer;
+}
+
+.pastries-slider .slide-content .order-now-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(231, 76, 60, 0.6);
+}
+
+.pastries-slider .slide-content .order-now-btn i {
+    margin-right: 8px;
+}
+
+.pastries-slider .swiper-pagination-bullet {
+    background: white;
+    opacity: 0.5;
+}
+
+.pastries-slider .swiper-pagination-bullet-active {
+    background: #e74c3c;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .pastries-slider .swiper { height: 160px; }
+    .pastries-slider .slide-content { padding: 10px 14px; max-width: 90%; }
+    .pastries-slider .slide-content h2 { font-size: 0.95rem; }
+    .pastries-slider .slide-content p { font-size: 0.6rem; display: none; }
+    .pastries-slider .slide-content .pastries-highlight { font-size: 0.75rem; margin-bottom: 4px; }
+    .pastries-slider .slide-content .order-now-btn { padding: 5px 14px; font-size: 0.65rem; }
+}
+
+@media (min-width: 768px) {
+    .pastries-slider .swiper { height: 240px; }
+    .pastries-slider .slide-content { max-width: 70%; }
+    .pastries-slider .slide-content h2 { font-size: 2.0rem; }
+    .pastries-slider .slide-content p { font-size: 1rem; }
+}
+
+@media (min-width: 1024px) {
+    .pastries-slider .swiper { height: 300px; }
+    .pastries-slider .slide-content { max-width: 60%; }
+    .pastries-slider .slide-content h2 { font-size: 2.5rem; }
+    .pastries-slider .slide-content p { font-size: 1.1rem; }
+    .pastries-slider .slide-content .order-now-btn { padding: 10px 40px; font-size: 1rem; }
+}
+
+        .section-title {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #ff9800;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: #ff9800;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            padding: 0;
+        }
+
+        .video-card {
+            background: rgba(30,30,35,0.95);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,152,0,0.3);
+        }
+
+        .video-card video {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .video-info {
+            padding: 10px;
+        }
+
+        .video-info h4 {
+            color: #ff9800;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .comments-section {
+            margin-top: 8px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .comment {
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 6px;
+            margin-bottom: 6px;
+        }
+
+        .comment-name {
+            color: #ff9800;
+            font-weight: bold;
+            font-size: 10px;
+        }
+
+        .comment-text {
+            font-size: 10px;
+            margin-top: 3px;
+            color: #ddd;
+            word-wrap: break-word;
+        }
+
+        .comment-date {
+            font-size: 8px;
+            color: #888;
+            margin-top: 3px;
+        }
+
+        .event-videos-section {
+            margin: 50px 0;
+            padding: 40px 0;
+            background: rgba(0,0,0,0.5);
+            border-radius: 20px;
+        }
+
+        .catering-section {
+            margin: 25px 0;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(30,30,35,0.98), rgba(20,20,25,0.98));
+            border-radius: 15px;
+            border: 1px solid rgba(255,152,0,0.3);
+        }
+
+        .catering-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .catering-info h3, .catering-form h3 {
+            color: #ff9800;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .catering-info p, .catering-info li {
+            color: #ccc;
+            line-height: 1.4;
+            font-size: 0.75rem;
+        }
+
+        .catering-info ul {
+            margin-left: 18px;
+        }
+
+        .contact-details {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+        }
+
+        .contact-details p {
+            margin: 6px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-details i {
+            color: #ff9800;
+            width: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,152,0,0.3);
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+        }
+
+        .catering-btn {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 15px 0;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #aaa;
+            font-size: 0.65rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.65rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .contact-item i {
+            color: #ff9800;
+        }
+
+        .boom-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+
+        .boom-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .boom-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff9800;
+            text-align: center;
+            padding: 15px;
+            animation: boomText 0.5s ease-out;
+        }
+
+        @keyframes boomText {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.3); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media (min-width: 768px) {
+            .container { padding: 20px; }
+            .restaurant-name { font-size: 3rem; }
+            .video-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .catering-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+            .boom-text { font-size: 2.5rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .restaurant-name { font-size: 4rem; }
+            .restaurant-name::after { width: 200px; height: 3px; }
+            .video-grid { grid-template-columns: repeat(3, 1fr); }
+            .boom-text { font-size: 4rem; }
+        }
+
+        /* ============================================ */
+        /* DARK/LIGHT MODE TOGGLE BUTTON */
+        /* ============================================ */
+        :root {
+            --bg-primary: #111;
+            --bg-secondary: rgba(30, 30, 35, 0.95);
+            --text-primary: #fff;
+            --text-secondary: #ddd;
+            --card-bg: rgba(30, 30, 30, 0.85);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --input-bg: rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode {
+            --bg-primary: #f5f5f5;
+            --bg-secondary: rgba(255, 255, 255, 0.95);
+            --text-primary: #111;
+            --text-secondary: #555;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --border-color: rgba(0, 0, 0, 0.1);
+            --input-bg: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            background-color: transparent;
+        }
+
+        .menu-item, .video-card, .catering-section, .checkout-form, .order-summary {
+            background: var(--bg-secondary);
+            border-color: var(--border-color);
+        }
+
+        .item-title, .cart-item-name, .video-info h4 {
+            color: var(--text-primary);
+        }
+
+        .item-description, .video-info p, .catering-info p, .catering-info li {
+            color: var(--text-secondary);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            background: var(--input-bg);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        footer, .contact-item, .takeaway-notice {
+            background-color: transparent;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 20px;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .theme-toggle { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 18px; }
+        }
+
+        @media (max-width: 480px) {
+            .theme-toggle { top: 10px; left: 10px; width: 35px; height: 35px; font-size: 16px; }
+        }
+
+        /* ============================================ */
+        /* LIGHT MODE FIXES */
+        /* ============================================ */
+        .takeaway-notice {
+            background-color: #f8d7da !important;
+            color: #721c24 !important;
+            border: 1px solid #f5c6cb !important;
+        }
+        body.light-mode .takeaway-notice {
+            background-color: #f8d7da !important;
+            color: #721c24 !important;
+        }
+        body.light-mode .video-card {
+            background: rgba(255, 255, 255, 0.95) !important;
+            border-color: rgba(0, 0, 0, 0.1) !important;
+        }
+        body.light-mode .video-info h4 { color: #111 !important; }
+        body.light-mode .comment { background: rgba(0, 0, 0, 0.05) !important; }
+        body.light-mode .comment-text { color: #333 !important; }
+        body.light-mode .comment-name { color: #ff9800 !important; }
+        body.light-mode .catering-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(240, 240, 245, 0.98)) !important;
+        }
+        body.light-mode .catering-info p, body.light-mode .catering-info li { color: #555 !important; }
+        body.light-mode .contact-details { background: rgba(0, 0, 0, 0.03) !important; }
+        body.light-mode .contact-details p { color: #555 !important; }
+        body.light-mode .form-group input, body.light-mode .form-group select, body.light-mode .form-group textarea {
+            background: rgba(0, 0, 0, 0.05) !important;
+            color: #111 !important;
+            border-color: rgba(0, 0, 0, 0.2) !important;
+        }
+        body.light-mode footer { border-top-color: rgba(0, 0, 0, 0.1) !important; }
+        body.light-mode .contact-item { color: #555 !important; }
+        body.light-mode .phone-ram {
+            background: linear-gradient(135deg, #ff9800, #ff5722) !important;
+            color: white !important;
+        }
+        body.light-mode .reviews-section { background: rgba(0, 0, 0, 0.05) !important; }
+        body.light-mode .event-videos-section { background: rgba(0, 0, 0, 0.03) !important; }
+
+        /* Light mode fixes for sliders */
+        body.light-mode .urban-pizza-slider { border-color: #ff9800; }
+        body.light-mode .urban-pizza-slider .slide-content { background: rgba(255, 255, 255, 0.15); }
+        body.light-mode .urban-pizza-slider .slide-content p { color: #fff; }
+
+        body.light-mode .chops-slider { border-color: #ff9800; }
+        body.light-mode .chops-slider .slide-content { background: rgba(255, 255, 255, 0.15); }
+        body.light-mode .chops-slider .slide-content p { color: #fff; }
+
+        body.light-mode .student-discount-slider { border-color: #ff9800; }
+        body.light-mode .student-discount-slider .slide-content { background: rgba(255, 255, 255, 0.1); }
+        body.light-mode .student-discount-slider .slide-content p { color: #fff; }
+
+        body.light-mode .pastries-slider { border-color: #e74c3c; }
+        body.light-mode .pastries-slider .slide-content { background: rgba(255, 255, 255, 0.1); }
+        body.light-mode .pastries-slider .slide-content p { color: #fff; }
+
+        /* ============================================ */
+        /* iOS INSTALL POPUP */
+        /* ============================================ */
+        .ios-install-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            animation: fadeInPopup 0.4s ease;
+        }
+
+        .ios-install-popup.active {
+            display: flex;
+        }
+
+        @keyframes fadeInPopup {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .ios-popup-content {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border-radius: 24px;
+            padding: 35px 30px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+            position: relative;
+        }
+
+        .ios-popup-content .popup-icon {
+            font-size: 3.5rem;
+            color: #ff9800;
+            margin-bottom: 15px;
+        }
+
+        .ios-popup-content h2 {
+            color: #fff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .ios-popup-content p {
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .ios-popup-content .steps {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+
+        .ios-popup-content .steps li {
+            color: #ddd;
+            font-size: 0.9rem;
+            padding: 6px 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .ios-popup-content .steps li:last-child {
+            border-bottom: none;
+        }
+
+        .ios-popup-content .steps li .step-num {
+            background: #ff9800;
+            color: #111;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .ios-popup-content .steps li i {
+            color: #ff9800;
+            font-size: 1.2rem;
+            width: 25px;
+            text-align: center;
+        }
+
+        .ios-popup-close {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .ios-popup-close:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.4);
+        }
+
+        .ios-popup-close i {
+            margin-right: 8px;
+        }
+
+        .ios-popup-content .close-x {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 1.8rem;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s;
+            background: none;
+            border: none;
+        }
+
+        .ios-popup-content .close-x:hover {
+            color: #fff;
+        }
+
+        body.light-mode .ios-popup-content {
+            background: linear-gradient(145deg, #f5f5f5, #e8e8e8);
+        }
+
+        body.light-mode .ios-popup-content h2 {
+            color: #111;
+        }
+
+        body.light-mode .ios-popup-content p {
+            color: #555;
+        }
+
+        body.light-mode .ios-popup-content .steps {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        body.light-mode .ios-popup-content .steps li {
+            color: #333;
+        }
+
+        /* ============================================ */
+        /* PWA INSTALL BUTTON - HEADER (BESIDE PHONE) */
+        /* ============================================ */
+        .pwa-install-btn-header {
+            position: absolute;
+            right: -85px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: none;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            box-shadow: 0 3px 15px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s ease;
+            animation: pulseGlow 2s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .pwa-install-btn-header:hover {
+            transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 5px 25px rgba(37, 211, 102, 0.6);
+        }
+
+        .pwa-install-btn-header i {
+            font-size: 0.8rem;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 3px 15px rgba(37, 211, 102, 0.3); }
+            50% { box-shadow: 0 3px 25px rgba(37, 211, 102, 0.7); }
+            100% { box-shadow: 0 3px 15px rgba(37, 211, 102, 0.3); }
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 480px) {
+            .phone-rams-container {
+                max-width: 320px;
+            }
+            .pwa-install-btn-header {
+                right: -65px;
+                padding: 4px 10px;
+                font-size: 0.55rem;
+            }
+            .pwa-install-btn-header i {
+                font-size: 0.6rem;
+            }
+        }
+
+        /* Desktop fix for PWA button - ensure it's fully visible */
+        @media (min-width: 1024px) {
+            .phone-rams-container {
+                max-width: 420px;
+            }
+            .pwa-install-btn-header {
+                right: -95px;
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+            .pwa-install-btn-header i {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* ============================================ */
+        /* PWA INSTALL CONTAINER - ALWAYS VISIBLE */
+        /* ============================================ */
+        #installContainer {
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #installBtn {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: auto;
+            justify-content: center;
+        }
+
+        #installBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        #installBtn:active {
+            transform: scale(0.95);
+        }
+
+        .install-text {
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        /* Manual Install Buttons (Fallback) */
+        #manualInstallContainer {
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+        }
+
+        #androidInstallBtn,
+        #iosInstallBtn,
+        #desktopInstallBtn {
+            display: none;
+            width: 100%;
+            justify-content: center;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #androidInstallBtn:hover,
+        #iosInstallBtn:hover,
+        #desktopInstallBtn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        #androidInstallBtn:active,
+        #iosInstallBtn:active,
+        #desktopInstallBtn:active {
+            transform: scale(0.97);
+        }
+
+        #installHelpText {
+            font-size: 0.65rem;
+            color: #888;
+            margin-top: 4px;
+            display: none;
+        }
+
+        #installInstructions {
+            display: inline-block;
+        }
+
+        /* iOS Install Banner */
+        #iosInstallBanner {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+
+        #iosInstallBanner button {
+            touch-action: manipulation;
+        }
+
+        @media (max-width: 480px) {
+            #iosInstallBanner {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                padding: 16px;
+                border-radius: 12px;
+            }
+            #iosInstallBanner div[style*="display:flex;align-items:center;gap:12px;flex-wrap:wrap;"] {
+                flex-direction: column;
+                align-items: flex-start !important;
+            }
+        }
+
+        /* Mobile adjustment for PWA buttons */
+        @media (max-width: 480px) {
+            #installBtn,
+            #androidInstallBtn,
+            #iosInstallBtn,
+            #desktopInstallBtn {
+                padding: 10px 18px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark/Light Mode Toggle Button -->
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <i class="fas fa-sun"></i>
+    </button>
+
+    <!-- Background Animation -->
+    <div class="background-container">
+        <div class="background-slide active" id="bg1"></div>
+        <div class="background-slide" id="bg2"></div>
+        <div class="background-slide" id="bg3"></div>
+    </div>
+
+    <!-- Animated Order Button with Circular Text -->
+    <div class="order-btn-container">
+        <div class="order-btn" id="orderNowBtn">
+            <i class="fas fa-hamburger"></i>
+            <div class="order-btn-text">
+                <span style="transform: rotate(0deg) translate(5px);">🍔</span>
+                <span style="transform: rotate(30deg) translate(5px);">R</span>
+                <span style="transform: rotate(60deg) translate(5px);">D</span>
+                <span style="transform: rotate(90deg) translate(5px);">E</span>
+                <span style="transform: rotate(120deg) translate(5px);">R</span>
+                <span style="transform: rotate(150deg) translate(5px);"> </span>
+                <span style="transform: rotate(180deg) translate(5px);">N</span>
+                <span style="transform: rotate(210deg) translate(5px);">🍔</span>
+                <span style="transform: rotate(240deg) translate(5px);">W</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Boom Overlay -->
+    <div id="boomOverlay" class="boom-overlay">
+        <div class="boom-text">🍔 UrbanCity 🍔</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1 class="restaurant-name">UrbanCity Restaurant</h1>
+            <p class="tagline">Authentic Handmade Asian Style Meals, Freshly Made</p>
+            
+            <div class="phone-rams-container">
+                <div class="phone-rams-track">
+                    <div class="phone-ram left-ram" id="leftRam">
+                        <i class="fas fa-phone"></i>
+                        <span>08105442629</span>
+                    </div>
+                    <!-- PWA Install Button - Beside Phone Number -->
+                    <button id="installBtnHeader" class="pwa-install-btn-header" style="display: none;">
+                        <i class="fas fa-download"></i>
+                        <span>Install App</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================ -->
+<!-- PWA INSTALL BANNER -->
+<!-- ============================================ -->
+<div id="installBanner" style="
+    display: none;
+    margin: 10px auto 15px;
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #1a3a5c, #0d1f33);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(135deg, #25D366, #128C7E);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: white;
+            ">
+                <i class="fas fa-download"></i>
+            </div>
+            <div style="text-align:left;">
+                <p style="font-size:0.85rem;font-weight:700;color:#fff;margin:0;">Install UrbanCity</p>
+                <p style="font-size:0.6rem;color:rgba(255,255,255,0.6);margin:0;">Get the app on your phone</p>
+            </div>
+        </div>
+        <button onclick="installPWA()" class="install-btn" style="
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+            Install
+        </button>
+    </div>
+</div>
+
+            <div class="takeaway-notice">
+                <i class="fas fa-shopping-bag"></i> Notice: All takeaway orders attract a ₦500 fee
+            </div>
+        </header>
+
+        <!-- ============================================ -->
+<!-- URBAN PIZZA SLIDER -->
+<!-- ============================================ -->
+<h2 class="slider-section-title" style="color: #e74c3c;"><i class="fas fa-pizza-slice"></i> 🍕 Urban Pizza</h2>
+<div class="pizza-slider">
+    <div class="swiper pizzaSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-image: url('PizzaPizzaPizzaPizzaWhatsApp Image 2026-07-18 at 1.36.25 PM.jpeg');">
+                <div class="slide-content">
+                    <h2>🍕 Signature Pizza</h2>
+                    <p>Freshly baked with premium toppings</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PizzaPizzaPizzaPizzaWhatsApp Image 2026-07-18 at 1.35.37 PM (1).jpeg');">
+                <div class="slide-content">
+                    <h2>🍕 Classic Pizza</h2>
+                    <p>Rich mozzarella and signature sauce</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PizzaPizzaPizzaPizzaWhatsApp Image 2026-07-18 at 1.35.37 PM (2).jpeg');">
+                <div class="slide-content">
+                    <h2>🍕 Deluxe Pizza</h2>
+                    <p>Loaded with chicken, beef &amp; cheese</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PizzaPizzaPizzaPizzaWhatsApp Image 2026-07-18 at 1.35.37 PM (3).jpeg');">
+                <div class="slide-content">
+                    <h2>🍕 Gourmet Pizza</h2>
+                    <p>A perfect blend of flavors</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PizzaPizzaPizzaPizzaWhatsApp Image 2026-07-18 at 1.35.37 PM.jpeg');">
+                <div class="slide-content">
+                    <h2>🍕 Ultimate Pizza</h2>
+                    <p>The best pizza in town</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PizzaWhatsApp Video 2026-07-18 at 1.35.37 PM.mp4');">
+                <div class="slide-content">
+                    <h2>🍕 Pizza Video</h2>
+                    <p>Watch our pizza being made fresh</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#urban-pizza'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination pizza-pagination"></div>
+    </div>
+</div>
+
+        <!-- ============================================ -->
+<!-- CHOPS CENTRAL SLIDER -->
+<!-- ============================================ -->
+<h2 class="slider-section-title"><i class="fas fa-utensils"></i> 🍗 Chops Central</h2>
+<div class="chops-slider">
+    <div class="swiper chopsSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-image: url('chopschopsWhatsApp Image 2026-07-18 at 2.05.31 PM (1).jpeg');">
+                <div class="slide-content">
+                    <h2>🍗 Grilled Chops</h2>
+                    <p>Perfectly grilled to juicy perfection</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#chops-central'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('chopschopsWhatsApp Image 2026-07-18 at 2.05.31 PM.jpeg');">
+                <div class="slide-content">
+                    <h2>🍗 Spicy Chops</h2>
+                    <p>Bold flavors with a spicy kick</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#chops-central'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('chopschopsWhatsApp Image 2026-07-18 at 2.21.45 PM.jpeg');">
+                <div class="slide-content">
+                    <h2>🍗 Smoky BBQ Chops</h2>
+                    <p>Smoky and tender with signature sauce</p>
+                    <button class="order-now-btn" onclick="window.location.href='menu.html#chops-central'">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-pagination chops-pagination"></div>
+    </div>
+</div>
+
+        <!-- ============================================ -->
+<!-- PASTRIES SLIDER -->
+<!-- ============================================ -->
+<h2 class="slider-section-title" style="color: #e74c3c;"><i class="fas fa-bread"></i>Pastries</h2>
+<div class="pastries-slider">
+    <div class="swiper pastriesSwiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide" style="background-image: url('PastriesPastriesWhatsApp Image 2026-07-18 at 2.06.05 PM (1).jpeg');">
+                <div class="slide-content">
+                    <h2><i class="fas fa-bread"></i> Fresh Pastries</h2>
+                    <p>Freshly baked to golden perfection</p>
+                    
+                    <a href="menu.html#pastries" class="order-now-btn">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </a>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PastriesPastriesWhatsApp Image 2026-07-18 at 2.06.05 PM (2).jpeg');">
+                <div class="slide-content">
+                    <h2><i class="fas fa-cookie"></i> Sweet Treats</h2>
+                    <p>Delicious pastries for every craving</p>
+                    
+                    <a href="menu.html#pastries" class="order-now-btn">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </a>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PastriesPastriesWhatsApp Image 2026-07-18 at 2.06.05 PM (3).jpeg');">
+                <div class="slide-content">
+                    <h2><i class="fas fa-cake"></i> Cake & More</h2>
+                    <p>Celebrate with our freshly made cakes</p>
+                    
+                    <a href="menu.html#pastries" class="order-now-btn">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </a>
+                </div>
+            </div>
+            <div class="swiper-slide" style="background-image: url('PastriesPastriesWhatsApp Image 2026-07-18 at 2.06.05 PM.jpeg');">
+                <div class="slide-content">
+                    <h2><i class="fas fa-donut"></i> Daily Fresh</h2>
+                    <p>Freshly baked every morning</p>
+                    
+                    <a href="menu.html#pastries" class="order-now-btn">
+                        <i class="fas fa-shopping-cart"></i> Order Now
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-pagination pastries-pagination"></div>
+    </div>
+</div>
+
+        <!-- ============================================ -->
+        <!-- STUDENT DISCOUNT SLIDER - FOURTH -->
+        <!-- ============================================ -->
+        <h2 class="slider-section-title"><i class="fas fa-graduation-cap"></i> 🎓 Student Discount</h2>
+        <div class="student-discount-slider">
+            <div class="swiper studentSwiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide" style="background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);">
+                        <div class="slide-content">
+                            <h2><i class="fas fa-graduation-cap"></i> Student Discount</h2>
+                            <p>on everything you love,</p>
+                            <span class="discount-highlight">🎓 10% OFF with Valid Student ID!</span>
+                            <a href="menu.html#student-discount" class="order-now-btn">
+                                <i class="fas fa-shopping-cart"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="background: linear-gradient(135deg, #1a1a2e, #0f3460, #16213e);">
+                        <div class="slide-content">
+                            <h2><i class="fas fa-graduation-cap"></i> Student Discount</h2>
+                            <p>on everything you love,</p>
+                            <span class="discount-highlight">🎓 Exclusive Deals for Students!</span>
+                            <a href="menu.html#student-discount" class="order-now-btn">
+                                <i class="fas fa-shopping-cart"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                    <div class="swiper-slide" style="background: linear-gradient(135deg, #16213e, #1a1a2e, #0f3460);">
+                        <div class="slide-content">
+                            <h2><i class="fas fa-graduation-cap"></i> Student Discount</h2>
+                            <p>on everything you love,</p>
+                            <span class="discount-highlight">🎓 Mondays & Tuesdays Only!</span>
+                            <a href="menu.html#student-discount" class="order-now-btn">
+                                <i class="fas fa-shopping-cart"></i> Order Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination student-pagination"></div>
+            </div>
+        </div>
+
+        <!-- Customer Video Reviews Section -->
+        <div class="reviews-section" style="margin: 30px 0; padding: 40px 0; background: rgba(0,0,0,0.5); border-radius: 20px;">
+            <h2 class="section-title">Customer Reviews</h2>
+            <div class="video-grid" id="videoReviewsGrid"></div>
+        </div>
+
+        <!-- Event Videos Section -->
+        <div class="event-videos-section">
+            <h2 class="section-title">Event Highlights</h2>
+            <div class="video-grid" id="eventVideosGrid"></div>
+        </div>
+
+        <!-- Catering Section -->
+        <div class="catering-section">
+            <div class="catering-grid">
+                <div class="catering-info">
+                    <h3><i class="fas fa-calendar-alt"></i> Catering & Events</h3>
+                    <p>Let us make your special occasions unforgettable! UrbanCity Restaurant offers premium catering services for:</p>
+                    <ul>
+                        <li>🎉 Birthday Parties</li>
+                        <li>💍 Weddings & Engagements</li>
+                        <li>🏢 Corporate Events</li>
+                        <li>🎓 Graduation Ceremonies</li>
+                        <li>🏠 Private Home Parties</li>
+                        <li>📅 Table Reservation</li>
+                    </ul>
+                    <div class="contact-details">
+                        <p><i class="fas fa-phone"></i> For Reservations: Call or WhatsApp us: <strong>08149920629</strong> / <strong>09038463317</strong></p>
+                        <p><i class="fas fa-envelope"></i> Email: <strong>urbancitypastagrillz@gmail.com</strong></p>
+                        <p><i class="fas fa-clock"></i> Open Daily: <strong>9AM - 11PM</strong></p>
+                    </div>
+                </div>
+                <div class="catering-form">
+                    <h3><i class="fas fa-envelope"></i> Book an Event</h3>
+                    <form id="cateringForm">
+                        <div class="form-group">
+                            <input type="text" id="cateringName" placeholder="Your Full Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" id="cateringEmail" placeholder="Your Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="tel" id="cateringPhone" placeholder="Your Phone Number" required>
+                        </div>
+                        <div class="form-group">
+                            <select id="cateringEventType" required>
+                                <option value="">Select Event Type</option>
+                                <option value="Birthday Party">🎂 Birthday Party</option>
+                                <option value="Wedding">💍 Wedding</option>
+                                <option value="Corporate Event">🏢 Corporate Event</option>
+                                <option value="Graduation">🎓 Graduation</option>
+                                <option value="Private Party">🏠 Private Party</option>
+                                <option value="Reservation">📅 Table Reservation</option>
+                                <option value="Other">📋 Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="date" id="cateringDate" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="number" id="cateringGuests" placeholder="Number of Guests" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea id="cateringMessage" rows="3" placeholder="Tell us about your event..."></textarea>
+                        </div>
+                        <button type="submit" class="catering-btn">
+                            <i class="fas fa-paper-plane"></i> Send Booking Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>UrbanCity Restaurant &copy; 2025 | Fine Dining in the Heart of the City</p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Behind LGUBE, Beside Kwara State Polytechnic, Ilorin</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>08105442629</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>Open Daily: 9AM - 11PM</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- iOS INSTALL POPUP -->
+    <!-- ============================================ -->
+    <div id="iosPopup" class="ios-install-popup">
+        <div class="ios-popup-content">
+            <button class="close-x" onclick="closeIosPopup()">&times;</button>
+            <div class="popup-icon">📱</div>
+            <h2>Add to Home Screen</h2>
+            <p>For the best experience, add UrbanCity to your home screen:</p>
+            <ul class="steps">
+                <li>
+                    <span class="step-num">1</span>
+                    <i class="fas fa-share-square"></i>
+                    Tap the <strong>Share</strong> button <i class="fas fa-arrow-right" style="color:#888;font-size:0.8rem;"></i>
+                </li>
+                <li>
+                    <span class="step-num">2</span>
+                    <i class="fas fa-plus-circle"></i>
+                    Scroll down and tap <strong>"Add to Home Screen"</strong>
+                </li>
+                <li>
+                    <span class="step-num">3</span>
+                    <i class="fas fa-check-circle"></i>
+                    Tap <strong>"Add"</strong> in the top-right corner
+                </li>
+            </ul>
+            <button class="ios-popup-close" onclick="closeIosPopup()">
+                <i class="fas fa-check"></i> Got it!
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // ============================================
+        // BACKGROUND ANIMATION
+        // ============================================
+        const backgrounds = document.querySelectorAll('.background-slide');
+        let currentBg = 0;
+        document.getElementById('bg1').style.backgroundImage = "url('logo.jpg')";
+        document.getElementById('bg2').style.backgroundImage = "url('logo1.jpg')";
+        document.getElementById('bg3').style.backgroundImage = "url('logo2.jpg')";
+        setInterval(() => {
+            backgrounds[currentBg].classList.remove('active');
+            currentBg = (currentBg + 1) % backgrounds.length;
+            backgrounds[currentBg].classList.add('active');
+        }, 8000);
+
+        // ============================================
+// PIZZA SWIPER
+// ============================================
+var pizzaSwiper = new Swiper('.pizzaSwiper', {
+    loop: true,
+    autoplay: { delay: 4500, disableOnInteraction: false },
+    pagination: { el: '.pizza-pagination', clickable: true },
+    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+    effect: 'slide'
+});
+
+        // ============================================
+        // CHOPS CENTRAL SWIPER - SECOND
+        // ============================================
+        var chopsSwiper = new Swiper('.chopsSwiper', {
+            loop: true,
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            pagination: { el: '.chops-pagination', clickable: true },
+            navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+            effect: 'slide'
+        });
+
+        // ============================================
+        // PASTRIES SWIPER - THIRD
+        // ============================================
+        var pastriesSwiper = new Swiper('.pastriesSwiper', {
+            loop: true,
+            autoplay: { delay: 4500, disableOnInteraction: false },
+            pagination: { el: '.pastries-pagination', clickable: true },
+            effect: 'fade',
+            fadeEffect: { crossFade: true }
+        });
+
+        // ============================================
+        // STUDENT DISCOUNT SWIPER - FOURTH
+        // ============================================
+        var studentSwiper = new Swiper('.studentSwiper', {
+            loop: true,
+            autoplay: { delay: 4000, disableOnInteraction: false },
+            pagination: { el: '.student-pagination', clickable: true },
+            effect: 'fade',
+            fadeEffect: { crossFade: true }
+        });
+
+        // ============================================
+        // EVENT VIDEOS DATA
+        // ============================================
+        const eventVideos = [
+            {
+                src: 'WhatsApp Video 2026-05-23 at 8.50.27 AM.mp4',
+                comments: [
+                    { name: 'Adeola O.', text: 'Amazing event setup! The food was incredible!', stars: 5, date: 'May 15, 2026' },
+                    { name: 'Tunde A.', text: 'Best catering service in Ilorin! Highly recommend!', stars: 5, date: 'January 10, 2026' },
+                    { name: 'Biola K.', text: 'The team was very professional and punctual.', stars: 4, date: 'May 5, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-23 at 8.50.29 AM.mp4',
+                comments: [
+                    { name: 'Oluwaseun B.', text: 'Wow the food is too delicious but this is spicy 🌶️', stars: 4, date: 'May 12, 2026' },
+                    { name: 'Aisha M.', text: 'Not spicy enough but I love this burger!', stars: 4, date: 'April 8, 2026' },
+                    { name: 'Segun W.', text: 'Their food is made fresh in 10-15 min. If you love fresh food, UrbanCity is the best!', stars: 5, date: 'May 3, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-23 at 8.50.30 AM.mp4',
+                comments: [
+                    { name: 'Ridwan A.', text: 'Best suya pasta in Ilorin! Will definitely order again', stars: 5, date: 'May 14, 2026' },
+                    { name: 'Femi O.', text: 'The delivery was super fast and food was still hot', stars: 5, date: 'March 9, 2026' },
+                    { name: 'Grace E.', text: 'Value for money! Portion sizes are generous', stars: 4, date: 'August 4, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-23 at 8.50.39 AM.mp4',
+                comments: [
+                    { name: 'David O.', text: 'The customer service is top notch. Very responsive', stars: 5, date: 'May 1, 2026' },
+                    { name: 'Aisha M.', text: 'I love their jollof rice! Best in town', stars: 5, date: 'February 7, 2026' },
+                    { name: 'Oluwaseun B.', text: 'Quick preparation and friendly staff', stars: 4, date: 'October 2, 2025' }
+                ]
+            }
+        ];
+
+        const customerReviews = [
+            {
+                src: 'IMG_1955.mp4',
+                comments: [
+                    { name: 'Shola J.', text: 'There taste never change I love it.', stars: 4, date: 'May 25, 2026' },
+                    { name: 'Tunde A.', text: 'Wow the food is too delicious but this is spicy 🌶️', stars: 4, date: 'February 15, 2026' },
+                    { name: 'Biola K.', text: 'Not spicy enough but I love this burger', stars: 4, date: 'January 10, 2026' },
+                    { name: 'Oluwaseun B.', text: 'Their food is made fresh in 10-15 min. If you love fresh food, UrbanCity is the best', stars: 5, date: 'December 5, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-21 at 10.02.15 PM.mp4',
+                comments: [
+                    { name: 'Afeez O.', text: 'You guys need to come to Uni ilorin', stars: 5, date: 'May 21, 2026' },
+                    { name: 'Aisha M.', text: 'Wow , This agege sandwich Is a Banger', stars: 5, date: 'April 14, 2026' },
+                    { name: 'Tunde A.', text: 'I love this sandwich is Thick and Filling, can\'t even finish it .', stars: 5, date: 'January 9, 2026' },
+                    { name: 'Segun W.', text: 'This is Yummy delicious , 🤤 am coming back again for this', stars: 4, date: 'June 4, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-25 at 8.35.57 AM.mp4',
+                comments: [
+                    { name: 'Lawal L.', text: 'This Chinese rice is absolutely delicious! The best fried rice in Ilorin!', stars: 5, date: 'May 25, 2026' },
+                    { name: 'Asia A.', text: 'The Chinese rice is so flavorful and packed with chicken and shrimp. Worth every naira!', stars: 5, date: 'April 24, 2026' },
+                    { name: 'Wale A.', text: 'I ordered the Chinese rice for my party and everyone loved it. Very generous portions!', stars: 5, date: 'January 2, 2026' },
+                    { name: 'Tola J.', text: 'Best Chinese rice in town! The spice level is perfect and delivery was super fast.', stars: 5, date: 'September 22, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-21 at 10.03.46 PM.mp4',
+                comments: [
+                    { name: 'Tinuke A.', text: 'There Suya Burger is on another level  ', stars: 5, date: 'May 14, 2026' },
+                    { name: 'Biola K.', text: 'The Buns are so soft ', stars: 5, date: 'March 13, 2026' },
+                    { name: 'Ade A.', text: 'If you love to explore different food they are the best. ', stars: 5, date: 'March 11, 2026' },
+                    { name: 'Aisha M.', text: 'I love the Suya burger most ', stars: 5, date: 'January 8, 2026' },
+                    { name: 'Lola S.', text: 'Burger wey still get Egg this is Rich ', stars: 5, date: 'December 5, 2025' },
+                    { name: 'Oluwaseun B.', text: 'Best Burger have ever Had', stars: 4, date: 'July 3, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-24 at 9.44.34 AM.mp4',
+                comments: [
+                    { name: 'New Customer', text: 'The food was amazing! Will definitely order again!', stars: 5, date: 'May 24, 2026' },
+                    { name: 'Happy Guest', text: 'Great service and delicious meals!', stars: 5, date: 'March 23, 2026' },
+                    { name: 'Food Lover', text: 'Best restaurant in town! Highly recommended!', stars: 5, date: 'May 22, 2025' }
+                ]
+            },
+            {
+                src: 'WhatsApp Video 2026-05-24 at 9.45.01 AM.mp4',
+                comments: [
+                    { name: 'Satisfied Customer', text: 'Fresh Food always Urban city', stars: 5, date: 'May 24, 2026' },
+                    { name: 'Regular Visitor', text: 'Asain chow mien Noodles no one does it better', stars: 4, date: 'December 23, 2025' },
+                    { name: 'Food Enthusiast', text: 'If you are tired of same food same taste, Explore Urban city Asain chow mien noodles', stars: 5, date: 'November 22, 2025' }
+                ]
+            }
+        ];
+
+        function renderStars(rating) {
+            return '★'.repeat(rating) + '☆'.repeat(5 - rating);
+        }
+
+        function loadEventVideos() {
+            const container = document.getElementById('eventVideosGrid');
+            if (!container) return;
+            let html = '';
+            eventVideos.forEach(video => {
+                let commentsHtml = '';
+                video.comments.forEach(c => {
+                    commentsHtml += `
+                        <div class="comment">
+                            <div class="comment-name">⭐ ${renderStars(c.stars)} - ${c.name}</div>
+                            <div class="comment-text">"${c.text}"</div>
+                            <div class="comment-date">${c.date}</div>
+                        </div>
+                    `;
+                });
+                html += `
+                    <div class="video-card">
+                        <video controls autoplay muted loop playsinline preload="auto">
+                            <source src="${video.src}" type="video/mp4">
+                        </video>
+                        <div class="video-info">
+                            <h4>Event Highlight</h4>
+                            <div class="comments-section">${commentsHtml}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function loadCustomerReviews() {
+            const container = document.getElementById('videoReviewsGrid');
+            if (!container) return;
+            let html = '';
+            customerReviews.forEach(review => {
+                let commentsHtml = '';
+                review.comments.forEach(c => {
+                    commentsHtml += `
+                        <div class="comment">
+                            <div class="comment-name">⭐ ${renderStars(c.stars)} - ${c.name}</div>
+                            <div class="comment-text">"${c.text}"</div>
+                            <div class="comment-date">${c.date}</div>
+                        </div>
+                    `;
+                });
+                html += `
+                    <div class="video-card">
+                        <video controls autoplay muted loop playsinline preload="auto">
+                            <source src="${review.src}" type="video/mp4">
+                        </video>
+                        <div class="video-info">
+                            <h4>Customer Review</h4>
+                            <div class="comments-section">${commentsHtml}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        loadEventVideos();
+        loadCustomerReviews();
+
+        // ============================================
+        // PHONE CLICK
+        // ============================================
+        document.getElementById('leftRam')?.addEventListener('click', () => alert('Calling: 08105442629'));
+
+        // ============================================
+        // ORDER BUTTON ANIMATION
+        // ============================================
+        function playRollingSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = 200;
+            gain.gain.value = 0.3;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.3);
+            osc.stop(now + 0.3);
+            audioContext.resume();
+        }
+
+        function playBoomSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const now = audioContext.currentTime;
+            const osc = audioContext.createOscillator();
+            const gain = audioContext.createGain();
+            osc.connect(gain);
+            gain.connect(audioContext.destination);
+            osc.frequency.value = 100;
+            gain.gain.value = 0.4;
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
+            osc.stop(now + 0.5);
+            audioContext.resume();
+        }
+
+        function showBoomAndRedirect() {
+            const boom = document.getElementById('boomOverlay');
+            boom.classList.add('active');
+            playBoomSound();
+            setTimeout(() => { window.location.href = 'menu.html'; }, 800);
+        }
+
+        function handleOrderClick() {
+            const btn = document.getElementById('orderNowBtn');
+            btn.classList.add('click-animation');
+            playRollingSound();
+            setTimeout(() => btn.classList.remove('click-animation'), 500);
+            setTimeout(() => showBoomAndRedirect(), 400);
+        }
+
+        document.getElementById('orderNowBtn').addEventListener('click', handleOrderClick);
+
+        // ============================================
+        // CATERING FORM
+        // ============================================
+        function sendCateringViaMailto(formData) {
+            const subject = `Catering Booking Request - ${formData.eventType} for ${formData.guests} guests`;
+            const body = `CATERING BOOKING REQUEST\n------------------------\nName: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nEvent Type: ${formData.eventType}\nEvent Date: ${formData.eventDate}\nNumber of Guests: ${formData.guests}\n\nMessage:\n${formData.message}`;
+            window.location.href = `mailto:urbancitypastagrills@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        document.getElementById('cateringForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById('cateringName').value,
+                email: document.getElementById('cateringEmail').value,
+                phone: document.getElementById('cateringPhone').value,
+                eventType: document.getElementById('cateringEventType').value,
+                eventDate: document.getElementById('cateringDate').value,
+                guests: document.getElementById('cateringGuests').value,
+                message: document.getElementById('cateringMessage').value
+            };
+            if (!formData.name || !formData.email || !formData.phone || !formData.eventType || !formData.eventDate || !formData.guests) {
+                alert('❌ Please fill in all required fields');
+                return;
+            }
+            sendCateringViaMailto(formData);
+            alert('✅ Booking request prepared! Your email client will open to send the message.\n\nPlease click Send to complete your booking request.');
+            document.getElementById('cateringForm').reset();
+        });
+
+        // ============================================
+        // DARK/LIGHT MODE TOGGLE
+        // ============================================
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const isLightMode = body.classList.contains('light-mode');
+            
+            if (isLightMode) {
+                body.classList.remove('light-mode');
+                localStorage.setItem('urbancity_theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.classList.add('light-mode');
+                localStorage.setItem('urbancity_theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('urbancity_theme');
+            const themeToggle = document.getElementById('themeToggle');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.body.classList.remove('light-mode');
+                if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        }
+
+        // ============================================
+// PWA INSTALL FUNCTIONALITY - ULTIMATE FIX
+// ============================================
+
+let deferredPrompt = null;
+let installBanner = document.getElementById('installBanner');
+let installBtn = document.querySelector('#installBanner .install-btn');
+
+// ===== CHECK IF ALREADY INSTALLED =====
+function isAppInstalled() {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true;
+}
+
+// ===== HIDE BANNER IF ALREADY INSTALLED =====
+if (isAppInstalled()) {
+    if (installBanner) installBanner.style.display = 'none';
+    console.log('✅ App already installed');
+}
+
+// ===== LISTEN FOR NATIVE INSTALL PROMPT =====
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    
+    if (installBanner) {
+        installBanner.style.display = 'block';
+        console.log('✅ Native install prompt captured - showing banner');
+    }
+});
+
+// ===== LISTEN FOR APP INSTALLED =====
+window.addEventListener('appinstalled', () => {
+    if (installBanner) installBanner.style.display = 'none';
+    console.log('✅ App installed successfully');
+});
+
+// ===== INSTALL FUNCTION =====
+function installPWA() {
+    console.log('🔘 Install button clicked');
+    
+    // Check if app is already installed
+    if (isAppInstalled()) {
+        alert('✅ UrbanCity is already installed on your device!');
+        if (installBanner) installBanner.style.display = 'none';
+        return;
+    }
+
+    // Try native install first
+    if (deferredPrompt) {
+        console.log('📱 Showing native install prompt');
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((result) => {
+            if (result.outcome === 'accepted') {
+                console.log('✅ User accepted install');
+                if (installBanner) installBanner.style.display = 'none';
+            } else {
+                console.log('❌ User dismissed install');
+                showInstallInstructions();
+            }
+            deferredPrompt = null;
+        });
+        return;
+    }
+
+    // If no native prompt, show instructions
+    showInstallInstructions();
+}
+
+// ===== SHOW INSTALL INSTRUCTIONS =====
+function showInstallInstructions() {
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const isAndroid = /Android/.test(navigator.userAgent);
+    
+    if (isIOS) {
+        // Show beautiful iOS banner
+        document.getElementById('iosPopup').classList.add('active');
+    } else if (isAndroid) {
+        // For Android, try to trigger install via different method
+        alert('📱 To install UrbanCity on Android:\n\n1️⃣ Tap the menu button (⋮) in Chrome\n2️⃣ Tap "Install App" or "Add to Home Screen"\n3️⃣ Tap "Install" to confirm\n\n✅ You will see the app icon on your home screen!');
+    } else {
+        alert('📱 To install UrbanCity on your device:\n\n• On Chrome/Edge: Tap the menu (⋮) → "Install App"\n• On Safari: Tap Share (⬆️) → "Add to Home Screen"\n\n✅ You will see the app icon on your home screen!');
+    }
+}
+
+// ===== FORCE SHOW INSTALL BANNER ON PAGE LOAD =====
+// This ensures the banner shows even if beforeinstallprompt doesn't fire
+document.addEventListener('DOMContentLoaded', function() {
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(function(reg) {
+                console.log('✅ Service Worker registered');
+                // Check for updates
+                reg.update();
+            })
+            .catch(function(err) {
+                console.log('❌ Service Worker registration failed:', err);
+            });
+    }
+
+    // If not installed and no deferredPrompt, show the banner anyway
+    // after a delay (for users who haven't seen it)
+    setTimeout(function() {
+        if (!isAppInstalled() && !deferredPrompt) {
+            // Check if the browser supports PWA install
+            if (window.matchMedia('(display-mode: browser)').matches) {
+                if (installBanner) {
+                    installBanner.style.display = 'block';
+                    console.log('📱 Showing install banner (fallback)');
+                }
+            }
+        }
+    }, 3000);
+});
+
+// ===== CLOSE IOS POPUP =====
+function closeIosPopup() {
+    document.getElementById('iosPopup').classList.remove('active');
+}
+
+// Close popup on outside click
+document.getElementById('iosPopup')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeIosPopup();
+    }
+});
+
+console.log('🚀 PWA Install system initialized');
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            
+            // Register Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered successfully:', registration);
+                    })
+                    .catch(function(error) {
+                        console.log('Service Worker registration failed:', error);
+                    });
+            }
+            
+            // Check if already installed as standalone
+            if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+                document.getElementById('installBanner').classList.add('hidden');
+                console.log('✅ Already installed as standalone app');
+            }
+        });
+    </script>
+</body>
+</html>

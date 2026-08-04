@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Migrate Menu to Supabase</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: monospace;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .success { color: #4caf50; }
+        .error { color: #e74c3c; }
+        .info { color: #2196f3; }
+        .warning { color: #ff9800; }
+        .log { 
+            background: #1e1e23; 
+            padding: 15px; 
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: monospace;
+        }
+        button {
+            background: #ff9800;
+            color: #111;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        button:hover { background: #ff5722; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        input {
+            width: 100%;
+            padding: 10px;
+            background: #333;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: white;
+            margin: 10px 0;
+        }
+        .config-box {
+            background: #1a1a1a;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #ff9800;
+        }
+        hr {
+            border-color: #333;
+            margin: 15px 0;
+        }
+        .file-input-area {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px dashed #ff9800;
+            margin: 15px 0;
+            text-align: center;
+            cursor: pointer;
+        }
+        .file-input-area:hover {
+            background: #2a2a2a;
+        }
+        #fileName {
+            color: #ff9800;
+            font-weight: bold;
+        }
+        .progress-bar {
+            background: #333;
+            border-radius: 5px;
+            margin: 10px 0;
+            height: 20px;
+            overflow: hidden;
+            display: none;
+        }
+        .progress-fill {
+            background: #4caf50;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📦 UrbanCity Menu Migration Tool</h1>
+    <p>This will move all your menu items from <strong>menu.json</strong> to Supabase.</p>
+    
+    <!-- File Upload Area -->
+    <div class="file-input-area" onclick="document.getElementById('fileInput').click()">
+        <p>📄 Click here to select your <strong>menu.json</strong> file</p>
+        <p style="color: #888; font-size: 14px;">or drag and drop it here</p>
+        <p id="fileName" style="margin-top: 10px;">No file selected</p>
+        <input type="file" id="fileInput" accept=".json" style="display: none;" onchange="handleFileSelect(event)">
+    </div>
+    
+    <div class="config-box">
+        <label>🔑 Supabase URL:</label>
+        <input type="text" id="supabaseUrl" placeholder="https://bpeyueppcksrbhugltjt.supabase.co" value="https://bpeyueppcksrbhugltjt.supabase.co">
+        
+        <label>🔐 Supabase Anon Key:</label>
+        <input type="text" id="supabaseKey" placeholder="eyJhbGciOiJIUzI1NiIs..." value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZXl1ZXBwY2tzcmJodWdsdGp0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDY1NDg3MiwiZXhwIjoyMDgwMjMwODcyfQ.n2n7L6E0xoW8-myGcX869mUfEfYRS3C0llXFvi581tg">
+        
+        <p style="font-size: 12px; color: #aaa; margin-top: 10px;">
+            ⚠️ This only needs to run ONCE to migrate your existing menu.
+        </p>
+    </div>
+    
+    <div id="progressContainer" class="progress-bar">
+        <div id="progressFill" class="progress-fill">0%</div>
+    </div>
+    
+    <button onclick="migrate()">🚀 Start Migration</button>
+    
+    <div id="log" class="log">
+        ⏳ Waiting to start...
+    </div>
+
+    <script>
+        let supabaseClient = null;
+        let selectedFile = null;
+        let menuData = null;
+        
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('fileName').textContent = `✅ Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                log(`📄 File selected: ${file.name}`, 'success');
+            }
+        }
+        
+        // Drag and drop support
+        document.querySelector('.file-input-area').addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#4caf50';
+            this.style.background = '#2a2a2a';
+        });
+        
+        document.querySelector('.file-input-area').addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#ff9800';
+            this.style.background = '#1a1a1a';
+        });
+        
+        document.querySelector('.file-input-area').addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#ff9800';
+            this.style.background = '#1a1a1a';
+            
+            const file = e.dataTransfer.files[0];
+            if (file) {
+                selectedFile = file;
+                document.getElementById('fileName').textContent = `✅ Selected: ${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+                log(`📄 File dropped: ${file.name}`, 'success');
+            }
+        });
+        
+        function updateProgress(percent, label) {
+            const container = document.getElementById('progressContainer');
+            const fill = document.getElementById('progressFill');
+            container.style.display = 'block';
+            fill.style.width = percent + '%';
+            fill.textContent = label || percent + '%';
+            if (percent >= 100) {
+                fill.style.background = '#4caf50';
+            }
+        }
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const colors = {
+                success: '#4caf50',
+                error: '#e74c3c',
+                warning: '#ff9800',
+                info: '#2196f3'
+            };
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div style="color: ${colors[type]}; margin: 3px 0;">[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        async function migrate() {
+            const url = document.getElementById('supabaseUrl').value;
+            const key = document.getElementById('supabaseKey').value;
+            
+            if (!url || !key) {
+                alert('❌ Please enter your Supabase URL and Anon Key');
+                return;
+            }
+            
+            if (!selectedFile) {
+                alert('❌ Please select a menu.json file first! Click the box above.');
+                return;
+            }
+            
+            document.getElementById('log').innerHTML = '';
+            document.getElementById('progressContainer').style.display = 'none';
+            
+            log('🚀 STARTING MIGRATION...', 'info');
+            log(`📡 Connecting to Supabase...`, 'info');
+            
+            const supabase = window.supabase.createClient(url, key);
+            supabaseClient = supabase;
+            
+            log('✅ Supabase client initialized', 'success');
+            
+            // Load menu.json from file
+            log('📥 Loading menu.json file...', 'info');
+            updateProgress(10, 'Loading file...');
+            
+            try {
+                const fileContent = await selectedFile.text();
+                menuData = JSON.parse(fileContent);
+                log(`✅ menu.json loaded successfully! Found ${menuData.categories.length} categories`, 'success');
+                updateProgress(20, 'File loaded');
+            } catch (err) {
+                log(`❌ Failed to load menu.json: ${err.message}`, 'error');
+                log(`💡 Make sure the file is valid JSON`, 'warning');
+                updateProgress(0, 'Error');
+                return;
+            }
+            
+            // Insert categories
+            log('📁 Inserting categories...', 'info');
+            let categoriesInserted = 0;
+            const totalCategories = menuData.categories.length;
+            updateProgress(25, 'Inserting categories...');
+            
+            for (let i = 0; i < menuData.categories.length; i++) {
+                const cat = menuData.categories[i];
+                const { error } = await supabase
+                    .from('categories')
+                    .upsert([{
+                        category_id: cat.id,
+                        name: cat.name,
+                        display_order: i,
+                        is_active: true
+                    }], { onConflict: 'category_id' });
+                
+                if (error) {
+                    log(`❌ Failed to insert category ${cat.name}: ${error.message}`, 'error');
+                } else {
+                    categoriesInserted++;
+                    // Update progress for categories (25% to 40%)
+                    const progress = 25 + (i / totalCategories) * 15;
+                    updateProgress(progress, `Categories: ${i+1}/${totalCategories}`);
+                }
+            }
+            log(`📁 Categories inserted: ${categoriesInserted}/${menuData.categories.length}`, 'success');
+            updateProgress(40, 'Categories done');
+            
+            // Insert menu items and variants
+            log('🍽️ Inserting menu items...', 'info');
+            let totalItems = 0;
+            let totalVariants = 0;
+            let skippedItems = 0;
+            let processedItems = 0;
+            let totalMenuItems = 0;
+            
+            // Count total items first
+            for (const category of menuData.categories) {
+                totalMenuItems += category.items.length;
+            }
+            
+            for (const category of menuData.categories) {
+                for (const item of category.items) {
+                    processedItems++;
+                    
+                    // Update progress (40% to 85%)
+                    const progress = 40 + (processedItems / totalMenuItems) * 45;
+                    updateProgress(progress, `Items: ${processedItems}/${totalMenuItems}`);
+                    
+                    // Prepare item data
+                    const itemData = {
+                        item_id: item.id,
+                        category_id: category.id,
+                        name: item.name,
+                        description: item.description || '',
+                        price: item.price || null,
+                        price_display: item.priceDisplay || null,
+                        type: item.type || null,
+                        tags: item.tags || [],
+                        icon: item.icon || null,
+                        image: item.image || null,
+                        stock: item.stock || 100,
+                        low_stock: item.low_stock || 20,
+                        is_available: true,
+                        is_active: true,
+                        display_order: 0
+                    };
+                    
+                    const { error: itemError } = await supabase
+                        .from('menu_items')
+                        .upsert([itemData], { onConflict: 'item_id' });
+                    
+                    if (itemError) {
+                        log(`❌ Failed to insert ${item.name}: ${itemError.message}`, 'error');
+                        skippedItems++;
+                    } else {
+                        totalItems++;
+                        
+                        // Insert variants if they exist
+                        if (item.variants && item.variants.length > 0) {
+                            for (let v = 0; v < item.variants.length; v++) {
+                                const variant = item.variants[v];
+                                const variantData = {
+                                    menu_item_id: item.id,
+                                    size: variant.size,
+                                    price: variant.price,
+                                    display: variant.display,
+                                    display_order: v
+                                };
+                                
+                                const { error: varError } = await supabase
+                                    .from('variants')
+                                    .upsert([variantData], { onConflict: 'id' });
+                                
+                                if (varError) {
+                                    // Silent fail for variants
+                                } else {
+                                    totalVariants++;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            updateProgress(85, 'Almost done...');
+            
+            // Final summary
+            updateProgress(90, 'Generating summary...');
+            log('', 'info');
+            log('═══════════════════════════════════════════════════', 'success');
+            log(`✅ MIGRATION COMPLETE!`, 'success');
+            log(`📁 Categories: ${categoriesInserted}`, 'success');
+            log(`🍽️ Menu Items: ${totalItems}`, 'success');
+            log(`📦 Variants: ${totalVariants}`, 'success');
+            if (skippedItems > 0) log(`⚠️ Skipped: ${skippedItems}`, 'warning');
+            log('═══════════════════════════════════════════════════', 'success');
+            
+            updateProgress(100, '✅ Complete!');
+            
+            log('', 'info');
+            log('🔗 NEXT STEPS:', 'info');
+            log('1. Update your index.html to load menu from Supabase', 'info');
+            log('2. Test your website - menu should appear', 'info');
+            log('3. Create admin panel for staff to edit menu', 'info');
+        }
+        
+        // Pre-fill the Supabase credentials
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('supabaseUrl').value = 'https://bpeyueppcksrbhugltjt.supabase.co';
+            document.getElementById('supabaseKey').value = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZXl1ZXBwY2tzcmJodWdsdGp0Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc2NDY1NDg3MiwiZXhwIjoyMDgwMjMwODcyfQ.n2n7L6E0xoW8-myGcX869mUfEfYRS3C0llXFvi581tg';
+            log('💡 Please select your menu.json file by clicking the box above', 'info');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - UrbanCity</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .tracking-container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(30,30,35,0.95);
+            border-radius: 20px;
+            border: 1px solid rgba(255,152,0,0.3);
+            padding: 30px;
+            text-align: center;
+        }
+        h1 {
+            color: #ff9800;
+            margin-bottom: 20px;
+        }
+        .order-status {
+            margin: 30px 0;
+        }
+        .status-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+            position: relative;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .status-steps::before {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: rgba(255,255,255,0.2);
+            z-index: 1;
+        }
+        .step {
+            text-align: center;
+            z-index: 2;
+            background: #222;
+            border-radius: 50%;
+            width: 60px;
+            padding: 10px;
+            position: relative;
+            flex: 1;
+        }
+        .step.active {
+            background: #ff9800;
+            color: #111;
+        }
+        .step.completed {
+            background: #4caf50;
+        }
+        .step-icon {
+            font-size: 24px;
+        }
+        .step-label {
+            font-size: 10px;
+            margin-top: 8px;
+        }
+        .order-details {
+            text-align: left;
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .refresh-btn, .back-btn {
+            background: #ff9800;
+            color: #111;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            cursor: pointer;
+            margin-top: 20px;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .back-btn {
+            background: transparent;
+            border: 1px solid #ff9800;
+            color: #ff9800;
+        }
+        .status-message {
+            font-size: 1.1rem;
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .status-pending { background: rgba(255,152,0,0.2); color: #ff9800; }
+        .status-confirmed { background: rgba(33,150,243,0.2); color: #2196f3; }
+        .status-preparing { background: rgba(255,152,0,0.2); color: #ff9800; }
+        .status-ready { background: rgba(76,175,80,0.2); color: #4caf50; }
+        .status-completed { background: rgba(76,175,80,0.2); color: #4caf50; }
+        .status-cancelled { background: rgba(244,67,54,0.2); color: #f44336; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+        @media (max-width: 600px) {
+            .step-label { font-size: 8px; }
+            .step { width: 50px; }
+            .step-icon { font-size: 18px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="tracking-container">
+        <h1><i class="fas fa-shipping-fast"></i> Track Your Order</h1>
+        
+        <div id="orderInfo">
+            <div class="order-details">
+                <p><strong>Order ID:</strong> <span id="orderId">Loading...</span></p>
+                <p><strong>Total:</strong> <span id="orderTotal">₦0</span></p>
+                <p><strong>Order Type:</strong> <span id="orderType">-</span></p>
+            </div>
+        </div>
+        
+        <div class="order-status">
+            <div class="status-steps">
+                <div class="step" data-step="pending">
+                    <div class="step-icon"><i class="fas fa-clock"></i></div>
+                    <div class="step-label">Pending</div>
+                </div>
+                <div class="step" data-step="confirmed">
+                    <div class="step-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="step-label">Confirmed</div>
+                </div>
+                <div class="step" data-step="preparing">
+                    <div class="step-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="step-label">Preparing</div>
+                </div>
+                <div class="step" data-step="ready">
+                    <div class="step-icon"><i class="fas fa-box"></i></div>
+                    <div class="step-label">Ready</div>
+                </div>
+                <div class="step" data-step="completed">
+                    <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                    <div class="step-label">Completed</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="statusMessage" class="status-message status-pending">
+            <i class="fas fa-spinner fa-spin"></i> Loading order status...
+        </div>
+        
+        <div>
+            <button class="refresh-btn" onclick="checkOrderStatus()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button class="back-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-arrow-left"></i> Back to Menu
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        const SUPABASE_URL = 'https://bpeyueppcksrbhugltjt.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZXl1ZXBwY2tzcmJodWdsdGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NTQ4NzIsImV4cCI6MjA4MDIzMDg3Mn0.5CnMyogeIbvM7medccj3ZPgUcDm6W52asIqQDC7EKAM';
+        
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        const orderId = new URLSearchParams(window.location.search).get('id');
+        
+        if (!orderId) {
+            document.getElementById('statusMessage').innerHTML = '<i class="fas fa-exclamation-triangle"></i> No order ID found';
+        }
+        
+        async function checkOrderStatus() {
+            if (!orderId) return;
+            
+            const { data, error } = await supabase
+                .from('orders')
+                .select('*')
+                .eq('id', orderId)
+                .single();
+            
+            if (error) {
+                document.getElementById('statusMessage').innerHTML = '<i class="fas fa-exclamation-triangle"></i> Order not found';
+                return;
+            }
+            
+            // Update order details
+            document.getElementById('orderId').textContent = data.id;
+            document.getElementById('orderTotal').textContent = `₦${data.total.toLocaleString()}`;
+            document.getElementById('orderType').textContent = data.order_type === 'delivery' ? '🚚 Delivery' : '🏪 Pickup';
+            
+            // Update status steps
+            const statusOrder = ['pending', 'confirmed', 'preparing', 'ready', 'completed'];
+            const currentStatusIndex = statusOrder.indexOf(data.order_status);
+            
+            document.querySelectorAll('.step').forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if (index < currentStatusIndex) {
+                    step.classList.add('completed');
+                } else if (index === currentStatusIndex) {
+                    step.classList.add('active');
+                }
+            });
+            
+            // Update status message
+            const statusMessages = {
+                'pending': { icon: 'fa-clock', text: '⏳ Order received! We\'re reviewing your order.', class: 'status-pending' },
+                'confirmed': { icon: 'fa-check-circle', text: '✅ Order confirmed! We\'ll start preparing soon.', class: 'status-confirmed' },
+                'preparing': { icon: 'fa-utensils', text: '🍳 Your order is being prepared by our chefs!', class: 'status-preparing' },
+                'ready': { icon: 'fa-box', text: '📦 Your order is ready! Head to the restaurant or watch out for delivery.', class: 'status-ready' },
+                'completed': { icon: 'fa-check-double', text: '🎉 Order completed! Enjoy your meal!', class: 'status-completed' },
+                'cancelled': { icon: 'fa-times-circle', text: '❌ Order cancelled. Contact support for assistance.', class: 'status-cancelled' }
+            };
+            
+            const msg = statusMessages[data.order_status] || statusMessages.pending;
+            document.getElementById('statusMessage').innerHTML = `<i class="fas ${msg.icon}"></i> ${msg.text}`;
+            document.getElementById('statusMessage').className = `status-message ${msg.class}`;
+        }
+        
+        // Real-time subscription for order updates
+        function subscribeToOrder() {
+            const channel = supabase
+                .channel(`order-${orderId}`)
+                .on('postgres_changes', 
+                    { event: 'UPDATE', schema: 'public', table: 'orders', filter: `id=eq.${orderId}` },
+                    (payload) => {
+                        console.log('Order updated:', payload.new);
+                        checkOrderStatus();
+                    }
+                )
+                .subscribe();
+        }
+        
+        // Initial load
+        checkOrderStatus();
+        if (orderId) subscribeToOrder();
+        
+        // Auto-refresh every 30 seconds as fallback
+        setInterval(checkOrderStatus, 30000);
+    </script>
+</body>
+</html>

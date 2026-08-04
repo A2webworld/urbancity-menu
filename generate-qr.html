@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UrbanCity QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #111 0%, #222 100%);
+            color: white;
+        }
+        .card {
+            background: rgba(30, 30, 30, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: inline-block;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+        }
+        h1 {
+            color: #ff9800;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        .domain-display {
+            font-size: 1.8rem;
+            color: #fff;
+            background: rgba(255, 152, 0, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            border: 2px dashed rgba(255, 152, 0, 0.5);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        #qrcode {
+            margin: 25px auto;
+            padding: 20px;
+            background: white;
+            display: inline-block;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            min-height: 320px;
+            min-width: 320px;
+        }
+        .upload-area {
+            background: rgba(255, 152, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px auto;
+            border: 2px dashed rgba(255, 152, 0, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            background: rgba(255, 152, 0, 0.2);
+        }
+        .upload-area input {
+            display: none;
+        }
+        .upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .upload-icon {
+            font-size: 40px;
+            color: #ff9800;
+        }
+        .logo-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px auto;
+            border: 3px solid #ff9800;
+            background: white;
+            display: none;
+        }
+        .logo-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .btn {
+            background: #ff9800;
+            color: #111;
+            border: none;
+            padding: 15px 35px;
+            font-size: 18px;
+            cursor: pointer;
+            border-radius: 30px;
+            margin: 25px 10px 10px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn:hover {
+            background: #ffa726;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(255, 152, 0, 0.3);
+        }
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px auto;
+            max-width: 500px;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>UrbanCity Restaurant</h1>
+        <p>Professional QR Code for Your Digital Menu</p>
+        
+        <div class="domain-display">
+            https://urbancity.food
+        </div>
+        
+        <!-- Logo Upload Section -->
+        <div class="upload-area" onclick="document.getElementById('logoUpload').click()">
+            <div class="upload-label">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div>
+                    <strong>Click to Upload Your Logo</strong><br>
+                    <small>or drag and drop your logo image here</small>
+                </div>
+                <input type="file" id="logoUpload" accept="image/*" onchange="handleLogoUpload(event)">
+            </div>
+        </div>
+        
+        <!-- Logo Preview -->
+        <div class="logo-preview" id="logoPreview">
+            <img id="previewImage" src="" alt="Logo Preview">
+        </div>
+        
+        <div id="status" class="status">
+            <i class="fas fa-info-circle"></i> Please upload your logo first
+        </div>
+        
+        <!-- QR Code Container -->
+        <div id="qrcode"></div>
+        
+        <button class="btn" onclick="downloadQR()" id="downloadBtn" disabled>
+            <i class="fas fa-download"></i> Download QR Code
+        </button>
+        
+        <div style="margin-top: 30px; color: #aaa; font-size: 14px;">
+            <strong>Tip:</strong> Use a square logo (1:1 ratio) for best results
+        </div>
+    </div>
+    
+    <script>
+        const CUSTOM_DOMAIN = "https://urbancity.food";
+        let uploadedLogo = null;
+        let qrCodeInstance = null;
+        
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Check if it's an image
+            if (!file.type.match('image.*')) {
+                showStatus('Please upload an image file (JPEG, PNG, etc.)', 'error');
+                return;
+            }
+            
+            // Check file size (max 2MB)
+            if (file.size > 2 * 1024 * 1024) {
+                showStatus('Image size should be less than 2MB', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedLogo = new Image();
+                uploadedLogo.onload = function() {
+                    // Show preview
+                    const preview = document.getElementById('previewImage');
+                    preview.src = e.target.result;
+                    document.getElementById('logoPreview').style.display = 'block';
+                    
+                    // Enable download button
+                    document.getElementById('downloadBtn').disabled = false;
+                    
+                    // Show success message
+                    showStatus('✓ Logo uploaded successfully! Generating QR code...', 'success');
+                    
+                    // Generate QR code with logo
+                    generateQRCode();
+                };
+                uploadedLogo.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function generateQRCode() {
+            // Clear any existing QR code
+            document.getElementById('qrcode').innerHTML = '';
+            
+            // Generate new QR code
+            qrCodeInstance = new QRCode(document.getElementById("qrcode"), {
+                text: CUSTOM_DOMAIN,
+                width: 320,
+                height: 320,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+            
+            setTimeout(() => {
+                showStatus('✓ QR Code ready! Click "Download QR Code"', 'success');
+            }, 500);
+        }
+        
+        function downloadQR() {
+            if (!qrCodeInstance) {
+                showStatus('Please wait for QR code to generate', 'error');
+                return;
+            }
+            
+            const canvas = document.querySelector('#qrcode canvas');
+            if (!canvas) {
+                showStatus('QR code not ready yet', 'error');
+                return;
+            }
+            
+            // Create a new canvas to combine QR code and logo
+            const combinedCanvas = document.createElement('canvas');
+            const ctx = combinedCanvas.getContext('2d');
+            
+            // Set canvas size
+            combinedCanvas.width = canvas.width;
+            combinedCanvas.height = canvas.height;
+            
+            // Draw the QR code
+            ctx.drawImage(canvas, 0, 0);
+            
+            // Calculate center position for logo
+            const logoSize = 85;
+            const centerX = (combinedCanvas.width - logoSize) / 2;
+            const centerY = (combinedCanvas.height - logoSize) / 2;
+            
+            // Draw white background for logo
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(centerX - 8, centerY - 8, logoSize + 16, logoSize + 16);
+            
+            // Draw orange border
+            ctx.strokeStyle = '#ff9800';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(centerX - 8, centerY - 8, logoSize + 16, logoSize + 16);
+            
+            // Draw the uploaded logo
+            if (uploadedLogo && uploadedLogo.complete) {
+                ctx.drawImage(uploadedLogo, centerX, centerY, logoSize, logoSize);
+            } else {
+                showStatus('Logo not loaded yet', 'error');
+                return;
+            }
+            
+            // ========== FIXED: ADD BORDER/BACKGROUND TO TEXT ==========
+            // Calculate text position (under the logo)
+            const textY = centerY + logoSize + 15;
+            const textWidth = 110;  // Width of the bordered box
+            const textHeight = 30;  // Height of the bordered box
+            
+            // Draw background for text (white rectangle with orange border)
+            ctx.fillStyle = '#ffffff';
+            const textBoxX = (combinedCanvas.width - textWidth) / 2;
+            const textBoxY = textY - 5;
+            
+            // Draw white background
+            ctx.fillRect(textBoxX, textBoxY, textWidth, textHeight);
+            
+            // Draw orange border around text background
+            ctx.strokeStyle = '#ff9800';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(textBoxX, textBoxY, textWidth, textHeight);
+            
+            // Add "UrbanCity" text inside the bordered box
+            ctx.font = 'bold 16px Arial';
+            ctx.fillStyle = '#ff9800';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('UrbanCity', combinedCanvas.width/2, textBoxY + textHeight/2);
+            // ========== END OF FIX ==========
+            
+            // Add small domain text at bottom
+            ctx.font = '10px Arial';
+            ctx.fillStyle = '#666';
+            ctx.fillText('urbancity.food', combinedCanvas.width/2, combinedCanvas.height - 10);
+            
+            // Create download link
+            const link = document.createElement('a');
+            const date = new Date().toISOString().split('T')[0];
+            link.download = `UrbanCity-Menu-QR-${date}.png`;
+            link.href = combinedCanvas.toDataURL('image/png');
+            link.click();
+            
+            showStatus('✓ QR Code downloaded! Test it with your phone.', 'success');
+        }
+        
+        function showStatus(message, type) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = 'status ' + (type || '');
+            
+            // Add icon based on type
+            let icon = 'fa-info-circle';
+            if (type === 'success') icon = 'fa-check-circle';
+            if (type === 'error') icon = 'fa-exclamation-circle';
+            
+            statusDiv.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+        }
+        
+        // Drag and drop functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const uploadArea = document.querySelector('.upload-area');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                this.style.background = 'rgba(255, 152, 0, 0.3)';
+            });
+            
+            uploadArea.addEventListener('dragleave', function(e) {
+                e.preventDefault();
+                this.style.background = 'rgba(255, 152, 0, 0.1)';
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.style.background = 'rgba(255, 152, 0, 0.1)';
+                
+                if (e.dataTransfer.files.length) {
+                    document.getElementById('logoUpload').files = e.dataTransfer.files;
+                    handleLogoUpload({ target: { files: e.dataTransfer.files } });
+                }
+            });
+        });
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>

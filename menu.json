@@ -1,0 +1,2176 @@
+{
+  "categories": [
+    {
+      "id": "pasta",
+      "name": "Urban Asian Pasta Central",
+      "items": [
+        {
+          "id": "native-pasta",
+          "name": "Native Pasta",
+          "description": "A Nigerian-inspired pasta dish featuring long spaghetti stir-fried with fresh peppers, onions, vegetables, and your choice of protein, all tossed in our signature native seasoning for a smoky, spicy, and satisfying taste.",
+          "price": 7500,
+          "priceDisplay": "#7,500",
+          "type": "Native",
+          "tags": ["Extra Spicy", "Pasta", "Bold"],
+          "icon": "fas fa-fire",
+          "image": "Native pasta.jpeg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "hot-stir-fry-chicken-pasta",
+          "name": "Hot Stir-Fry Chicken Pasta",
+          "description": "Fresh spaghetti wok-tossed with tender chicken chunks, veggies, and our signature freshly made sauce bold and flavourful.",
+          "variants": [
+            {"size": "Small Plate", "price": 3000, "display": "Small Plate – ₦3,000"},
+            {"size": "Urban Box", "price": 5600, "display": "Urban Box (1 Chicken Wing) – ₦5,600"}
+          ],
+          "type": "Signature",
+          "tags": ["Signature", "Spicy", "Popular"],
+          "icon": "fas fa-pepper-hot",
+          "image": "Hot stir fry chicken pasta.jpeg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "penne-chicken-pasta",
+          "name": "Penne Pasta Chicken & Beef (served with 3 Korean chicken popcorn)",
+          "description": "Fresh spaghetti mixed with tender chicken chunks and shredded beef, fresh vegetables, and our signature freshly made sauce, bursting with bold, savoury flavours. Served with 3 pieces of crispy Korean Popcorn Chicken.",
+          "variants": [
+            {"size": "Small Plate", "price": 3600, "display": "Small Plate – ₦3,600"},
+            {"size": "Urban Box", "price": 6500, "display": "Urban Box (1 Chicken Wing) – ₦6,500"}
+          ],
+          "type": "Italian",
+          "tags": ["Italian", "Creamy", "Colorful"],
+          "icon": "fas fa-cheese",
+          "image": "Penne chicken pasta.jpeg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asunn-hot-stir-fry-pasta",
+          "name": "Asun Hot Stir-Fry Pasta",
+          "description": "Our signature stir-fried Spaghetti loaded with spicy smoked Asun (goat meat), fresh veggies and a savoury house-made sauce.",
+          "variants": [
+            {"size": "Small Plate", "price": 3600, "display": "Small Plate – ₦3,600"},
+            {"size": "Urban Box", "price": 6500, "display": "Urban Box (1 Chicken Wing) – ₦6,500"}
+          ],
+          "type": "Extra Spicy",
+          "tags": ["Extra Spicy", "Smoky", "Bold"],
+          "icon": "fas fa-fire",
+          "image": "81.jpg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asunn-penne-pasta",
+          "name": "Asun Penne Pasta",
+          "description": "Italian pasta coated in a rich, flavourful freshly made sauce with smoked spicy Goatmeat, delicious Nigerian fusion experience.",
+          "variants": [
+            {"size": "Small Plate", "price": 4000, "display": "Small Plate – ₦4,000"},
+            {"size": "Urban Box", "price": 8000, "display": "Urban Box (1 Chicken Wing) – From ₦8,000"}
+          ],
+          "type": "Spicy",
+          "tags": ["Spicy", "Smoky", "Rich"],
+          "icon": "fas fa-fire-alt",
+          "image": "Asun Penne pasta.jpeg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "suya-pasta",
+          "name": "Suya Pasta",
+          "description": "spicy Grilled beef suya tossed with freshly made tagliatelle pasta, mixed with our signature savoury sauce, served with onions and fresh tomatoes.",
+          "price": 7000,
+          "priceDisplay": "₦7,000",
+          "type": "Suya",
+          "tags": ["Suya", "Spicy", "Fusion"],
+          "icon": "fas fa-pepper-hot",
+          "image": "119.jpg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "penne-arrabbiata-pasta",
+          "name": "Penne Arrabbiata Pasta",
+          "description": "Italian penne pasta simmered in a rich tomato sauce with garlic, herbs, and a touch of chilli for a bold, authentic flavour.",
+          "price": 3500,
+          "priceDisplay": "₦3,500",
+          "type": "Italian",
+          "tags": ["Italian", "Spicy", "Authentic"],
+          "icon": "fas fa-pepper-hot",
+          "image": "Penne arrabittta Pasta.jpeg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "alfredo-chicken-pasta",
+          "name": "Alfredo Chicken Pasta",
+          "description": "Silky tagliatelle pasta tossed in a rich, creamy Alfredo sauce with tender grilled chicken, parmesan, and aromatic Flavours for a smooth, indulgent finish.",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Creamy",
+          "tags": ["Creamy", "Italian", "Rich"],
+          "icon": "fas fa-cheese",
+          "image": "122.jpg",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "signature-spaghetti-meatballs",
+          "name": "Signature Spaghetti & Meatballs",
+          "description": "Classic Nigerian spaghetti served with juicy homemade beef meatballs, slow-cooked in our Freshly made rich tomato and Flavourful sauce",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Signature",
+          "tags": ["Signature", "Classic", "Meatballs"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "mixed-grilled-creamy-pasta",
+          "name": "Mixed Grilled Creamy Pasta (Linguine)",
+          "description": "Linguine pasta tossed in our signature creamy sauce with juicy grilled beef strips and grilled Prawn, finished with parmesan and aromatic Flavours",
+          "price": 9500,
+          "priceDisplay": "₦9,500",
+          "type": "Premium",
+          "tags": ["Creamy", "Premium", "Seafood"],
+          "icon": "fas fa-crown",
+          "image": "",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "creamy-garlic-steak-pasta",
+          "name": "Creamy Garlic Steak Pasta (Tagliatelle)",
+          "description": "Freshly made tagliatelle pasta enveloped in a creamy roasted garlic sauce, served with tendered steak beef for a rich, bold flavour.",
+          "price": 8500,
+          "priceDisplay": "₦8,500",
+          "type": "Premium",
+          "tags": ["Premium", "Steak", "Creamy"],
+          "icon": "fas fa-crown",
+          "image": "",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "seafood-pasta",
+          "name": "Seafood Pasta",
+          "description": "Fresh linguine pasta coated in our signature creamy seafood sauce, topped with succulent prawns, shrimp, tender calamari, and premium snail, Bold rich flavour.",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Seafood",
+          "tags": ["Seafood", "Premium", "Creamy"],
+          "icon": "fas fa-shrimp",
+          "image": "",
+          "category": "pasta",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "rice",
+      "name": "Oriental City Rice",
+      "items": [
+        {
+          "id": "chinese-chicken-fried-rice",
+          "name": "Chinese Fried Rice",
+          "description": "Basmati rice wok-tossed with fresh healthy veggies, scrambled eggs, and our signature Asian seasoning, served with three crispy Korean Popcorn Chicken for the perfect balance of flavour and crunch.",
+          "price": 6600,
+          "priceDisplay": "Urban Box (1 Chicken Wing) – ₦6,600",
+          "type": "Chinese",
+          "tags": ["Chinese", "Fried Rice", "Popular"],
+          "icon": "fas fa-utensils",
+          "image": "100.jpg",
+          "category": "rice",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asunn-rice",
+          "name": "Asun Rice",
+          "description": "cooked with basmati rice served with our signature spicy smoked Asun (goat meat), fresh peppers, and bold Nigerian flavours for a truly satisfying meal.",
+          "price": 6500,
+          "priceDisplay": "– ₦6,500",
+          "type": "Asunn Rice",
+          "tags": ["Asunn", "Rice", "Chicken"],
+          "icon": "fas fa-fire",
+          "image": "106.jpg",
+          "category": "rice",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "seafood-rice",
+          "name": "Seafood Rice",
+          "description": "Basmati fried rice loaded with succulent prawns, crab, shrimp, calamari, premium snail, and colourful vegetables, wok-tossed in our signature seafood seasoning.",
+          "price": 9500,
+          "priceDisplay": "₦9,500",
+          "type": "Seafood",
+          "tags": ["Seafood", "Premium", "Rice"],
+          "icon": "fas fa-shrimp",
+          "image": "",
+          "category": "rice",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-suya-jollof",
+          "name": "Urban Suya Jollof",
+          "description": "Our signature smoky Jollof rice infused with flavourful Suya spices, mixed with sausage and tender Suya beef, and served with sweet fried plantain for the perfect Nigerian fusion.",
+          "price": 7000,
+          "priceDisplay": "₦7,000",
+          "type": "Signature",
+          "tags": ["Suya", "Jollof", "Fusion"],
+          "icon": "fas fa-pepper-hot",
+          "image": "",
+          "category": "rice",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "native-rice",
+          "name": "Native Rice (per portion #1,300)",
+          "description": "Basmati rice cooked in a Nigerian smoky pepper sauce, Pomo, meat, intestine, smoked fish, delivering the authentic taste of home in every bite.",
+          "price": 1300,
+          "priceDisplay": "₦1,300 per portion",
+          "type": "Native",
+          "tags": ["Native", "Nigerian", "Rice"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "rice",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "wings-seoul",
+      "name": "Wings & Seoul Combo Chicken",
+      "items": [
+        {
+          "id": "boneless-chicken-strips",
+          "name": "Boneless Chicken Strips",
+          "description": "Crispy golden chicken strips coated in our signature seasoned breading, served tender and juicy with your choice of dipping sauce.",
+          "variants": [
+            {"size": "4 Pieces", "price": 3500, "display": "4 Pieces – ₦3,500"},
+            {"size": "6 Pieces", "price": 5500, "display": "6 Pieces – ₦5,500"},
+            {"size": "8 Pieces", "price": 7500, "display": "8 Pieces – ₦7,500"},
+            {"size": "12 Pieces", "price": 10500, "display": "12 Pieces – ₦10,500"}
+          ],
+          "type": "Chicken",
+          "tags": ["Chicken", "Crispy", "Strips"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "spicy-suya-wings",
+          "name": "Spicy Suya Wings",
+          "description": "Your Choice served with our Signature Fries.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4000, "display": "4 Pieces – ₦4,000"},
+            {"size": "6 Pieces", "price": 6000, "display": "6 Pieces – ₦6,000"},
+            {"size": "8 Pieces", "price": 8000, "display": "8 Pieces – ₦8,000"},
+            {"size": "12 Pieces", "price": 11000, "display": "12 Pieces – ₦11,000"}
+          ],
+          "type": "Wings",
+          "tags": ["Suya", "Wings", "Spicy"],
+          "icon": "fas fa-pepper-hot",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "bbq-wings",
+          "name": "BBQ Wings",
+          "description": "Tender Grilled chicken wings glazed in our rich spicy smoky BBQ sauce, perfectly caramelised for a sweet and savoury finish.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4000, "display": "4 Pieces – ₦4,000"},
+            {"size": "6 Pieces", "price": 6000, "display": "6 Pieces – ₦6,000"},
+            {"size": "8 Pieces", "price": 8000, "display": "8 Pieces – ₦8,000"},
+            {"size": "12 Pieces", "price": 11000, "display": "12 Pieces – ₦11,000"}
+          ],
+          "type": "Wings",
+          "tags": ["BBQ", "Wings", "Smoky"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "honeycomb-wings",
+          "name": "Honeycomb Chicken Wings",
+          "description": "Crispy, golden chicken wings coated in our signature sweet honey glaze, perfectly balanced with buttery richness and a hint of savoury flavour for a sticky, finger-licking finish.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4500, "display": "4 Pieces – ₦4,500"},
+            {"size": "6 Pieces", "price": 6500, "display": "6 Pieces – ₦6,500"},
+            {"size": "8 Pieces", "price": 8500, "display": "8 Pieces – ₦8,500"},
+            {"size": "12 Pieces", "price": 11500, "display": "12 Pieces – ₦11,500"}
+          ],
+          "type": "Wings",
+          "tags": ["Honey", "Wings", "Crispy", "Sweet"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "alfredo-creamy-herb-wings",
+          "name": "Alfredo Creamy Herb Wings",
+          "description": "Crispy chicken wings coated in our rich Alfredo cream sauce, finished with parmesan for a smooth and indulgent taste.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4500, "display": "4 Pieces – ₦4,500"},
+            {"size": "6 Pieces", "price": 6500, "display": "6 Pieces – ₦6,500"},
+            {"size": "8 Pieces", "price": 8500, "display": "8 Pieces – ₦8,500"},
+            {"size": "12 Pieces", "price": 11500, "display": "12 Pieces – ₦11,500"}
+          ],
+          "type": "Wings",
+          "tags": ["Creamy", "Wings", "Alfredo"],
+          "icon": "fas fa-cheese",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "buffalo-wings",
+          "name": "Buffalo Wings",
+          "description": "Crispy chicken wings tossed in our classic Buffalo sauce, offering the perfect balance of spicy and tangy flavour.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4000, "display": "4 Pieces – ₦4,000"},
+            {"size": "6 Pieces", "price": 6000, "display": "6 Pieces – ₦6,000"},
+            {"size": "8 Pieces", "price": 8000, "display": "8 Pieces – ₦8,000"},
+            {"size": "12 Pieces", "price": 11000, "display": "12 Pieces – ₦11,000"}
+          ],
+          "type": "Wings",
+          "tags": ["Buffalo", "Wings", "Spicy"],
+          "icon": "fas fa-pepper-hot",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "korean-fried-chicken",
+          "name": "Korean Fried Chicken",
+          "description": "Extra crispy fried chicken coated in our signature Korean glaze, combining sweet, spicy, and savoury flavours.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4500, "display": "4 Pieces – ₦4,500"},
+            {"size": "6 Pieces", "price": 6500, "display": "6 Pieces – ₦6,500"},
+            {"size": "8 Pieces", "price": 8500, "display": "8 Pieces – ₦8,500"},
+            {"size": "12 Pieces", "price": 11500, "display": "12 Pieces – ₦11,500"}
+          ],
+          "type": "Chicken",
+          "tags": ["Korean", "Fried Chicken", "Crispy"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "korean-popcorn-chicken",
+          "name": "Korean Popcorn Chicken",
+          "description": "Bite-sized crispy chicken chunked pieces coated in our signature Korean sauce for the perfect crunchy snack.",
+          "variants": [
+            {"size": "4 Pieces", "price": 3500, "display": "4 Pieces – ₦3,500"},
+            {"size": "6 Pieces", "price": 5500, "display": "6 Pieces – ₦5,500"},
+            {"size": "8 Pieces", "price": 7500, "display": "8 Pieces – ₦7,500"},
+            {"size": "12 Pieces", "price": 10500, "display": "12 Pieces – ₦10,500"}
+          ],
+          "type": "Chicken",
+          "tags": ["Korean", "Popcorn", "Crispy"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "triple-wings-flavor-feast",
+          "name": "Triple Wings Flavor Feast",
+          "description": "Comes with any drink of your choice. Choose any 3 flavours.",
+          "variants": [
+            {"size": "6 Pieces Combo", "price": 9500, "display": "6 Pieces Combo (2 Pieces per flavour) – ₦9,500"},
+            {"size": "12 Pieces Combo", "price": 16500, "display": "12 Pieces Combo (4 Pieces per flavour) – ₦16,500"},
+            {"size": "24 Pieces Combo", "price": 28500, "display": "24 Pieces Combo – ₦28,500"}
+          ],
+          "type": "Combo",
+          "tags": ["Combo", "Wings", "Flavours"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "wings-seoul",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "loaded-fries",
+      "name": "Loaded Fries",
+      "items": [
+        {
+          "id": "creamy-loaded-fries",
+          "name": "Creamy Loaded Fries",
+          "description": "Crispy fries layered with crispy chunked chicken, rich creamy sauce, and fresh veggies.",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Loaded Fries",
+          "tags": ["Creamy", "Loaded", "Fries"],
+          "icon": "fas fa-bacon",
+          "image": "7.jpg",
+          "category": "loaded-fries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "cheesy-loaded-fries",
+          "name": "Cheesy Loaded Fries",
+          "description": "Golden fries generously topped crispy chicken with melted cheese, creamy sauce, and finished with our signature sauce.",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Cheesy",
+          "tags": ["Cheesy", "Loaded", "Fries"],
+          "icon": "fas fa-cheese",
+          "image": "8.jpg",
+          "category": "loaded-fries",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Cheese", "price": 1000, "display": "Extra Cheese – ₦1,000"}
+          ]
+        },
+        {
+          "id": "suya-loaded-fries",
+          "name": "Suya Loaded Fries",
+          "description": "Golden crispy fries topped with spicy smoked suya, fresh veggies, and our signature UrbanCity sauce.",
+          "price": 10000,
+          "priceDisplay": "₦10,000",
+          "type": "Loaded Fries",
+          "tags": ["Suya", "Loaded Fries", "Spicy"],
+          "icon": "fas fa-bacon",
+          "image": "121.jpg",
+          "category": "loaded-fries",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Cream", "price": 500, "display": "Extra Cream – ₦500"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "protein-sides",
+      "name": "City Grillz Protein Sides",
+      "items": [
+        {
+          "id": "air-fried-dodo",
+          "name": "Plantain",
+          "description": "",
+          "price": 2500,
+          "priceDisplay": "₦2,500",
+          "type": "Sides",
+          "tags": ["Plantain", "Air-Fried", "Sides"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "steak-meat",
+          "name": "Steak Meat",
+          "description": "A succulent premium beef steak, marinated with our signature herbs and spices, flame-grilled to perfection, and served with crispy fries or creamy mashed potatoes for a bold and satisfying meal.",
+          "price": 4500,
+          "priceDisplay": "₦4,500",
+          "type": "Protein",
+          "tags": ["Steak", "Protein", "Grilled"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "mongolian-beef-strips",
+          "name": "Mongolian Beef Strips",
+          "description": "Tender slices of beef wok-tossed with caramelized onions in our rich Mongolian sauce, delivering the perfect balance of sweet, savoury, and bold Asian flavours.",
+          "price": 5500,
+          "priceDisplay": "₦5,500",
+          "type": "Protein",
+          "tags": ["Mongolian", "Beef", "Asian"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "hake-fish",
+          "name": "Hake Fish",
+          "description": "",
+          "price": 4000,
+          "priceDisplay": "₦4,000",
+          "type": "Fish",
+          "tags": ["Fish", "Hake", "Protein"],
+          "icon": "fas fa-fish",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "cut-fish",
+          "name": "Cut Fish",
+          "description": "",
+          "price": 3000,
+          "priceDisplay": "₦3,000",
+          "type": "Fish",
+          "tags": ["Fish", "Cut", "Protein"],
+          "icon": "fas fa-fish",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "grilled-chicken-wings",
+          "name": "Grilled or Peppered Chicken Wings",
+          "description": "Grilled or peppered chicken wings.",
+          "price": 1500,
+          "priceDisplay": "₦1,500",
+          "type": "Wings",
+          "tags": ["Wings", "Grilled", "Protein"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "71.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "egg",
+          "name": "Egg",
+          "description": "egg.",
+          "price": 500,
+          "priceDisplay": "₦500",
+          "type": "protein",
+          "tags": ["egg", "Grilled", "Protein"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "egg.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "gizzdodo",
+          "name": "Gizdodo",
+          "description": "Gizzard with fried plantain.",
+          "price": 5500,
+          "priceDisplay": "₦5,500",
+          "type": "Mixed",
+          "tags": ["Gizzard", "Plantain", "Mixed"],
+          "icon": "fas fa-utensils",
+          "image": "15.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "grilled-turkey",
+          "name": "Grilled or Peppered Turkey",
+          "description": "Grilled or peppered turkey.",
+          "price": 5000,
+          "priceDisplay": "₦5,000",
+          "type": "Turkey",
+          "tags": ["Turkey", "Grilled", "Protein"],
+          "icon": "fas fa-drumstick-bite",
+          "image": "86.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asun-smoked-spicy",
+          "name": "Asun (Smoked & Spicy)",
+          "description": "Smoked spicy asun.",
+          "price": 1500,
+          "priceDisplay": "₦1,500 per portion",
+          "type": "Spicy",
+          "tags": ["Spicy", "Smoked", "Asun"],
+          "icon": "fas fa-fire",
+          "image": "85.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "grilled-titus-fish",
+          "name": "Grilled Titus Fish",
+          "description": "Grilled titus fish.",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Fish",
+          "tags": ["Fish", "Grilled", "Protein"],
+          "icon": "fas fa-fish",
+          "image": "22.jpg",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "grilled-mackerel-fish",
+          "name": "Grilled Mackerel Fish",
+          "description": "",
+          "price": 6000,
+          "priceDisplay": "₦6,000",
+          "type": "Fish",
+          "tags": ["Fish", "Grilled", "Protein"],
+          "icon": "fas fa-fish",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chicken-lap",
+          "name": "Chicken Lap",
+          "description": "",
+          "price": 4000,
+          "priceDisplay": "₦4,000",
+          "type": "Chicken",
+          "tags": ["Chicken", "Grilled", "Protein"],
+          "icon": "fas fa-chicken",
+          "image": "",
+          "category": "protein-sides",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "shawarma",
+      "name": "Shawarma Central",
+      "items": [
+        {
+          "id": "chicken-spicy-shawarma",
+          "name": "Chicken Spicy Shawarma",
+          "description": "Spicy chicken shawarma with fresh vegetables.",
+          "variants": [
+            {"size": "Single", "price": 3000, "display": "Single Sausage – ₦3,000"},
+            {"size": "Double", "price": 3500, "display": "Double Sausage – ₦3,500"},
+            {"size": "Extra Chicken", "price": 1000, "display": "Extra Chicken – ₦1,000"},
+            {"size": "Dip Sauce", "price": 500, "display": "Dip Sauce – ₦500"},
+            {"size": "Nigerian Sauce", "price": 1500, "display": "Nigerian Sauce – ₦1,500"}
+          ],
+          "type": "Spicy Shawarma",
+          "tags": ["Spicy", "Chicken", "Shawarma"],
+          "icon": "fas fa-pepper-hot",
+          "image": "16.jpg",
+          "category": "shawarma",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "suya-shawarma",
+          "name": "Suya Shawarma",
+          "description": "",
+          "variants": [
+            {"size": "Single Sausage", "price": 3500, "display": "Single Sausage – ₦3,500"},
+            {"size": "Double Sausage", "price": 4500, "display": "Double Sausage – ₦4,500"},
+            {"size": "Extra Suya", "price": 500, "display": "Extra Suya – ₦500"}
+          ],
+          "type": "Suya Shawarma",
+          "tags": ["Suya", "Shawarma", "Spicy"],
+          "icon": "fas fa-pepper-hot",
+          "image": "",
+          "category": "shawarma",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "turkey-shawarma",
+          "name": "Turkey Shawarma",
+          "description": "Premium turkey shawarma with fresh vegetables. Comes with Fries or Grilled Potatoes. Extra Sauce Included.",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Turkey Shawarma",
+          "tags": ["Turkey", "Premium", "Shawarma"],
+          "icon": "fas fa-crown",
+          "image": "69.jpg",
+          "category": "shawarma",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Turkey", "price": 500, "display": "Extra Turkey – ₦500"},
+            {"name": "Dip Sauce", "price": 500, "display": "Dip Sauce – ₦500"},
+            {"name": "Nigerian Sauce", "price": 500, "display": "Nigerian Sauce – ₦500"}
+          ]
+        },
+        {
+          "id": "chicken-cheesy-shawarma",
+          "name": "Chicken Cheesy Shawarma",
+          "description": "Chicken shawarma loaded with melted cheese.",
+          "variants": [
+            {"size": "Single", "price": 6500, "display": "Single – ₦6,500"},
+            {"size": "Extra Cheese", "price": 1500, "display": "Extra Cheese – ₦1,500"}
+          ],
+          "type": "Cheesy Shawarma",
+          "tags": ["Cheesy", "Chicken", "Shawarma"],
+          "icon": "fas fa-cheese",
+          "image": "70.jpg",
+          "category": "shawarma",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "jumbo-mixed-shawarma",
+          "name": "Jumbo Mixed Shawarma",
+          "description": "Chicken & Beef OR Chicken, Suya & Turkey",
+          "price": 8000,
+          "priceDisplay": "₦8,000",
+          "type": "Jumbo Shawarma",
+          "tags": ["Jumbo", "Mixed", "Shawarma"],
+          "icon": "fas fa-star",
+          "image": "16.jpg",
+          "category": "shawarma",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Chicken & Beef", "price": 1000, "display": "Chicken & Beef – ₦1,000"},
+            {"name": "Chicken & Turkey", "price": 1500, "display": "Chicken & Turkey – ₦1,500"},
+            {"name": "Turkey & Suya Beef", "price": 1000, "display": "Turkey & Suya Beef – ₦1,000"},
+            {"name": "Beef & Suya Beef", "price": 1500, "display": "Beef & Suya Beef – ₦1,500"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sandwiches",
+      "name": "Wraps, Rolls & Sandwiches",
+      "items": [
+        {
+          "id": "suya-wrap",
+          "name": "Suya Wrap",
+          "description": "smoked grilled Beef suya mixed with lettuce or cabbage and our signature sauce wrapped in a warm tortilla.",
+          "price": 4500,
+          "priceDisplay": "₦4,500",
+          "type": "Wrap",
+          "tags": ["Suya", "Wrap", "Spicy"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chicken-wrap",
+          "name": "Chicken Wrap",
+          "description": "Grilled chicken, crisp lettuce, tomatoes, and our signature sauce wrapped in a soft tortilla.",
+          "price": 3500,
+          "priceDisplay": "₦3,500",
+          "type": "Wrap",
+          "tags": ["Chicken", "Wrap", "Grilled"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Chicken", "price": 1000, "display": "Extra Chicken – ₦1,000"},
+            {"name": "Dip Sauce", "price": 500, "display": "Dip Sauce – ₦500"},
+            {"name": "Nigerian Sauce", "price": 1500, "display": "Nigerian Sauce – ₦1,500"}
+          ]
+        },
+        {
+          "id": "classic-chicken-sandwich",
+          "name": "Classic Chicken Sandwich",
+          "description": "Tender grilled chicken fillet layered with fresh lettuce, tomatoes, and creamy mayo on toasted agege bread",
+          "variants": [
+            {"size": "Small", "price": 2000, "display": "Small – ₦2,000"},
+            {"size": "Large", "price": 3500, "display": "Large – ₦3,500"}
+          ],
+          "type": "Chicken Sandwich",
+          "tags": ["Chicken", "Sandwich", "Classic"],
+          "icon": "fas fa-bread-slice",
+          "image": "19.jpg",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "egg-cheese-sandwich",
+          "name": "Egg & Cheese Sandwich",
+          "description": "Fluffy eggs, melted cheese, and creamy mayo served on freshly toasted sliced bread for a simple yet satisfying bite.",
+          "price": 2500,
+          "priceDisplay": "₦2,500",
+          "type": "Egg Sandwich",
+          "tags": ["Egg", "Sandwich", "Classic"],
+          "icon": "fas fa-bread-slice",
+          "image": "104.jpg",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "club-sandwich",
+          "name": "Club Sandwich",
+          "description": "A triple-layer sandwich stacked with grilled chicken, crispy beef strips, lettuce, tomatoes, cheese, and creamy mayo.",
+          "price": 5500,
+          "priceDisplay": "₦5,500",
+          "type": "Chicken Sandwich",
+          "tags": ["Club", "Sandwich", "Triple"],
+          "icon": "fas fa-bread-slice",
+          "image": "",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "belleful-loaded-agege-sandwich",
+          "name": "Belleful Loaded Agege Sandwich",
+          "description": "Loaded Agege bread sandwich with premium fillings served with our signature fries.",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Loaded Sandwich",
+          "tags": ["Loaded", "Premium", "Sandwich"],
+          "icon": "fas fa-crown",
+          "image": "37.jpg",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "tuna-sandwich",
+          "name": "Tuna Sandwich",
+          "description": "Premium tuna mixed with creamy mayo, crisp lettuce, and fresh tomatoes on toasted sliced bread.",
+          "price": 5000,
+          "priceDisplay": "₦5,000",
+          "type": "Tuna Sandwich",
+          "tags": ["Tuna", "Sandwich", "Seafood"],
+          "icon": "fas fa-fish",
+          "image": "68.jpg",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "cheese-steak-sandwich",
+          "name": "Cheesesteak Sandwich",
+          "description": "Tender grilled beef strips, melted cheese, and veggies served with toasted agege bread",
+          "price": 10000,
+          "priceDisplay": "₦10,000",
+          "type": "Cheese Steak Sandwich",
+          "tags": ["Cheese", "Sandwich", "Steak"],
+          "icon": "fas fa-bread-slice",
+          "image": "105.jpg",
+          "category": "sandwiches",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "burgers",
+      "name": "Urban Burger Central",
+      "items": [
+        {
+          "id": "waffle-burger",
+          "name": "Waffle Burger",
+          "description": "A juicy crunchy chicken layered with cheese and urban signature sauce, served between two golden waffles for a unique sweet and savoury experience.",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Chicken Burger",
+          "tags": ["Waffle", "Burger", "Sweet"],
+          "icon": "fas fa-hamburger",
+          "image": "",
+          "category": "burgers",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-mega-crispy-burger",
+          "name": "Urban Mega Crispy Burger",
+          "description": "Our ultimate burger featuring double crispy chicken fillets, melted cheese, fresh lettuce, tomatoes, and signature sauce served with crispy fries.",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Chicken Burger",
+          "tags": ["Chicken", "Burger", "Double"],
+          "icon": "fas fa-hamburger",
+          "image": "",
+          "category": "burgers",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "crispy-chicken-burger",
+          "name": "Crispy Chicken Burger",
+          "description": "A crispy golden chicken fillet topped with fresh lettuce, tomatoes, cheese, and our signature burger sauce in a soft toasted bun.",
+          "variants": [
+            {"size": "Single", "price": 4000, "display": "Single – ₦4,000"},
+            {"size": "Double", "price": 8500, "display": "Double – ₦8,500"}
+          ],
+          "type": "Chicken Burger",
+          "tags": ["Chicken", "Crispy", "Burger"],
+          "icon": "fas fa-hamburger",
+          "image": "18.jpg",
+          "category": "burgers",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-gourmet-sausage-burger",
+          "name": "Urban Gourmet Sausage Burger",
+          "description": "Choose your protein",
+          "variants": [
+            {"size": "Chicken", "price": 5000, "display": "Chicken – ₦5,000"},
+            {"size": "Turkey", "price": 6500, "display": "Turkey – ₦6,500"}
+          ],
+          "type": "Sausage Burger",
+          "tags": ["Sausage", "Burger", "Gourmet"],
+          "icon": "fas fa-hotdog",
+          "image": "",
+          "category": "burgers",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "suya-burger",
+          "name": "Suya Burger",
+          "description": "Juicy beef or chicken patty coated in spicy suya seasoning, served with lettuce, tomatoes, onions, and creamy suya sauce in a soft bun.",
+          "price": 5000,
+          "priceDisplay": "₦5,000",
+          "type": "Spicy Burger",
+          "tags": ["Suya", "Burger", "Spicy"],
+          "icon": "fas fa-hamburger",
+          "image": "120.jpg",
+          "category": "burgers",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Suya", "price": 500, "display": "Extra Suya – ₦500"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "noodles",
+      "name": "NOODLES, RAMEN & SUSHI",
+      "items": [
+        {
+          "id": "chicken-sausage-noodles",
+          "name": "Chicken Sausage Noodles",
+          "description": "Stir-fried noodles loaded with chicken sausage, vegetables, eggs, and our signature seasoning.",
+          "price": 2800,
+          "priceDisplay": "₦2,800",
+          "type": "Chicken Noodles",
+          "tags": ["Chicken", "Noodles", "Affordable"],
+          "icon": "fas fa-utensils",
+          "image": "102.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "singapore-noodles",
+          "name": "Singapore Noodles",
+          "description": "Thin stir-fried noodles tossed with shrimps, chicken, vegetables, curry spices, and our signature Singapore-style sauce.",
+          "price": 6200,
+          "priceDisplay": "₦6,200",
+          "type": "Singapore Noodles",
+          "tags": ["Singapore", "Noodles", "Seafood"],
+          "icon": "fas fa-utensils",
+          "image": "101.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asian-chow-mein",
+          "name": "Asian Chow Mein",
+          "description": "Classic stir-fried noodles cooked with fresh vegetables and your choice of tender chicken or beef in our signature Asian sauce.",
+          "price": 5600,
+          "priceDisplay": "₦5,600",
+          "type": "Chow Mein",
+          "tags": ["Asian", "Noodles", "Popular"],
+          "icon": "fas fa-utensils",
+          "image": "29.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "mongolian-beef-noodles",
+          "name": "Mongolian Beef Noodles",
+          "description": "Wok-tossed noodles with tender beef strips, colourful vegetables, and our rich Mongolian sauce for a bold, savoury flavour.",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Asian Noodles",
+          "tags": ["Mongolian", "Beef", "Noodles"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "indo-gizdodo-noodles",
+          "name": "Indo-Gizdodo Noodles",
+          "description": "A delicious fusion of stir-fried noodles with spicy gizzard, ripe plantain, peppers, and onions.",
+          "price": 5000,
+          "priceDisplay": "₦5,000",
+          "type": "Mixed Noodles",
+          "tags": ["Gizzard", "Plantain", "Noodles"],
+          "icon": "fas fa-utensils",
+          "image": "4.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asun-noodles",
+          "name": "Asun Noodles",
+          "description": "Stir-fried noodles tossed with spicy smoked Asun, and our signature house seasoning.",
+          "price": 3800,
+          "priceDisplay": "₦3,800",
+          "type": "Spicy Noodles",
+          "tags": ["Spicy", "Asun", "Noodles"],
+          "icon": "fas fa-fire",
+          "image": "66.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asian-ramen",
+          "name": "Asian Ramen",
+          "description": "Authentic ramen noodles wok-tossed with fresh vegetables and your choice of protein with egg in our signature Asian house sauce, delivering the perfect balance of savoury, smoky, and umami flavours.",
+          "variants": [
+            {"size": "Chicken", "price": 5500, "display": "Chicken – ₦5,500"},
+            {"size": "Beef", "price": 6500, "display": "Beef – ₦6,500"},
+            {"size": "Shrimp", "price": 7500, "display": "Shrimp – ₦7,500"}
+          ],
+          "type": "Ramen",
+          "tags": ["Ramen", "Asian", "Noodles"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "steak-noodles",
+          "name": "Steak Noodles",
+          "description": "Fresh egg noodles wok-tossed with tender grilled steak strips, colourful vegetables, and our signature savoury sauce, delivering a rich, smoky, and bold flavour in every bite.",
+          "price": 8500,
+          "priceDisplay": "₦8,500",
+          "type": "Steak Noodles",
+          "tags": ["Steak", "Noodles", "Premium"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-signature-noodles",
+          "name": "Urban Signature Noodles",
+          "description": "Our signature wok-tossed egg noodles loaded with succulent prawns, shrimp, tender calamari, premium snail, and fresh veggies coated in our rich house-made Asian seafood sauce for a bold, smoky, and unforgettable flavour.",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Signature Noodles",
+          "tags": ["Urban", "Noodles", "Signature"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "indomie-goatmeat-pepper-soup",
+          "name": "Indomie Goat Meat Pepper Soup",
+          "description": "Spicy Indomie noodles served in a rich pepper soup broth with tender goat meat, intestine and authentic Nigerian spices.",
+          "price": 5000,
+          "priceDisplay": "₦5,000",
+          "type": "Indomie",
+          "tags": ["Indomie", "Goatmeat", "Peppersoup"],
+          "icon": "fas fa-utensils",
+          "image": "110.jpg",
+          "category": "noodles",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "student-combos",
+      "name": "Student Discount",
+      "items": [],
+      "discountInfo": "🎓 Coming Soon!\n\nTerms & Conditions:\n• Must Present a Valid Student ID Card\n• Valid on Mondays & Tuesdays Only\n• Discount Applies to Eligible Menu Items Only\n• Offer Cannot Be Combined with Other Promotions"
+    },
+    {
+      "id": "breakfast",
+      "name": "Breakfast",
+      "items": [
+        {
+          "id": "mashed-potatoes-beef-gravy",
+          "name": "Mashed Potatoes & Beef Gravy",
+          "description": "Smooth, creamy mashed potatoes topped with our rich, savoury beef gravy, made from slow-simmered beef stock for a comforting, delicious meal.",
+          "price": 3500,
+          "priceDisplay": "₦3,500",
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Mashed Potatoes", "Beef Gravy"],
+          "icon": "fas fa-coffee",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "oreo-mini-crepe-pancakes",
+          "name": "Oreo Mini Crepe Pancakes",
+          "description": "Soft mini crepe pancakes layered with crushed Oreo cookies, drizzled with chocolate sauce, and finished with whipped cream.",
+          "variants": [
+            {"size": "6 Pieces", "price": 4000, "display": "6 Pieces – ₦4,000"},
+            {"size": "8 Pieces", "price": 5500, "display": "8 Pieces – ₦5,500"},
+            {"size": "12 Pieces", "price": 7500, "display": "12 Pieces – ₦7,500"},
+            {"size": "24 Pieces", "price": 12000, "display": "24 Pieces – ₦12,000"},
+            {"size": "Extra Whipping Cream", "price": 500, "display": "Extra Whipping Cream – ₦500"}
+          ],
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Pancake", "Oreo", "Sweet"],
+          "icon": "fas fa-pancakes",
+          "image": "oreo.jpg",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "red-velvet-waffles",
+          "name": "Red Velvet Waffles",
+          "description": "Our freshly baked red velvet waffles soft, fluffy, and perfectly crisp, finished with silky whipped cream, served with 2 Sausage 2 Spring Rolls 2 Samosa",
+          "variants": [
+            {"size": "4 Pieces", "price": 4500, "display": "4 Pieces – ₦4,500"},
+            {"size": "6 Pieces", "price": 6500, "display": "6 Pieces – ₦6,500"},
+            {"size": "8 Pieces", "price": 8500, "display": "8 Pieces – ₦8,500"},
+            {"size": "Extra Whipping Cream", "price": 500, "display": "Extra Whipping Cream – ₦500"}
+          ],
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Waffle", "Red Velvet"],
+          "icon": "fas fa-waffle",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chocolate-chip-pancake-stack",
+          "name": "Chocolate Chip Pancake Stack",
+          "description": "A stack of soft, fluffy pancakes loaded with rich chocolate chips drizzled with chocolate sauce, and served with whipped cream. Comes with 2 crispy spring rolls and 2 golden samosas for a delicious sweet-and-savoury combination.",
+          "variants": [
+            {"size": "4 Pieces", "price": 4000, "display": "4 Pieces – ₦4,000"},
+            {"size": "6 Pieces", "price": 5500, "display": "6 Pieces – ₦5,500"},
+            {"size": "8 Pieces", "price": 7500, "display": "8 Pieces – ₦7,500"},
+            {"size": "Extra Whipping Cream", "price": 500, "display": "Extra Whipping Cream – ₦500"}
+          ],
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Pancake", "Chocolate Chip"],
+          "icon": "fas fa-pancakes",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "english-breakfast",
+          "name": "English Breakfast",
+          "description": "2 Toast bread or 3 Pancakes\n* Baked Beans\n* 2 Sausages\n* Sunny Side Egg\n* 1 Grilled Turkey or 2 Chicken Wings",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Breakfast",
+          "tags": ["Breakfast", "English", "Classic"],
+          "icon": "fas fa-coffee",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "pancake-breakfast",
+          "name": "Pancake Breakfast",
+          "description": "* 4 Pancakes\n* 4 Mosa\n* Baked beans\n* 2 Grilled or Honeycomb Wings\n* Scrambled Eggs",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Pancake", "Waffle"],
+          "icon": "fas fa-pancakes",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "waffle-breakfast",
+          "name": "Waffle Breakfast",
+          "description": "3 waffles, Egg & Cheese Sandwich, 3 Boneless chicken strips and urban Signature fries",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Breakfast",
+          "tags": ["Breakfast", "Waffle", "Egg"],
+          "icon": "fas fa-waffle",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "deluxe-breakfast",
+          "name": "Deluxe Breakfast",
+          "description": "4 waffles, 4 pancakes, 2 turkey, 2 scrambled egg, 2 sausage, 4 samosa and 4 MOSA.",
+          "price": 18500,
+          "priceDisplay": "#18,500",
+          "type": "Deluxe Breakfast",
+          "tags": ["Deluxe", "Breakfast", "Premium"],
+          "icon": "fas fa-crown",
+          "image": "breakfast.jpg",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "yamarita",
+          "name": "Yamarita",
+          "description": "Golden fried yam coated in a light seasoned egg batter, served with your choice of rich Nigerian egg sauce or flavourful fish sauce. Accompanied by 2 spicy sausages, 2 chicken wings and baked beans for a hearty, satisfying meal.",
+          "price": 5500,
+          "priceDisplay": "₦5,500",
+          "type": "Nigerian Breakfast",
+          "tags": ["Nigerian", "Breakfast", "Yamarita"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "breakfast",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "urban-ph-boli",
+      "name": "Urban PH Boli, Fish & Yam",
+      "items": [
+        {
+          "id": "boli",
+          "name": "Boli",
+          "description": "All Orders Come with Sauce.",
+          "price": 1000,
+          "priceDisplay": "₦1,000",
+          "type": "Boli",
+          "tags": ["Boli", "Grilled", "Plantain"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "variants": [
+            {"size": "Small", "price": 1000, "display": "Small – ₦1,000"},
+            {"size": "Large", "price": 1500, "display": "Large – ₦1,500"}
+          ]
+        },
+        {
+          "id": "mixed-grilled-boli-pomo",
+          "name": "Mixed Grilled Boli with Yam & Pomo Sauce",
+          "description": "Mixed grilled plantain and yam with pomo sauce.",
+          "price": 2500,
+          "priceDisplay": "₦2,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Grilled", "Pomo"],
+          "icon": "fas fa-fire",
+          "image": "6.jpg",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Pomo Sauce", "price": 1000, "display": "Extra Pomo Sauce – ₦1,000"},
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        },
+        {
+          "id": "boli-combo-1",
+          "name": "2 Grilled Boli + 1 Cut Fish + Yam",
+          "description": "2 grilled plantain with yam and cut fish.",
+          "price": 4500,
+          "priceDisplay": "₦4,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Yam", "Fish"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        },
+        {
+          "id": "boli-combo-2",
+          "name": "2 Grilled Boli + 1 Full Mackerel Fish + Yam",
+          "description": "2 grilled plantain with full mackerel fish and yam.",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Yam", "Fish"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        },
+        {
+          "id": "boli-combo-3",
+          "name": "2 Grilled Boli + 1 Turkey + Yam",
+          "description": "2 grilled plantain with turkey and yam.",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Yam", "Turkey"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        },
+        {
+          "id": "boli-combo-4",
+          "name": "2 Grilled Boli + 2 Chicken Wings + Yam",
+          "description": "2 grilled plantain with chicken wings and yam.",
+          "price": 5500,
+          "priceDisplay": "₦5,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Yam", "Chicken Wings"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        },
+        {
+          "id": "boli-combo-5",
+          "name": "4 Grilled Boli + 4 Chicken Wings + Yam",
+          "description": "4 grilled plantain with chicken wings and yam.",
+          "price": 8500,
+          "priceDisplay": "₦8,500",
+          "type": "Boli Combo",
+          "tags": ["Boli", "Yam", "Chicken Wings"],
+          "icon": "fas fa-fire",
+          "image": "",
+          "category": "urban-ph-boli",
+          "stock": 100,
+          "lowStock": 20,
+          "addons": [
+            {"name": "Extra Sauce", "price": 1000, "display": "Extra Sauce – ₦1,000"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "urban-grillz-platter",
+      "name": "Urban Grillz Platter",
+      "items": [
+        {
+          "id": "urban-solo-feast",
+          "name": "Urban Solo Feast",
+          "description": "Classic Chicken Sandwich, Yam Fries, Turkey, 2 Sweet Corn, 1 Sausage, Fruit Juice or Zobo",
+          "price": 8500,
+          "priceDisplay": "₦8,500",
+          "type": "Feast",
+          "tags": ["Feast", "Solo", "Platter"],
+          "icon": "fas fa-star",
+          "image": "",
+          "category": "urban-grillz-platter",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "big-brother-feast",
+          "name": "Big Brother Feast",
+          "description": "Advanced Full Agege Sandwich, Yam Fries, Sweet Potatoes, 2 Sweet Corn, 2 Honeycomb Wings, 1 Grilled Turkey",
+          "price": 12500,
+          "priceDisplay": "₦12,500",
+          "type": "Feast",
+          "tags": ["Feast", "Platter", "Premium"],
+          "icon": "fas fa-crown",
+          "image": "",
+          "category": "urban-grillz-platter",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "netflix-chill-feast",
+          "name": "Netflix & Chill Feast",
+          "description": "Full Agege Sandwich, Classic Chicken Sandwich, 2 Turkey, 2 Honeycomb Wings, 4 Sausages, 4 Sweet Corn, 2 Zobo",
+          "price": 18500,
+          "priceDisplay": "₦18,500",
+          "type": "Feast",
+          "tags": ["Feast", "Netflix", "Platter"],
+          "icon": "fas fa-tv",
+          "image": "",
+          "category": "urban-grillz-platter",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-protein-feast",
+          "name": "Urban Protein Feast",
+          "description": "2 Grilled Turkey, 4 Honeycomb or Suya Wings, 2 Sticks of Suya, French Fries or Grilled Sweet Potatoes, 4 Sausages, 4 Sweet Corn, 2 Boli, 1 Sauce, served with a Big Bowl of Suya Jollof/ Urban signature Rice.",
+          "price": 21500,
+          "priceDisplay": "₦21,500",
+          "type": "Feast",
+          "tags": ["Feast", "Protein", "Platter"],
+          "icon": "fas fa-dumbbell",
+          "image": "",
+          "category": "urban-grillz-platter",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "feed-the-body-platter",
+          "name": "Feed The Body Platter (Serves 3)",
+          "description": "Urban Signature Rice\nChinese Fried Rice\nSingapore noodles\nPenne Arrabbiata Pasta\nAsun/ Suya\n6 Korean Chicken Popcorn\n2 BbQ wings\n2 Alfredo wings\n1 Chicken wrap\n1 Sharwama\nChapman( For 3)",
+          "price": 29500,
+          "priceDisplay": "₦29,500",
+          "type": "Platter",
+          "tags": ["Platter", "Feast", "Family"],
+          "icon": "fas fa-users",
+          "image": "",
+          "category": "urban-grillz-platter",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "urban-combos",
+      "name": "Urban Combos",
+      "items": [
+        {
+          "id": "combo-1",
+          "name": "Combo 1",
+          "description": "Singapore Noodles, Asun Rice, 4 Korean Popcorn Chicken or 2 Wings",
+          "price": 9500,
+          "priceDisplay": "₦9,500",
+          "type": "Combo",
+          "tags": ["Combo", "Noodles", "Rice", "Chicken"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "combo-2",
+          "name": "Combo 2",
+          "description": "Suya Burger, Single Crispy Burger, Fries, 2 Buffalo Wings or 1 Grilled Turkey, Milkshake",
+          "price": 12500,
+          "priceDisplay": "₦12,500",
+          "type": "Combo",
+          "tags": ["Combo", "Burger", "Fries", "Wings"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "combo-3",
+          "name": "Combo 3",
+          "description": "Waffle Burger, Fries, 2 Alfredo Chicken Wings",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Combo",
+          "tags": ["Combo", "Burger", "Waffle", "Wings"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "combo-4",
+          "name": "Combo 4",
+          "description": "Urban Chicken Gourmet Sausage Roll, Korean Popcorn Chicken or 2 Boneless Chicken Strips, Fruit Juice",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Combo",
+          "tags": ["Combo", "Sausage", "Chicken", "Juice"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "combo-5",
+          "name": "Combo 5",
+          "description": "3 Chocolate Chip Pancakes with whipping cream, 2 crispy chicken or Alfredo wings, 2 sausage",
+          "price": 8500,
+          "priceDisplay": "₦8,500",
+          "type": "Combo",
+          "tags": ["Combo", "Pancake", "Chicken", "Breakfast"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "combo-6",
+          "name": "Combo 6",
+          "description": "3 Red Velvet Waffle Stacks with whipping cream topping, 2 boneless chicken and sauce",
+          "price": 10500,
+          "priceDisplay": "₦10,500",
+          "type": "Combo",
+          "tags": ["Combo", "Waffle", "Red Velvet", "Chicken"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "urban-mini-burger-box",
+          "name": "Urban Mini Burger Box (6 Pieces)",
+          "description": "3 Mini Crispy Chicken Burgers, 3 Mini Suya Beef Burgers, 3 Samosas, 3 Spring Rolls, 10 Puff Puff",
+          "price": 13500,
+          "priceDisplay": "₦13,500",
+          "type": "Combo",
+          "tags": ["Combo", "Burger", "Samosa", "Spring Roll", "Puff Puff"],
+          "icon": "fas fa-concierge-bell",
+          "image": "",
+          "category": "urban-combos",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "salads",
+      "name": "Salads",
+      "items": [
+        {
+          "id": "pasta-chicken-salad",
+          "name": "Pasta Chicken Salad",
+          "description": "Fresh chicken salad.",
+          "price": 2500,
+          "priceDisplay": "#2,500",
+          "type": "Salad",
+          "tags": ["Salad", "Chicken", "Fresh"],
+          "icon": "fas fa-leaf",
+          "image": "82.jpg",
+          "category": "salads",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "coleslaw",
+          "name": "Coleslaw",
+          "description": "Creamy coleslaw.",
+          "price": 1200,
+          "priceDisplay": "#1,200",
+          "type": "Salad",
+          "tags": ["Salad", "Coleslaw", "Creamy"],
+          "icon": "fas fa-leaf",
+          "image": "50.jpg",
+          "category": "salads",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "milkshake",
+      "name": "Milkshakes & Cocktails",
+      "items": [
+        {
+          "id": "love-portion-cocktails",
+          "name": "Love Portion Cocktails",
+          "description": "",
+          "price": 0,
+          "priceDisplay": "Price varies",
+          "type": "Cocktail",
+          "tags": ["Cocktail", "Drink", "Love Portion"],
+          "icon": "fas fa-glass-martini",
+          "image": "",
+          "category": "milkshake",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "oreo-milkshake",
+          "name": "Oreo Milkshake",
+          "description": "Oreo Milkshake",
+          "variants": [
+            {"size": "Small Cup", "price": 3500, "display": "Small Cup – ₦3,500"},
+            {"size": "Big Cup", "price": 6500, "display": "Big Cup – ₦6,500"}
+          ],
+          "type": "Milk",
+          "tags": ["Drink", "Milk", "Oreo"],
+          "icon": "fas fa-milk",
+          "image": "93.jpg",
+          "category": "milkshake",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "strawberry-milkshake",
+          "name": "Strawberry",
+          "description": "Strawberry",
+          "variants": [
+            {"size": "Small Cup", "price": 3000, "display": "Small Cup – ₦3,000"},
+            {"size": "Big Cup", "price": 5000, "display": "Big Cup – ₦5,000"}
+          ],
+          "type": "Milk",
+          "tags": ["Drink", "Milk", "Strawberry"],
+          "icon": "fas fa-milk",
+          "image": "92.jpg",
+          "category": "milkshake",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "banana-milkshake",
+          "name": "Banana Milkshake",
+          "description": "Banana Milkshake",
+          "variants": [
+            {"size": "Small Cup", "price": 3000, "display": "Small Cup – ₦3,000"},
+            {"size": "Big Cup", "price": 6000, "display": "Big Cup – ₦6,000"}
+          ],
+          "type": "Milk",
+          "tags": ["Drink", "Milk", "Milkshake"],
+          "icon": "fas fa-milk",
+          "image": "91.jpg",
+          "category": "milkshake",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chocolate-milkshake",
+          "name": "Chocolate Milkshake",
+          "description": "Creamy milkshake.",
+          "variants": [
+            {"size": "Small Cup", "price": 3000, "display": "Small Cup – ₦3,000"},
+            {"size": "Big Cup", "price": 5000, "display": "Big Cup – ₦5,000"}
+          ],
+          "type": "Milkshake",
+          "tags": ["Drink", "Creamy", "Milkshake"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "48.jpg",
+          "category": "milkshake",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "drinks",
+      "name": "Drinks",
+      "items": [
+        {
+          "id": "chapman",
+          "name": "Chapman",
+          "description": "None Alcoholic Drink.",
+          "price": 1500,
+          "priceDisplay": "₦1,500",
+          "type": "Fruit Drink",
+          "tags": ["Drink", "Fruit", "Chapman"],
+          "icon": "fas fa-glass-fruit",
+          "image": "90.jpg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "zobo",
+          "name": "Zobo",
+          "description": "Hibiscus drink.",
+          "price": 1000,
+          "priceDisplay": "#1,000",
+          "type": "Local Drink",
+          "tags": ["Drink", "Local", "Zobo"],
+          "icon": "fas fa-glass-whiskey",
+          "image": ".jpg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "fruit-juice",
+          "name": "Fruit Juice",
+          "description": "Fruit drink.",
+          "price": 1000,
+          "priceDisplay": "#1,000",
+          "type": "Local Drink",
+          "tags": ["Drink", "Local", "Fruit"],
+          "icon": "fas fa-glass-whiskey",
+          "image": ".jpg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "palmwine",
+          "name": "Palmwine",
+          "description": "Fresh palmwine.",
+          "price": 1000,
+          "priceDisplay": "₦1,000",
+          "type": "Local Drink",
+          "tags": ["Drink", "Local", "Palmwine"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "coca-cola",
+          "name": "Coca-Cola",
+          "description": "Carbonated soft drink.",
+          "price": 600,
+          "priceDisplay": "#600",
+          "type": "Soft Drink",
+          "tags": ["Drink", "Soda", "Coke"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "1.jpeg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chivita-active",
+          "name": "Chivita Active",
+          "description": "Fruit drink.",
+          "price": 500,
+          "priceDisplay": "₦500",
+          "type": "Fruit Drink",
+          "tags": ["Drink", "Fruit", "Chivita"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "sprite",
+          "name": "Sprite",
+          "description": "Carbonated soft drink.",
+          "price": 600,
+          "priceDisplay": "#600",
+          "type": "Soft Drink",
+          "tags": ["Drink", "Soda", "Sprite"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "1.avif",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "schweppes-mojito",
+          "name": "Schweppes Mojito",
+          "description": "Carbonated soft drink.",
+          "price": 600,
+          "priceDisplay": "₦600",
+          "type": "Soft Drink",
+          "tags": ["Drink", "Soda", "Schweppes"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "monster-energy",
+          "name": "Monster Energy",
+          "description": "Energy drink.",
+          "price": 2000,
+          "priceDisplay": "Price varies",
+          "type": "Energy Drink",
+          "tags": ["Drink", "Energy", "Monster"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "2.jpeg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "five-alive",
+          "name": "5 Alive",
+          "description": "Fruit drink.",
+          "price": 500,
+          "priceDisplay": "Price varies",
+          "type": "Fruit Drink",
+          "tags": ["Drink", "Fruit", "Five Alive"],
+          "icon": "fas fa-glass-whiskey",
+          "image": "3.webp",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "water",
+          "name": "Water",
+          "description": "Bottled water.",
+          "price": 500,
+          "priceDisplay": "#500",
+          "type": "Water",
+          "tags": ["Drink", "Water", "Bottled"],
+          "icon": "fas fa-tint",
+          "image": "112.jpg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "tigernut",
+          "name": "Tigernut Drink",
+          "description": "Tigernut drink.",
+          "price": 1200,
+          "priceDisplay": "₦1,200",
+          "type": "Local Drink",
+          "tags": ["Drink", "Local", "Tiger Nut"],
+          "icon": "fas fa-glass-whiskey",
+          "image": ".jpg",
+          "category": "drinks",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "urban-pizza",
+      "name": "Urban Pizza",
+      "items": [
+        {
+          "id": "urban-trio-pizza",
+          "name": "Urban Trio Pizza (Large Only)",
+          "description": "A large signature pizza divided into three delicious sections—tender grilled chicken, seasoned beef, and spicy smoked Asun (goat meat)—topped with rich mozzarella cheese and our signature pizza sauce for the ultimate three-in-one experience.",
+          "variants": [
+            {"size": "Large", "price": 9500, "display": "Large – ₦9,500"}
+          ],
+          "type": "Pizza",
+          "tags": ["Pizza", "Deluxe", "Special"],
+          "icon": "fas fa-pizza-slice",
+          "image": "",
+          "category": "urban-pizza",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chicken-pizza",
+          "name": "Chicken Pizza",
+          "description": "A freshly baked pizza topped with tender grilled chicken, rich mozzarella cheese, and our signature tomato sauce, finished with a blend of aromatic herbs for a deliciously satisfying bite.",
+          "variants": [
+            {"size": "Small", "price": 3500, "display": "Small – ₦3,500"},
+            {"size": "Medium", "price": 5500, "display": "Medium – ₦5,500"},
+            {"size": "Large", "price": 7500, "display": "Large – ₦7,500"}
+          ],
+          "type": "Pizza",
+          "tags": ["Pizza", "Chicken", "Italian"],
+          "icon": "fas fa-pizza-slice",
+          "image": "",
+          "category": "urban-pizza",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "beef-pizza",
+          "name": "Beef Pizza",
+          "description": "Freshly baked pizza loaded with seasoned minced beef, rich mozzarella cheese, and our signature tomato sauce, finished with herbs for a bold, savoury flavour.",
+          "variants": [
+            {"size": "Small", "price": 3500, "display": "Small – ₦3,500"},
+            {"size": "Medium", "price": 5500, "display": "Medium – ₦5,500"},
+            {"size": "Large", "price": 7500, "display": "Large – ₦7,500"}
+          ],
+          "type": "Pizza",
+          "tags": ["Pizza", "Beef", "Italian"],
+          "icon": "fas fa-pizza-slice",
+          "image": "",
+          "category": "urban-pizza",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "deluxe-pizza",
+          "name": "Deluxe Pizza (Chicken & Beef)",
+          "description": "The perfect combination of tender grilled chicken and seasoned beef layered over our signature tomato sauce and generous mozzarella cheese, freshly baked to golden perfection.",
+          "variants": [
+            {"size": "Medium", "price": 6500, "display": "Medium – ₦6,500"},
+            {"size": "Large", "price": 8500, "display": "Large – ₦8,500"}
+          ],
+          "type": "Pizza",
+          "tags": ["Pizza", "Deluxe", "Chicken", "Beef"],
+          "icon": "fas fa-pizza-slice",
+          "image": "",
+          "category": "urban-pizza",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "asun-pizza",
+          "name": "Asun Pizza",
+          "description": "A bold Nigerian fusion pizza topped with spicy smoked Asun (goat meat), rich mozzarella cheese, and our signature tomato sauce, delivering a smoky, spicy, and unforgettable flavour.",
+          "variants": [
+            {"size": "Small", "price": 4000, "display": "Small – ₦4,000"},
+            {"size": "Medium", "price": 6000, "display": "Medium – ₦6,000"}
+          ],
+          "type": "Pizza",
+          "tags": ["Pizza", "Asun", "Spicy"],
+          "icon": "fas fa-pizza-slice",
+          "image": "",
+          "category": "urban-pizza",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "turkey-small-chops",
+      "name": "Urban Turkey Small Chops Central",
+      "items": [
+        {
+          "id": "turkey-solo-pack",
+          "name": "Turkey Solo Pack",
+          "description": "2 Samosa, 2 Spring Roll, 10 Puff Puff, 6 Mosa, 1 pc Turkey",
+          "price": 4500,
+          "priceDisplay": "₦4,500",
+          "type": "Small Chops",
+          "tags": ["Turkey", "Small Chops", "Solo"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "turkey-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "mini-turkey-pack",
+          "name": "Mini Turkey Pack",
+          "description": "6 Samosa, 6 Spring Roll, 15 Puff Puff, 10 Mosa, 1 pc Turkey",
+          "price": 7500,
+          "priceDisplay": "₦7,500",
+          "type": "Small Chops",
+          "tags": ["Turkey", "Small Chops", "Mini"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "turkey-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "classic-turkey-pack",
+          "name": "Classic Turkey Pack",
+          "description": "8 Samosa, 8 Spring Roll, 20 Puff Puff, 15 Mosa, 2 pcs Turkey, 2 Sticks of Suya",
+          "price": 12500,
+          "priceDisplay": "₦12,500",
+          "type": "Small Chops",
+          "tags": ["Turkey", "Small Chops", "Classic"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "turkey-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "netflix-chill-turkey-chops",
+          "name": "Netflix & Chill Small Chops",
+          "description": "15 Samosa, 15 Spring Rolls, 30 Puff Puff, 30 Mosa, 3 Grilled Turkey, 4 Grilled Sweet Corn / 4 pcs Korean Popcorn Chicken, 10 pcs Peppered Gizzard",
+          "price": 22500,
+          "priceDisplay": "₦22,500",
+          "type": "Small Chops",
+          "tags": ["Turkey", "Small Chops", "Netflix", "Chill"],
+          "icon": "fas fa-tv",
+          "image": "",
+          "category": "turkey-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "chicken-small-chops",
+      "name": "Urban Chicken Small Chops Central",
+      "items": [
+        {
+          "id": "chicken-solo-pack",
+          "name": "Chicken Solo Pack",
+          "description": "2 Samosa, 2 Spring Rolls, 10 Puff Puff, 6 Mosa, 1 pc Chicken Wing",
+          "price": 3500,
+          "priceDisplay": "₦3,500",
+          "type": "Small Chops",
+          "tags": ["Chicken", "Small Chops", "Solo"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "chicken-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "mini-chicken-pack",
+          "name": "Mini Chicken Pack",
+          "description": "6 Samosa, 6 Spring Rolls, 15 Puff Puff, 15 Mosa, 3 pcs Grilled Chicken",
+          "price": 6500,
+          "priceDisplay": "₦6,500",
+          "type": "Small Chops",
+          "tags": ["Chicken", "Small Chops", "Mini"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "chicken-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "classic-chicken-pack",
+          "name": "Classic Chicken Pack",
+          "description": "8 Samosa, 8 Spring Rolls, 20 Puff Puff, 15 Mosa, 5 pcs Chicken Wings, 2 Sticks of Suya",
+          "price": 11500,
+          "priceDisplay": "₦11,500",
+          "type": "Small Chops",
+          "tags": ["Chicken", "Small Chops", "Classic"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "chicken-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "netflix-chill-chicken-chops",
+          "name": "Netflix & Chill Small Chops",
+          "description": "15 Samosa, 15 Spring Rolls, 30 Puff Puff, 30 Mosa, 4 BBQ Chicken Wings, 4 Suya Chicken Wings, 4 Sweet Corn / 4 Korean Popcorn Chicken, 5 pcs Peppered Gizzard, 5 Sticks Suya",
+          "price": 20500,
+          "priceDisplay": "₦20,500",
+          "type": "Small Chops",
+          "tags": ["Chicken", "Small Chops", "Netflix", "Chill"],
+          "icon": "fas fa-tv",
+          "image": "",
+          "category": "chicken-small-chops",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    },
+    {
+      "id": "pastries",
+      "name": "Pastries",
+      "items": [
+        {
+          "id": "scotch-egg",
+          "name": "Scotch Egg",
+          "description": "",
+          "price": 1000,
+          "priceDisplay": "₦1,000",
+          "type": "Pastry",
+          "tags": ["Pastry", "Scotch Egg"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "sausage-roll",
+          "name": "Sausage Roll",
+          "description": "",
+          "price": 1000,
+          "priceDisplay": "₦1,000",
+          "type": "Pastry",
+          "tags": ["Pastry", "Sausage Roll"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "doughnut",
+          "name": "Doughnut",
+          "description": "",
+          "price": 1000,
+          "priceDisplay": "₦1,000",
+          "type": "Pastry",
+          "tags": ["Pastry", "Doughnut"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "chicken-pie",
+          "name": "Chicken Pie",
+          "description": "",
+          "price": 1500,
+          "priceDisplay": "₦1,500",
+          "type": "Pastry",
+          "tags": ["Pastry", "Chicken Pie"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "meat-pie",
+          "name": "Meat Pie",
+          "description": "",
+          "price": 1500,
+          "priceDisplay": "₦1,500",
+          "type": "Pastry",
+          "tags": ["Pastry", "Meat Pie"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        },
+        {
+          "id": "fish-pie",
+          "name": "Fish Pie",
+          "description": "",
+          "price": 1500,
+          "priceDisplay": "₦1,500",
+          "type": "Pastry",
+          "tags": ["Pastry", "Fish Pie"],
+          "icon": "fas fa-utensils",
+          "image": "",
+          "category": "pastries",
+          "stock": 100,
+          "lowStock": 20
+        }
+      ]
+    }
+  ]
+}
