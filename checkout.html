@@ -340,7 +340,7 @@
         <div class="checkout-form">
             <h2><i class="fas fa-truck"></i> Delivery Information</h2>
             <div class="notice">
-                <i class="fas fa-info-circle"></i> ₦300 takeaway fee applies to ALL orders
+                <i class="fas fa-info-circle"></i> ₦500 takeaway fee applies to ALL orders
             </div>
             
             <div class="form-group">
@@ -426,7 +426,7 @@
             </div>
             <div class="order-total" style="margin-top: 10px;">
                 <span>Takeaway Fee:</span>
-                <span id="takeaway-fee">₦300</span>
+                <span id="takeaway-fee">₦500</span>
             </div>
             <div class="order-total" style="border-top: none;">
                 <span>Total:</span>
@@ -553,7 +553,7 @@
                 if (!savedCart) {
                     document.getElementById('order-items').innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     document.getElementById('order-subtotal').textContent = '₦0';
-                    document.getElementById('order-total').textContent = '₦300';
+                    document.getElementById('order-total').textContent = '₦500';
                     return;
                 }
                 
@@ -601,7 +601,7 @@
             function updateTotalDisplay() {
                 const orderTotalEl = document.getElementById('order-total');
                 const subtotal = cartData?.total || 0;
-                const total = subtotal + 300;
+                const total = subtotal + 500;
                 if (orderTotalEl) {
                     orderTotalEl.textContent = `₦${total.toLocaleString()}`;
                 }
@@ -679,7 +679,7 @@
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Takeaway Fee:</span>
-                                <span>₦300</span>
+                                <span>₦500</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
                                 <span>TOTAL:</span>
@@ -712,7 +712,7 @@
                             order_type: orderTypeForDb,
                             items: orderData.items,
                             subtotal: orderData.subtotal,
-                            takeaway_fee: 300,
+                            takeaway_fee: 500,
                             total: orderData.total,
                             payment_method: orderData.paymentMethod,
                             payment_status: orderData.paymentStatus || 'pending',
@@ -921,7 +921,7 @@
                     orderType: currentOrderType,
                     items: cartData.items,
                     subtotal: cartData.total,
-                    total: cartData.total + 300,
+                    total: cartData.total + 500,
                     paymentMethod: paymentMethod,
                     paymentStatus: 'pending',
                     pickupLocation: currentOrderType === 'pickup' ? address : null,

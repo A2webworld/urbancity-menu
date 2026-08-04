@@ -3015,29 +3015,38 @@
             itemContent.appendChild(itemDescription);
             
             // VARIANT SELECTOR - Clickable buttons for each variant
-            if (item.variants && item.variants.length > 0) {
-                const variantSelector = document.createElement('div');
-                variantSelector.className = 'variant-selector';
-                item.variants.forEach((variant, idx) => {
-                    const variantBtn = document.createElement('button');
-                    variantBtn.className = 'variant-btn';
-                    if (idx === 0) variantBtn.classList.add('selected');
-                    variantBtn.textContent = variant.display || variant.size;
-                    variantBtn.dataset.variant = JSON.stringify(variant);
-                    variantBtn.addEventListener('click', function() {
-                        variantSelector.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
-                        this.classList.add('selected');
-                        // Update price display
-                        const priceDisplay = this.textContent.match(/₦[\d,]+/);
-                        if (priceDisplay) {
-                            const priceTag = menuItem.querySelector('.item-price');
-                            if (priceTag) priceTag.innerHTML = priceDisplay[0];
-                        }
-                    });
-                    variantSelector.appendChild(variantBtn);
-                });
-                itemContent.appendChild(variantSelector);
+if (item.variants && item.variants.length > 0) {
+    const variantSelector = document.createElement('div');
+    variantSelector.className = 'variant-selector';
+    item.variants.forEach((variant, idx) => {
+        const variantBtn = document.createElement('button');
+        variantBtn.className = 'variant-btn';
+        if (idx === 0) variantBtn.classList.add('selected');
+        variantBtn.textContent = variant.display || variant.size;
+        variantBtn.dataset.variant = JSON.stringify(variant);
+        variantBtn.dataset.price = variant.price || 0;
+        variantBtn.dataset.size = variant.size || '';
+        variantBtn.addEventListener('click', function() {
+            variantSelector.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+            this.classList.add('selected');
+            // Update price display
+            const priceDisplay = this.textContent.match(/₦[\d,]+/);
+            if (priceDisplay) {
+                const priceTag = menuItem.querySelector('.item-price');
+                if (priceTag) priceTag.innerHTML = priceDisplay[0];
             }
+            // Update the add to cart button data
+            const addBtn = menuItem.querySelector('.add-to-cart-btn');
+            if (addBtn) {
+                const variantData = JSON.parse(this.dataset.variant);
+                addBtn.dataset.price = variantData.price || 0;
+                addBtn.dataset.variant = variantData.size || variantData.display || '';
+            }
+        });
+        variantSelector.appendChild(variantBtn);
+    });
+    itemContent.appendChild(variantSelector);
+}
             
             const itemFooter = document.createElement('div');
             itemFooter.className = 'item-footer';
@@ -3061,94 +3070,93 @@
             itemContent.appendChild(itemFooter);
             
             // ADD TO CART BUTTON - FIXED
-            const addToCartBtn = document.createElement('button');
-            addToCartBtn.className = 'add-to-cart-btn';
-            addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
-            addToCartBtn.addEventListener('click', function() {
-                // === GET ITEM NAME FROM TITLE ===
-                const titleEl = menuItem.querySelector('.item-title');
-                let itemName = titleEl ? titleEl.textContent.trim() : item.name || 'Item';
-                // Remove price from name if present
-                itemName = itemName.replace(/₦[\d,]+/g, '').trim();
-                
-                // === GET PRICE FROM PRICE TAG ===
-                const priceTag = menuItem.querySelector('.item-price');
-                let price = 0;
-                if (priceTag) {
-                    const priceText = priceTag.textContent;
-                    const match = priceText.match(/₦([\d,]+)/);
-                    if (match) {
-                        price = parseInt(match[1].replace(/,/g, ''));
-                    }
-                }
-                
-                // === GET VARIANT INFO ===
-                const selectedVariant = itemContent.querySelector('.variant-btn.selected');
-                let variantName = null;
-                let variantPrice = 0;
-                
-                if (selectedVariant) {
-                    try {
-                        const variantData = JSON.parse(selectedVariant.dataset.variant);
-                        variantName = variantData.size || variantData.display || null;
-                        variantPrice = variantData.price || 0;
-                    } catch(e) {
-                        variantName = selectedVariant.textContent.trim();
-                        // Try to extract price from variant text
-                        const match = variantName.match(/₦([\d,]+)/);
-                        if (match) {
-                            variantPrice = parseInt(match[1].replace(/,/g, ''));
-                        }
-                    }
-                } else if (item.variants && item.variants.length > 0) {
-                    const firstVariant = item.variants[0];
-                    variantName = firstVariant.size || null;
-                    variantPrice = firstVariant.price || 0;
-                }
-                
-                // === USE VARIANT PRICE IF AVAILABLE ===
-                if (variantPrice > 0) {
-                    price = variantPrice;
-                }
-                
-                // === FALLBACK: Try to get price from item object ===
-                if (price === 0 && item.price) {
-                    price = item.price;
-                }
-                if (price === 0 && item.price_display) {
-                    const match = item.price_display.match(/₦([\d,]+)/);
-                    if (match) {
-                        price = parseInt(match[1].replace(/,/g, ''));
-                    }
-                }
-                
-                // === LOG FOR DEBUGGING ===
-                console.log('🛒 Adding to cart:', { 
-                    itemId: item.item_id || item.id, 
-                    itemName: itemName, 
-                    price: price, 
-                    variantName: variantName 
-                });
-                
-                // === VALIDATE ===
-                if (price === 0 || isNaN(price)) {
-                    showToast('⚠️ Price not available for this item');
-                    return;
-                }
-                
-                if (!itemName || itemName === '') {
-                    itemName = item.name || 'Menu Item';
-                }
-                
-                // === ADD TO CART ===
-                if (typeof addToCart === 'function') {
-                    addToCart(item.item_id || item.id, itemName, price, variantName);
-                } else {
-                    console.error('❌ addToCart function not available');
-                    showToast('⚠️ Error adding item to cart');
-                }
-            });
-            itemContent.appendChild(addToCartBtn);
+const addToCartBtn = document.createElement('button');
+addToCartBtn.className = 'add-to-cart-btn';
+addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
+addToCartBtn.addEventListener('click', function() {
+    // === GET ITEM NAME FROM TITLE ===
+    const titleEl = menuItem.querySelector('.item-title');
+    let itemName = titleEl ? titleEl.textContent.trim() : item.name || 'Item';
+    itemName = itemName.replace(/₦[\d,]+/g, '').trim();
+    
+    // === GET PRICE - PRIORITIZE SELECTED VARIANT ===
+    const selectedVariant = itemContent.querySelector('.variant-btn.selected');
+    let price = 0;
+    let variantName = null;
+    
+    if (selectedVariant) {
+        try {
+            const variantData = JSON.parse(selectedVariant.dataset.variant);
+            price = variantData.price || parseInt(selectedVariant.dataset.price) || 0;
+            variantName = variantData.size || variantData.display || selectedVariant.dataset.size || null;
+            console.log('🔘 Selected variant:', { price, variantName });
+        } catch(e) {
+            // Fallback: try to get from text
+            const variantText = selectedVariant.textContent.trim();
+            const match = variantText.match(/₦([\d,]+)/);
+            if (match) {
+                price = parseInt(match[1].replace(/,/g, ''));
+            }
+            variantName = variantText.replace(/₦[\d,]+/g, '').trim();
+        }
+    } else if (item.variants && item.variants.length > 0) {
+        // If no variant selected, use the first one
+        const firstVariant = item.variants[0];
+        price = firstVariant.price || 0;
+        variantName = firstVariant.size || null;
+        console.log('🔘 Using first variant as default:', { price, variantName });
+    }
+    
+    // === FALLBACK: Try price tag if variant didn't give price ===
+    if (price === 0 || isNaN(price)) {
+        const priceTag = menuItem.querySelector('.item-price');
+        if (priceTag) {
+            const priceText = priceTag.textContent;
+            const match = priceText.match(/₦([\d,]+)/);
+            if (match) {
+                price = parseInt(match[1].replace(/,/g, ''));
+            }
+        }
+    }
+    
+    // === FALLBACK: Try item object ===
+    if (price === 0 && item.price) {
+        price = item.price;
+    }
+    if (price === 0 && item.price_display) {
+        const match = item.price_display.match(/₦([\d,]+)/);
+        if (match) {
+            price = parseInt(match[1].replace(/,/g, ''));
+        }
+    }
+    
+    // === LOG FOR DEBUGGING ===
+    console.log('🛒 Adding to cart:', { 
+        itemId: item.item_id || item.id, 
+        itemName: itemName, 
+        price: price, 
+        variantName: variantName 
+    });
+    
+    // === VALIDATE ===
+    if (price === 0 || isNaN(price)) {
+        showToast('⚠️ Please select a valid option for this item');
+        return;
+    }
+    
+    if (!itemName || itemName === '') {
+        itemName = item.name || 'Menu Item';
+    }
+    
+    // === ADD TO CART ===
+    if (typeof addToCart === 'function') {
+        addToCart(item.item_id || item.id, itemName, price, variantName);
+    } else {
+        console.error('❌ addToCart function not available');
+        showToast('⚠️ Error adding item to cart');
+    }
+});
+itemContent.appendChild(addToCartBtn);
             
             // ============================================
             // ADD COMMENT SECTION
