@@ -206,13 +206,13 @@
             height: 100%;
             background: rgba(0,0,0,0.9);
             z-index: 1000;
-            display: none;
+            display: none !important;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
         .success-modal.active {
-            display: flex;
+            display: flex !important;
         }
         .success-content {
             background: #1e1e23;
@@ -340,7 +340,7 @@
         <div class="checkout-form">
             <h2><i class="fas fa-truck"></i> Delivery Information</h2>
             <div class="notice">
-                <i class="fas fa-info-circle"></i> ₦300 takeaway fee applies to ALL orders
+                <i class="fas fa-info-circle"></i> ₦500 takeaway fee applies to ALL orders
             </div>
             
             <div class="form-group">
@@ -426,7 +426,7 @@
             </div>
             <div class="order-total" style="margin-top: 10px;">
                 <span>Takeaway Fee:</span>
-                <span id="takeaway-fee">₦300</span>
+                <span id="takeaway-fee">₦500</span>
             </div>
             <div class="order-total" style="border-top: none;">
                 <span>Total:</span>
@@ -449,6 +449,7 @@
             <h3>Order Placed Successfully!</h3>
             <p id="orderIdDisplay"></p>
             <p id="orderTotalDisplay"></p>
+            <div id="orderInstructionsDisplay" style="margin-top: 10px; padding: 10px; background: #fff3cd; border-radius: 8px; display: none; color: #856404;"></div>
             <div class="receipt-actions">
                 <button class="whatsapp-btn" id="whatsappShareBtn">
                     <i class="fab fa-whatsapp"></i> Send Receipt to Restaurant
@@ -456,7 +457,7 @@
                 <button class="save-receipt-btn" id="saveReceiptBtn">
                     <i class="fas fa-image"></i> Save Receipt to Phone
                 </button>
-                <button class="close-modal-btn" onclick="closeSuccessModal()">
+                <button class="close-modal-btn" id="closeModalBtn">
                     Close
                 </button>
             </div>
@@ -464,15 +465,33 @@
     </div>
 
     <script>
+        // ============================================
+        // GLOBAL FUNCTIONS (accessible from HTML)
+        // ============================================
+        let lastOrderData = null;
+        let currentOrderType = 'delivery';
+        let cartData = { items: [], total: 0 };
+        let supabase = null;
+
+        // FIX: Global close function
+        window.closeSuccessModal = function() {
+            console.log('🔄 Closing success modal...');
+            const modal = document.getElementById('successModal');
+            if (modal) {
+                modal.classList.remove('active');
+                modal.style.display = 'none';
+            }
+            lastOrderData = null;
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 300);
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             const SUPABASE_URL = 'https://bpeyueppcksrbhugltjt.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZXl1ZXBwY2tzcmJodWdsdGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NTQ4NzIsImV4cCI6MjA4MDIzMDg3Mn0.5CnMyogeIbvM7medccj3ZPgUcDm6W52asIqQDC7EKAM';
             
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
-            let cartData = { items: [], total: 0 };
-            let currentOrderType = 'delivery';
-            let lastOrderData = null;
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             
             function loadSavedCustomerInfo() {
                 const savedInfo = localStorage.getItem('urbancity_customer_info');
@@ -522,7 +541,6 @@
                     });
                 });
                 
-                // Default to delivery
                 document.querySelector('.radio-option[data-type="delivery"]').classList.add('selected');
                 document.getElementById('deliveryRadio').checked = true;
                 deliverySection.classList.add('show');
@@ -535,7 +553,7 @@
                 if (!savedCart) {
                     document.getElementById('order-items').innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     document.getElementById('order-subtotal').textContent = '₦0';
-                    document.getElementById('order-total').textContent = '₦300';
+                    document.getElementById('order-total').textContent = '₦500';
                     return;
                 }
                 
@@ -561,7 +579,6 @@
                         orderItemsEl.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     }
                     
-                    // Calculate subtotal
                     const subtotal = cartData.items.reduce((sum, item) => {
                         return sum + ((item.price || 0) * (item.quantity || 0));
                     }, 0);
@@ -581,15 +598,12 @@
             function updateTotalDisplay() {
                 const orderTotalEl = document.getElementById('order-total');
                 const subtotal = cartData?.total || 0;
-                const total = subtotal + 300;
+                const total = subtotal + 500;
                 if (orderTotalEl) {
                     orderTotalEl.textContent = `₦${total.toLocaleString()}`;
                 }
             }
             
-            // ============================================
-            // UPDATE SPECIAL INSTRUCTIONS DISPLAY
-            // ============================================
             function updateInstructionsDisplay() {
                 const instructions = document.getElementById('instructions').value.trim();
                 const displayDiv = document.getElementById('special-instructions-display');
@@ -604,7 +618,6 @@
                 }
             }
             
-            // Listen for instructions input
             document.getElementById('instructions').addEventListener('input', updateInstructionsDisplay);
             
             function setupPaymentSelection() {
@@ -627,8 +640,12 @@
                             </div>`;
                 }).join('');
                 
-                const instructionsHtml = orderData.customer.instructions ? 
-                    `<p><strong>Instructions:</strong> ${orderData.customer.instructions}</p>` : '';
+                const instructionsHtml = orderData.customer && orderData.customer.instructions ? 
+                    `<p style="margin: 5px 0; font-size: 12px; background: #fff3cd; padding: 5px; border-radius: 4px; color: #856404;">
+                        <strong>📝 Special Instructions:</strong> ${orderData.customer.instructions}
+                    </p>` : '';
+                
+                let addressDisplay = orderData.customer.address || 'N/A';
                 
                 return `
                     <div id="receiptContainer" style="width: 380px; background: white; color: #333; padding: 20px; border-radius: 15px; font-family: monospace; text-align: center;">
@@ -643,7 +660,7 @@
                             <p><strong>Customer:</strong> ${orderData.customer.fullname}</p>
                             <p><strong>Phone:</strong> ${orderData.customer.phone}</p>
                             <p><strong>Type:</strong> ${orderData.orderType === 'delivery' ? '🚚 Delivery' : '🏪 Pickup'}</p>
-                            ${orderData.orderType === 'delivery' ? `<p><strong>Address:</strong> ${orderData.customer.address}</p>` : `<p><strong>Pickup Location:</strong> ${orderData.customer.address}</p>`}
+                            <p><strong>${orderData.orderType === 'delivery' ? 'Address' : 'Pickup Location'}:</strong> ${addressDisplay}</p>
                             ${instructionsHtml}
                         </div>
                         <div style="margin: 15px 0;">
@@ -657,7 +674,7 @@
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Takeaway Fee:</span>
-                                <span>₦300</span>
+                                <span>₦500</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
                                 <span>TOTAL:</span>
@@ -672,8 +689,12 @@
                 `;
             }
             
+            // FIX: saveOrderToSupabase - Convert 'pickup' to 'takeaway' for Supabase
             async function saveOrderToSupabase(orderData) {
                 try {
+                    // FIX: Convert 'pickup' to 'takeaway' for Supabase check constraint
+                    const orderTypeForDb = orderData.orderType === 'pickup' ? 'takeaway' : orderData.orderType;
+                    
                     const { error } = await supabase
                         .from('orders')
                         .insert([{
@@ -684,10 +705,10 @@
                             customer_email: orderData.customer.email || null,
                             delivery_address: orderData.orderType === 'delivery' ? orderData.customer.address : null,
                             pickup_location: orderData.orderType === 'pickup' ? orderData.customer.address : null,
-                            order_type: orderData.orderType,
+                            order_type: orderTypeForDb,
                             items: orderData.items,
                             subtotal: orderData.subtotal,
-                            takeaway_fee: 300,
+                            takeaway_fee: 500,
                             total: orderData.total,
                             payment_method: orderData.paymentMethod,
                             payment_status: orderData.paymentStatus || 'pending',
@@ -705,9 +726,6 @@
                 }
             }
 
-            // ============================================
-            // MONNIFY PAYMENT FUNCTION
-            // ============================================
             async function payWithMonnify(orderData) {
                 try {
                     const placeOrderBtn = document.getElementById('placeOrderBtn');
@@ -770,9 +788,14 @@
                             return `${item.quantity}x ${itemName} - ₦${((item.price || 0) * (item.quantity || 0)).toLocaleString()}`;
                         }).join('\n');
                         
-                        const instructionsText = orderData.customer.instructions ? `\n📝 *Instructions:* ${orderData.customer.instructions}` : '';
+                        const instructionsText = orderData.customer && orderData.customer.instructions ? 
+                            `\n📝 *Special Instructions:* ${orderData.customer.instructions}` : '';
                         
-                        const message = `🍽️ *NEW ORDER RECEIVED!* 🍽️%0A%0A📋 *Order ID:* ${orderData.orderId}%0A👤 *Customer:* ${orderData.customer.fullname}%0A📞 *Phone:* ${orderData.customer.phone}%0A💰 *Total:* ₦${orderData.total.toLocaleString()}%0A📦 *Type:* ${orderData.orderType.toUpperCase()}%0A📍 *Address:* ${orderData.customer.address}%0A%0A📝 *Items:*%0A${itemsList}${instructionsText}%0A%0A✅ *Payment Completed!*%0A%0AThank you for choosing UrbanCity! 🎉`;
+                        const addressText = orderData.orderType === 'delivery' ? 
+                            `📍 *Delivery Address:* ${orderData.customer.address}` : 
+                            `📍 *Pickup Location:* ${orderData.customer.address}`;
+                        
+                        const message = `🍽️ *NEW ORDER RECEIVED!* 🍽️%0A%0A📋 *Order ID:* ${orderData.orderId}%0A👤 *Customer:* ${orderData.customer.fullname}%0A📞 *Phone:* ${orderData.customer.phone}%0A💰 *Total:* ₦${orderData.total.toLocaleString()}%0A📦 *Type:* ${orderData.orderType.toUpperCase()}%0A${addressText}${instructionsText}%0A%0A📝 *Items:*%0A${itemsList}%0A%0A✅ *Payment Completed!*%0A%0AThank you for choosing UrbanCity! 🎉`;
                         
                         const whatsappUrl = `https://wa.me/${restaurantWhatsApp}?text=${message}`;
                         window.open(whatsappUrl, '_blank');
@@ -811,17 +834,26 @@
                 lastOrderData = orderData;
                 document.getElementById('orderIdDisplay').innerHTML = `<strong>Order ID:</strong> ${orderData.orderId}`;
                 document.getElementById('orderTotalDisplay').innerHTML = `<strong>Total:</strong> ₦${orderData.total.toLocaleString()}`;
+                
+                const instructionsDisplay = document.getElementById('orderInstructionsDisplay');
+                if (orderData.customer && orderData.customer.instructions) {
+                    if (instructionsDisplay) {
+                        instructionsDisplay.innerHTML = `<p><strong>📝 Instructions:</strong> ${orderData.customer.instructions}</p>`;
+                        instructionsDisplay.style.display = 'block';
+                    }
+                } else {
+                    if (instructionsDisplay) instructionsDisplay.style.display = 'none';
+                }
+                
                 document.getElementById('successModal').classList.add('active');
+                document.getElementById('successModal').style.display = 'flex';
                 
                 document.getElementById('whatsappShareBtn').onclick = () => shareToWhatsApp(orderData);
                 document.getElementById('saveReceiptBtn').onclick = () => saveReceiptAsImage();
+                document.getElementById('closeModalBtn').onclick = window.closeSuccessModal;
             }
             
-            function closeSuccessModal() {
-                document.getElementById('successModal').classList.remove('active');
-                window.location.href = 'index.html';
-            }
-            
+            // FIX: placeOrder with pickup/delivery fix
             async function placeOrder() {
                 const savedCart = localStorage.getItem('urbancity_cart');
                 if (!savedCart) {
@@ -853,11 +885,13 @@
                         return;
                     }
                 } else {
-                    address = document.getElementById('pickupLocation').value;
+                    const pickupSelect = document.getElementById('pickupLocation');
+                    address = pickupSelect.value;
                     if (!address) {
                         alert('Please select a pickup location');
                         return;
                     }
+                    console.log('📦 Pickup location selected:', address);
                 }
                 
                 const instructions = document.getElementById('instructions').value.trim();
@@ -882,18 +916,17 @@
                     orderType: currentOrderType,
                     items: cartData.items,
                     subtotal: cartData.total,
-                    total: cartData.total + 300,
+                    total: cartData.total + 500,
                     paymentMethod: paymentMethod,
-                    paymentStatus: 'pending'
+                    paymentStatus: 'pending',
+                    pickupLocation: currentOrderType === 'pickup' ? address : null,
+                    deliveryAddress: currentOrderType === 'delivery' ? address : null
                 };
                 
                 console.log('📦 Order Data:', orderData);
                 saveCustomerInfo();
-                
-                // Show instructions in the order summary for preview
                 updateInstructionsDisplay();
                 
-                // Payment logic
                 if (paymentMethod === 'card' || paymentMethod === 'opay' || paymentMethod === 'ussd') {
                     orderData.paymentStatus = 'pending';
                     const saved = await saveOrderToSupabase(orderData);
@@ -938,7 +971,6 @@
             setupPaymentSelection();
             displayOrderSummary();
             
-            // Update instructions display on load
             setTimeout(updateInstructionsDisplay, 500);
             
             document.getElementById('placeOrderBtn').addEventListener('click', placeOrder);

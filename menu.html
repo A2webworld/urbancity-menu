@@ -543,6 +543,220 @@
             transform: scale(1.05);
         }
 
+                /* ============================================ */
+        /* FIX: CART SIDEBAR - STICKY CHECKOUT BUTTON */
+        /* ============================================ */
+        
+        /* Make cart sidebar use flex column layout */
+        .cart-sidebar {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            overflow: hidden !important;
+        }
+        
+        /* Cart items scrollable area */
+        .cart-items {
+            flex: 1 !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            padding: 15px !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+        
+        /* Cart footer - STICKY AT BOTTOM */
+        .cart-footer {
+            flex-shrink: 0 !important;
+            padding: 15px !important;
+            background: rgba(0, 0, 0, 0.9) !important;
+            border-top: 1px solid rgba(255, 152, 0, 0.3) !important;
+            position: sticky !important;
+            bottom: 0 !important;
+            z-index: 10 !important;
+            width: 100% !important;
+        }
+        
+        /* Make sure the checkout button is always visible */
+        .cart-footer .checkout-btn {
+            width: 100% !important;
+            padding: 14px !important;
+            font-size: 16px !important;
+            display: block !important;
+            text-align: center !important;
+            white-space: nowrap !important;
+        }
+        
+        .cart-footer .cart-total {
+            display: flex !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            font-size: 1.2rem !important;
+            margin-bottom: 12px !important;
+        }
+        
+        /* Mobile specific fixes for cart sidebar */
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100% !important;
+                right: -100% !important;
+                border-radius: 0 !important;
+            }
+            
+            .cart-sidebar.open {
+                right: 0 !important;
+            }
+            
+            .cart-header {
+                padding: 12px 15px !important;
+                flex-shrink: 0 !important;
+            }
+            
+            .cart-header h2 {
+                font-size: 1.1rem !important;
+            }
+            
+            .cart-items {
+                padding: 12px 15px !important;
+                max-height: none !important;
+            }
+            
+            .cart-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                padding: 10px 0 !important;
+                width: 100% !important;
+            }
+            
+            .cart-item-info {
+                width: 100% !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .cart-item-name {
+                font-size: 14px !important;
+                word-wrap: break-word !important;
+                white-space: normal !important;
+                line-height: 1.4 !important;
+            }
+            
+            .cart-item-price {
+                font-size: 13px !important;
+                margin-top: 4px !important;
+            }
+            
+            .cart-item-actions {
+                display: flex !important;
+                justify-content: flex-end !important;
+                gap: 12px !important;
+                width: 100% !important;
+            }
+            
+            .cart-item-actions button {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 16px !important;
+                border-radius: 50% !important;
+            }
+            
+            .cart-item-quantity {
+                min-width: 30px !important;
+                text-align: center !important;
+                font-size: 16px !important;
+            }
+            
+            .cart-footer {
+                padding: 12px 15px !important;
+                background: rgba(0, 0, 0, 0.95) !important;
+                border-top: 1px solid rgba(255, 152, 0, 0.3) !important;
+                position: sticky !important;
+                bottom: 0 !important;
+                z-index: 20 !important;
+                box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.4) !important;
+            }
+            
+            .cart-footer .cart-total {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            
+            .cart-footer .checkout-btn {
+                padding: 14px !important;
+                font-size: 15px !important;
+                border-radius: 30px !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .cart-sidebar {
+                width: 100% !important;
+                right: -100% !important;
+            }
+            
+            .cart-items {
+                padding: 10px 12px !important;
+            }
+            
+            .cart-item {
+                padding: 8px 0 !important;
+            }
+            
+            .cart-item-name {
+                font-size: 13px !important;
+            }
+            
+            .cart-item-actions button {
+                width: 32px !important;
+                height: 32px !important;
+                font-size: 14px !important;
+            }
+            
+            .cart-footer {
+                padding: 10px 12px !important;
+            }
+            
+            .cart-footer .cart-total {
+                font-size: 1rem !important;
+                margin-bottom: 8px !important;
+            }
+            
+            .cart-footer .checkout-btn {
+                padding: 12px !important;
+                font-size: 14px !important;
+            }
+        }
+        
+        /* Ensure the overlay covers everything */
+        .cart-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: rgba(0, 0, 0, 0.6) !important;
+            z-index: 999 !important;
+            display: none !important;
+        }
+        
+        .cart-overlay.active {
+            display: block !important;
+        }
+        
+        /* Cart icon stays on top */
+        .cart-icon {
+            z-index: 1000 !important;
+        }
+        
+        /* Fix for cart header close button */
+        .close-cart {
+            font-size: 28px !important;
+            background: none !important;
+            border: none !important;
+            color: #ff9800 !important;
+            cursor: pointer !important;
+            padding: 5px !important;
+        }
+
         /* ============================================ */
         /* PWA INSTALL BUTTON - HEADER (BESIDE PHONE) */
         /* ============================================ */
@@ -2846,26 +3060,92 @@
             }
             itemContent.appendChild(itemFooter);
             
-            // ADD TO CART BUTTON
+            // ADD TO CART BUTTON - FIXED
             const addToCartBtn = document.createElement('button');
             addToCartBtn.className = 'add-to-cart-btn';
             addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
             addToCartBtn.addEventListener('click', function() {
+                // === GET ITEM NAME FROM TITLE ===
+                const titleEl = menuItem.querySelector('.item-title');
+                let itemName = titleEl ? titleEl.textContent.trim() : item.name || 'Item';
+                // Remove price from name if present
+                itemName = itemName.replace(/₦[\d,]+/g, '').trim();
+                
+                // === GET PRICE FROM PRICE TAG ===
+                const priceTag = menuItem.querySelector('.item-price');
+                let price = 0;
+                if (priceTag) {
+                    const priceText = priceTag.textContent;
+                    const match = priceText.match(/₦([\d,]+)/);
+                    if (match) {
+                        price = parseInt(match[1].replace(/,/g, ''));
+                    }
+                }
+                
+                // === GET VARIANT INFO ===
                 const selectedVariant = itemContent.querySelector('.variant-btn.selected');
+                let variantName = null;
+                let variantPrice = 0;
+                
                 if (selectedVariant) {
-                    const variantData = JSON.parse(selectedVariant.dataset.variant);
-                    if (typeof addToCart === 'function') {
-                        addToCart(item, variantData);
+                    try {
+                        const variantData = JSON.parse(selectedVariant.dataset.variant);
+                        variantName = variantData.size || variantData.display || null;
+                        variantPrice = variantData.price || 0;
+                    } catch(e) {
+                        variantName = selectedVariant.textContent.trim();
+                        // Try to extract price from variant text
+                        const match = variantName.match(/₦([\d,]+)/);
+                        if (match) {
+                            variantPrice = parseInt(match[1].replace(/,/g, ''));
+                        }
                     }
                 } else if (item.variants && item.variants.length > 0) {
                     const firstVariant = item.variants[0];
-                    if (typeof addToCart === 'function') {
-                        addToCart(item, firstVariant);
+                    variantName = firstVariant.size || null;
+                    variantPrice = firstVariant.price || 0;
+                }
+                
+                // === USE VARIANT PRICE IF AVAILABLE ===
+                if (variantPrice > 0) {
+                    price = variantPrice;
+                }
+                
+                // === FALLBACK: Try to get price from item object ===
+                if (price === 0 && item.price) {
+                    price = item.price;
+                }
+                if (price === 0 && item.price_display) {
+                    const match = item.price_display.match(/₦([\d,]+)/);
+                    if (match) {
+                        price = parseInt(match[1].replace(/,/g, ''));
                     }
+                }
+                
+                // === LOG FOR DEBUGGING ===
+                console.log('🛒 Adding to cart:', { 
+                    itemId: item.item_id || item.id, 
+                    itemName: itemName, 
+                    price: price, 
+                    variantName: variantName 
+                });
+                
+                // === VALIDATE ===
+                if (price === 0 || isNaN(price)) {
+                    showToast('⚠️ Price not available for this item');
+                    return;
+                }
+                
+                if (!itemName || itemName === '') {
+                    itemName = item.name || 'Menu Item';
+                }
+                
+                // === ADD TO CART ===
+                if (typeof addToCart === 'function') {
+                    addToCart(item.item_id || item.id, itemName, price, variantName);
                 } else {
-                    if (typeof addToCart === 'function') {
-                        addToCart(item, null);
-                    }
+                    console.error('❌ addToCart function not available');
+                    showToast('⚠️ Error adding item to cart');
                 }
             });
             itemContent.appendChild(addToCartBtn);

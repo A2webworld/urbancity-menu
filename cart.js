@@ -50,13 +50,86 @@ function updateCartTotals() {
 }
 
 // ============================================
-// ADD TO CART - FIXED
+// ADD TO CART - FIXED WITH DOM RECOVERY
 // ============================================
 
 function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
     console.log('🛒 addToCart called:', { itemId, itemName, price, variant });
     
-    // --- FIX: Handle cases where itemId is an object ---
+    // ============================================
+    // FIX 1: Handle null/undefined itemName - recover from DOM
+    // ============================================
+    if (!itemName || itemName === 'null' || itemName === null || itemName === '') {
+        // Try to find the menu item element by ID
+        const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
+        if (menuItemEl) {
+            const titleEl = menuItemEl.querySelector('.item-title');
+            if (titleEl) {
+                let name = titleEl.textContent.trim();
+                // Remove price from name if present
+                name = name.replace(/₦[\d,]+/g, '').trim();
+                if (name) {
+                    itemName = name;
+                    console.log('🔄 Recovered item name from DOM:', itemName);
+                }
+            }
+        }
+        // If still null, use a fallback
+        if (!itemName || itemName === 'null' || itemName === '') {
+            itemName = 'Menu Item';
+        }
+    }
+    
+    // ============================================
+    // FIX 2: Handle null/undefined price - recover from DOM
+    // ============================================
+    if (!price || price === 0 || isNaN(price) || price === undefined) {
+        // Try to find the menu item element by ID
+        const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
+        if (menuItemEl) {
+            const priceTag = menuItemEl.querySelector('.item-price');
+            if (priceTag) {
+                const priceText = priceTag.textContent;
+                const match = priceText.match(/₦([\d,]+)/);
+                if (match) {
+                    price = parseInt(match[1].replace(/,/g, ''));
+                    console.log('🔄 Recovered price from DOM:', price);
+                }
+            }
+            // If still 0, try variant buttons
+            if (!price || price === 0 || isNaN(price)) {
+                const variantBtns = menuItemEl.querySelectorAll('.variant-btn');
+                if (variantBtns.length > 0) {
+                    const firstBtn = variantBtns[0];
+                    const priceText = firstBtn.textContent;
+                    const match = priceText.match(/₦([\d,]+)/);
+                    if (match) {
+                        price = parseInt(match[1].replace(/,/g, ''));
+                        console.log('🔄 Recovered price from variant button:', price);
+                    }
+                }
+            }
+        }
+        // If still 0, try using the variant data if available
+        if ((!price || price === 0 || isNaN(price)) && variant && typeof variant === 'object') {
+            if (variant.price) {
+                price = variant.price;
+                console.log('🔄 Recovered price from variant object:', price);
+            }
+        }
+        // Last fallback: check if price is in the itemId string
+        if (!price || price === 0 || isNaN(price)) {
+            const priceMatch = String(itemId).match(/-(\d+)$/);
+            if (priceMatch) {
+                price = parseInt(priceMatch[1]);
+                console.log('🔄 Recovered price from itemId:', price);
+            }
+        }
+    }
+    
+    // ============================================
+    // FIX 3: Handle cases where itemId is an object
+    // ============================================
     let finalId = itemId;
     if (typeof itemId === 'object' && itemId !== null) {
         // If itemId is an object, try to get the actual ID
@@ -64,20 +137,26 @@ function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
         console.log('🔄 Extracted ID from object:', finalId);
     }
     
-    // --- FIX: Handle cases where itemName is an object ---
+    // ============================================
+    // FIX 4: Handle cases where itemName is an object
+    // ============================================
     let finalName = itemName;
     if (typeof itemName === 'object' && itemName !== null) {
         finalName = itemName.name || itemName.display || itemName.displayName || 'Item';
         console.log('🔄 Extracted name from object:', finalName);
     }
     
-    // --- FIX: Ensure price is a number ---
+    // ============================================
+    // FIX 5: Ensure price is a number
+    // ============================================
     let finalPrice = typeof price === 'number' ? price : 0;
     if (typeof price === 'string') {
         finalPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
     }
     
-    // --- FIX: If price is 0, try to get it from the DOM ---
+    // ============================================
+    // FIX 6: If price is 0, try to get it from the DOM
+    // ============================================
     if (finalPrice === 0 && finalId) {
         const menuItemEl = document.querySelector(`.menu-item[data-id="${finalId}"]`);
         if (menuItemEl) {
@@ -115,7 +194,9 @@ function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
         }
     }
     
-    // --- FIX: If variant is still null, try to get it from the DOM ---
+    // ============================================
+    // FIX 7: If variant is still null, try to get it from the DOM
+    // ============================================
     if (!variant && finalId) {
         const menuItemEl = document.querySelector(`.menu-item[data-id="${finalId}"]`);
         if (menuItemEl) {
@@ -131,8 +212,9 @@ function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
         }
     }
     
-    // --- FIX: Create a unique key that includes variant ---
-    // This is the most important part - different variants MUST have different keys
+    // ============================================
+    // FIX 8: Create a unique key that includes variant
+    // ============================================
     let itemKey;
     if (variant) {
         // If variant exists, use it in the key
@@ -164,7 +246,9 @@ function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
         return;
     }
     
-    // --- FIX: Check if item with SAME KEY exists ---
+    // ============================================
+    // FIX 9: Check if item with SAME KEY exists
+    // ============================================
     const existingItem = cart.items.find(item => item.key === itemKey);
     
     if (existingItem) {
@@ -394,14 +478,32 @@ function getItemVariants(menuItemEl) {
 }
 
 function getSimplePrice(menuItemEl) {
+    // Try to get from item-price element
     const priceEl = menuItemEl.querySelector('.item-price');
     if (priceEl) {
         let priceText = priceEl.textContent;
-        let match = priceText.match(/[#₦]?([\d,]+)/);
+        let match = priceText.match(/₦([\d,]+)/);
+        if (match) {
+            return parseInt(match[1].replace(/,/g, ''));
+        }
+        // Try alternative format
+        match = priceText.match(/([\d,]+)/);
         if (match) {
             return parseInt(match[1].replace(/,/g, ''));
         }
     }
+    
+    // Try to get from variant buttons
+    const variantBtns = menuItemEl.querySelectorAll('.variant-btn');
+    if (variantBtns.length > 0) {
+        const firstBtn = variantBtns[0];
+        const priceText = firstBtn.textContent;
+        const match = priceText.match(/₦([\d,]+)/);
+        if (match) {
+            return parseInt(match[1].replace(/,/g, ''));
+        }
+    }
+    
     return 0;
 }
 
