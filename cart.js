@@ -1,5 +1,5 @@
 // ============================================
-// URBANCITY CART SYSTEM - FINAL FIXED VERSION
+// URBANCITY CART SYSTEM - FIXED
 // ============================================
 
 // Cart state
@@ -50,124 +50,148 @@ function updateCartTotals() {
 }
 
 // ============================================
-// ADD TO CART - FIXED: Different variants as separate items
+// ADD TO CART - FIXED
 // ============================================
 
-function addToCart(id, name, price, variant = null, quantity = 1) {
-    console.log('🛒 Adding to cart - raw input:', { id, name, price, variant });
+function addToCart(itemId, itemName, price, variant = null, quantity = 1) {
+    console.log('🛒 addToCart called:', { itemId, itemName, price, variant });
     
-    // Ensure id is a string
-    const itemId = typeof id === 'string' ? id : (id?.item_id || id?.id || '');
-    
-    // Ensure name is a string
-    let itemName = typeof name === 'string' ? name : (name?.name || name?.display || 'Item');
-    
-    // If name contains "– ₦" it means it's a variant display, try to get the actual item name
-    if (itemName.includes('– ₦') || itemName.includes('Price varies')) {
-        const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
-        if (menuItemEl) {
-            const titleEl = menuItemEl.querySelector('.item-title');
-            if (titleEl) {
-                itemName = titleEl.textContent.trim();
-                console.log('🔄 Fixed item name from menu:', itemName);
-            }
-        }
+    // --- FIX: Handle cases where itemId is an object ---
+    let finalId = itemId;
+    if (typeof itemId === 'object' && itemId !== null) {
+        // If itemId is an object, try to get the actual ID
+        finalId = itemId.item_id || itemId.id || itemId.key || JSON.stringify(itemId);
+        console.log('🔄 Extracted ID from object:', finalId);
     }
     
-    // Ensure price is a number
-    let finalPrice = typeof price === 'number' ? price : 0;
+    // --- FIX: Handle cases where itemName is an object ---
+    let finalName = itemName;
+    if (typeof itemName === 'object' && itemName !== null) {
+        finalName = itemName.name || itemName.display || itemName.displayName || 'Item';
+        console.log('🔄 Extracted name from object:', finalName);
+    }
     
-    // If price is 0, try to find it from the menu item
-    if (finalPrice === 0) {
-        const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
+    // --- FIX: Ensure price is a number ---
+    let finalPrice = typeof price === 'number' ? price : 0;
+    if (typeof price === 'string') {
+        finalPrice = parseInt(price.replace(/[^0-9]/g, '')) || 0;
+    }
+    
+    // --- FIX: If price is 0, try to get it from the DOM ---
+    if (finalPrice === 0 && finalId) {
+        const menuItemEl = document.querySelector(`.menu-item[data-id="${finalId}"]`);
         if (menuItemEl) {
-            const priceEl = menuItemEl.querySelector('.item-price');
-            if (priceEl) {
-                const priceText = priceEl.textContent;
-                const match = priceText.match(/₦([\d,]+)/);
-                if (match) {
-                    finalPrice = parseInt(match[1].replace(/,/g, ''));
-                    console.log('🔄 Found price from item-price:', finalPrice);
+            // Try to get selected variant price
+            const selectedVariant = menuItemEl.querySelector('.variant-btn.selected');
+            if (selectedVariant) {
+                const priceAttr = selectedVariant.dataset.price;
+                if (priceAttr) {
+                    finalPrice = parseInt(priceAttr);
+                    console.log('🔄 Found price from selected variant:', finalPrice);
+                    // Also get the variant text
+                    if (!variant) {
+                        const variantText = selectedVariant.textContent.trim();
+                        const match = variantText.match(/^(.+?)\s*–\s*₦/);
+                        if (match) {
+                            variant = match[1].trim();
+                            console.log('🔄 Extracted variant from selected button:', variant);
+                        }
+                    }
                 }
             }
             
+            // If still 0, try item-price
             if (finalPrice === 0) {
-                const variantBtns = menuItemEl.querySelectorAll('.variant-btn');
-                if (variantBtns.length > 0) {
-                    let selectedVariant = null;
-                    variantBtns.forEach(btn => {
-                        if (btn.classList.contains('selected')) {
-                            selectedVariant = btn;
-                        }
-                    });
-                    if (!selectedVariant) {
-                        selectedVariant = variantBtns[0];
-                    }
-                    if (selectedVariant) {
-                        const priceAttr = selectedVariant.dataset.price;
-                        if (priceAttr) {
-                            finalPrice = parseInt(priceAttr);
-                            console.log('🔄 Found price from variant button:', finalPrice);
-                        }
+                const priceEl = menuItemEl.querySelector('.item-price');
+                if (priceEl) {
+                    const priceText = priceEl.textContent;
+                    const match = priceText.match(/₦([\d,]+)/);
+                    if (match) {
+                        finalPrice = parseInt(match[1].replace(/,/g, ''));
+                        console.log('🔄 Found price from item-price:', finalPrice);
                     }
                 }
             }
         }
     }
     
-    // If variant is null but we have a variant string from the name, extract it
-    let finalVariant = variant;
-    if (!finalVariant && typeof name === 'string' && name.includes('– ₦')) {
-        const variantMatch = name.match(/^(.+?)\s*–\s*₦/);
-        if (variantMatch) {
-            finalVariant = variantMatch[1].trim();
-            console.log('🔄 Extracted variant from name:', finalVariant);
+    // --- FIX: If variant is still null, try to get it from the DOM ---
+    if (!variant && finalId) {
+        const menuItemEl = document.querySelector(`.menu-item[data-id="${finalId}"]`);
+        if (menuItemEl) {
+            const selectedVariant = menuItemEl.querySelector('.variant-btn.selected');
+            if (selectedVariant) {
+                const variantText = selectedVariant.textContent.trim();
+                const match = variantText.match(/^(.+?)\s*–\s*₦/);
+                if (match) {
+                    variant = match[1].trim();
+                    console.log('🔄 Extracted variant from DOM:', variant);
+                }
+            }
         }
     }
     
-    // 🔧 FIX: Create unique key that includes BOTH item ID AND variant
-    // This ensures different variants of the same item are treated as separate items
-    const itemKey = finalVariant ? `${itemId}-${finalVariant}` : itemId;
+    // --- FIX: Create a unique key that includes variant ---
+    // This is the most important part - different variants MUST have different keys
+    let itemKey;
+    if (variant) {
+        // If variant exists, use it in the key
+        itemKey = `${finalId}-${variant}`;
+    } else if (finalPrice > 0) {
+        // If no variant but different price, use price in key
+        itemKey = `${finalId}-${finalPrice}`;
+    } else {
+        itemKey = finalId;
+    }
     
-    console.log('📦 Processed item:', { itemId, itemName, finalPrice, variant: finalVariant, itemKey });
+    console.log('📦 Final processed item:', { 
+        finalId, 
+        finalName, 
+        finalPrice, 
+        variant, 
+        itemKey 
+    });
     
-    if (!itemId) {
+    if (!finalId) {
         console.error('❌ No item ID found!');
         showToast('⚠️ Error adding item to cart');
         return;
     }
     
     if (finalPrice === 0 || isNaN(finalPrice)) {
-        console.warn('⚠️ Invalid price for item:', itemName);
+        console.warn('⚠️ Invalid price for item:', finalName);
         showToast('⚠️ Please select a valid option for this item');
         return;
     }
     
-    // Check if item with SAME KEY already exists in cart
-    // The key includes variant, so different variants = different items
+    // --- FIX: Check if item with SAME KEY exists ---
     const existingItem = cart.items.find(item => item.key === itemKey);
     
     if (existingItem) {
         existingItem.quantity += quantity;
         console.log('✅ Updated existing item quantity:', existingItem.quantity);
     } else {
+        // Create display name with variant if available
+        const displayName = variant ? `${finalName} (${variant})` : finalName;
+        
         cart.items.push({
             key: itemKey,
-            id: itemId,
-            name: itemName,
+            id: finalId,
+            name: finalName,
             price: finalPrice,
-            variant: finalVariant || null,
+            variant: variant || null,
             quantity: quantity,
-            // Store display name with variant for better UI
-            displayName: finalVariant ? `${itemName} (${finalVariant})` : itemName
+            displayName: displayName
         });
-        console.log('✅ Added new item to cart:', itemName, 'Variant:', finalVariant, 'Price:', finalPrice);
+        console.log('✅ Added new item to cart:', displayName, 'Price:', finalPrice);
     }
     
     updateCartTotals();
     saveCart();
     updateCartUI();
-    showToast(`✓ ${itemName}${finalVariant ? ` (${finalVariant})` : ''} added to cart!`);
+    
+    const displayMsg = variant ? `${finalName} (${variant})` : finalName;
+    showToast(`✓ ${displayMsg} added to cart!`);
 }
 
 // ============================================
@@ -241,12 +265,11 @@ function updateCartUI() {
     let html = '';
     cart.items.forEach((item) => {
         const price = item.price || 0;
-        // Show variant in display
         const displayName = item.displayName || (item.variant ? `${item.name} (${item.variant})` : item.name);
         html += `
             <div class="cart-item" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
                 <div class="cart-item-info" style="flex:1;min-width:0;">
-                    <div class="cart-item-name" style="font-weight:600;margin-bottom:4px;word-wrap:break-word;">${displayName}</div>
+                    <div class="cart-item-name" style="font-weight:600;margin-bottom:4px;word-wrap:break-word;font-size:0.95rem;">${displayName}</div>
                     <div class="cart-item-price" style="font-size:0.85rem;color:#ff9800;">₦${price.toLocaleString()}</div>
                 </div>
                 <div class="cart-item-actions" style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
@@ -266,7 +289,7 @@ function updateCartUI() {
 }
 
 // ============================================
-// CART SIDEBAR TOGGLE - FIXED: Checkout button visible on mobile
+// CART SIDEBAR TOGGLE
 // ============================================
 
 function toggleCart() {
@@ -284,7 +307,6 @@ function toggleCart() {
         if (overlay) overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateCartUI();
-        // 🔧 FIX: Scroll to bottom of cart after opening to show checkout button
         setTimeout(() => {
             const cartItems = document.getElementById('cart-items');
             if (cartItems) {
@@ -348,7 +370,7 @@ function showToast(message, type = 'success') {
 }
 
 // ============================================
-// MENU ITEM BUTTON GENERATION - FINAL FIXED
+// MENU ITEM BUTTON GENERATION - FIXED
 // ============================================
 
 function getItemVariants(menuItemEl) {
@@ -357,8 +379,13 @@ function getItemVariants(menuItemEl) {
     variantBtns.forEach(btn => {
         const priceMatch = btn.textContent.match(/₦([\d,]+)/);
         if (priceMatch) {
+            // Extract variant text (everything before "– ₦")
+            const text = btn.textContent.trim();
+            const variantMatch = text.match(/^(.+?)\s*–\s*₦/);
+            const variantText = variantMatch ? variantMatch[1].trim() : text;
             variants.push({
-                text: btn.textContent.trim(),
+                text: text,
+                variant: variantText,
                 price: parseInt(priceMatch[1].replace(/,/g, ''))
             });
         }
@@ -386,7 +413,7 @@ function openWhatsAppChat(itemName) {
 }
 
 // ============================================
-// ADD TO CART BUTTONS - FINAL FIXED
+// ADD TO CART BUTTONS - FIXED
 // ============================================
 
 function addAddToCartButtonsToMenu() {
@@ -436,23 +463,26 @@ function addAddToCartButtonsToMenu() {
                 continue;
             }
             
+            // Case 1: Has variants
             if (variants.length > 0) {
                 var variantsHtml = '';
                 for (var v = 0; v < variants.length; v++) {
                     var isSelected = v === 0 ? 'selected' : '';
                     var price = variants[v].price || 0;
-                    var variantText = variants[v].text.replace(/"/g, '&quot;');
-                    variantsHtml += `<button class="variant-btn ${isSelected}" data-price="${price}" data-variant="${variantText}">${variants[v].text}</button>`;
+                    var variantText = variants[v].variant || variants[v].text.replace(/"/g, '&quot;');
+                    var displayText = variants[v].text.replace(/"/g, '&quot;');
+                    variantsHtml += `<button class="variant-btn ${isSelected}" data-price="${price}" data-variant="${variantText}" data-display="${displayText}">${displayText}</button>`;
                 }
                 
                 var initialPrice = variants[0]?.price || 0;
-                var initialVariant = variants[0]?.text || '';
+                var initialVariant = variants[0]?.variant || '';
+                var initialDisplay = variants[0]?.text || '';
                 
                 buttonContainer.innerHTML = `
                     <div class="variant-selector" id="variant-${itemId}">
                         ${variantsHtml}
                     </div>
-                    <button class="add-to-cart-btn" data-id="${itemId}" data-name="${fullItemName}" data-price="${initialPrice}" data-variant="${initialVariant}">
+                    <button class="add-to-cart-btn" data-id="${itemId}" data-name="${fullItemName}" data-price="${initialPrice}" data-variant="${initialVariant}" data-display="${initialDisplay}">
                         <i class="fas fa-plus"></i> Add to Cart
                     </button>
                 `;
@@ -472,9 +502,11 @@ function addAddToCartButtonsToMenu() {
                             var addButton = b.parentElement.parentElement.querySelector('.add-to-cart-btn');
                             var price = parseInt(b.dataset.price);
                             var variant = b.dataset.variant;
+                            var display = b.dataset.display;
                             addButton.dataset.price = price;
                             addButton.dataset.variant = variant;
-                            console.log('🔘 Variant selected:', { price, variant });
+                            addButton.dataset.display = display;
+                            console.log('🔘 Variant selected:', { price, variant, display });
                         };
                     })(btn));
                 }
@@ -485,14 +517,17 @@ function addAddToCartButtonsToMenu() {
                     var name = this.dataset.name;
                     var priceVal = parseInt(this.dataset.price);
                     var variant = this.dataset.variant || null;
-                    console.log('🛒 Add button clicked:', { id, name, priceVal, variant });
+                    var display = this.dataset.display || '';
+                    console.log('🛒 Add button clicked:', { id, name, priceVal, variant, display });
                     if (priceVal > 0) {
+                        // Pass the variant name to addToCart
                         addToCart(id, name, priceVal, variant);
                     } else {
                         showToast('Please select a valid option');
                     }
                 });
             }
+            // Case 2: Simple price
             else if (simplePrice > 0) {
                 buttonContainer.innerHTML = `
                     <button class="add-to-cart-btn" data-id="${itemId}" data-name="${fullItemName}" data-price="${simplePrice}">
@@ -514,6 +549,7 @@ function addAddToCartButtonsToMenu() {
                     }
                 });
             }
+            // Case 3: Market price - Chat to Order
             else {
                 var priceDisplayEl = menuItemEl.querySelector('.item-price');
                 var priceDisplay = priceDisplayEl ? priceDisplayEl.textContent : '';
