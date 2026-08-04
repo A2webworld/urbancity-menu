@@ -50,7 +50,7 @@ function updateCartTotals() {
 }
 
 // ============================================
-// ADD TO CART - FINAL FIXED
+// ADD TO CART - FIXED: Different variants as separate items
 // ============================================
 
 function addToCart(id, name, price, variant = null, quantity = 1) {
@@ -59,12 +59,11 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
     // Ensure id is a string
     const itemId = typeof id === 'string' ? id : (id?.item_id || id?.id || '');
     
-    // Ensure name is a string - FIXED: if name looks like a price display, try to get real name from menu item
+    // Ensure name is a string
     let itemName = typeof name === 'string' ? name : (name?.name || name?.display || 'Item');
     
     // If name contains "– ₦" it means it's a variant display, try to get the actual item name
     if (itemName.includes('– ₦') || itemName.includes('Price varies')) {
-        // Try to get the item name from the menu item element
         const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
         if (menuItemEl) {
             const titleEl = menuItemEl.querySelector('.item-title');
@@ -75,14 +74,13 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
         }
     }
     
-    // Ensure price is a number - FIXED: try multiple ways to get price
+    // Ensure price is a number
     let finalPrice = typeof price === 'number' ? price : 0;
     
     // If price is 0, try to find it from the menu item
     if (finalPrice === 0) {
         const menuItemEl = document.querySelector(`.menu-item[data-id="${itemId}"]`);
         if (menuItemEl) {
-            // Try to get price from item-price element
             const priceEl = menuItemEl.querySelector('.item-price');
             if (priceEl) {
                 const priceText = priceEl.textContent;
@@ -93,11 +91,9 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
                 }
             }
             
-            // If still 0, try variants
             if (finalPrice === 0) {
                 const variantBtns = menuItemEl.querySelectorAll('.variant-btn');
                 if (variantBtns.length > 0) {
-                    // Find the selected variant or use first
                     let selectedVariant = null;
                     variantBtns.forEach(btn => {
                         if (btn.classList.contains('selected')) {
@@ -119,10 +115,9 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
         }
     }
     
-    // If variant is null but we have a variant string from the button, use it
+    // If variant is null but we have a variant string from the name, extract it
     let finalVariant = variant;
     if (!finalVariant && typeof name === 'string' && name.includes('– ₦')) {
-        // Extract the variant text (everything before "– ₦")
         const variantMatch = name.match(/^(.+?)\s*–\s*₦/);
         if (variantMatch) {
             finalVariant = variantMatch[1].trim();
@@ -130,7 +125,11 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
         }
     }
     
-    console.log('📦 Processed item:', { itemId, itemName, finalPrice, variant: finalVariant });
+    // 🔧 FIX: Create unique key that includes BOTH item ID AND variant
+    // This ensures different variants of the same item are treated as separate items
+    const itemKey = finalVariant ? `${itemId}-${finalVariant}` : itemId;
+    
+    console.log('📦 Processed item:', { itemId, itemName, finalPrice, variant: finalVariant, itemKey });
     
     if (!itemId) {
         console.error('❌ No item ID found!');
@@ -144,10 +143,8 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
         return;
     }
     
-    // Create unique key for cart item
-    const itemKey = finalVariant ? `${itemId}-${finalVariant}` : itemId;
-    
-    // Check if item already exists in cart
+    // Check if item with SAME KEY already exists in cart
+    // The key includes variant, so different variants = different items
     const existingItem = cart.items.find(item => item.key === itemKey);
     
     if (existingItem) {
@@ -160,9 +157,11 @@ function addToCart(id, name, price, variant = null, quantity = 1) {
             name: itemName,
             price: finalPrice,
             variant: finalVariant || null,
-            quantity: quantity
+            quantity: quantity,
+            // Store display name with variant for better UI
+            displayName: finalVariant ? `${itemName} (${finalVariant})` : itemName
         });
-        console.log('✅ Added new item to cart:', itemName, 'Price:', finalPrice);
+        console.log('✅ Added new item to cart:', itemName, 'Variant:', finalVariant, 'Price:', finalPrice);
     }
     
     updateCartTotals();
@@ -242,14 +241,15 @@ function updateCartUI() {
     let html = '';
     cart.items.forEach((item) => {
         const price = item.price || 0;
-        const variantDisplay = item.variant ? `<br><small style="color:#ff9800;font-size:0.8rem;">${item.variant}</small>` : '';
+        // Show variant in display
+        const displayName = item.displayName || (item.variant ? `${item.name} (${item.variant})` : item.name);
         html += `
             <div class="cart-item" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
-                <div class="cart-item-info" style="flex:1;">
-                    <div class="cart-item-name" style="font-weight:600;margin-bottom:4px;">${item.name}${variantDisplay}</div>
+                <div class="cart-item-info" style="flex:1;min-width:0;">
+                    <div class="cart-item-name" style="font-weight:600;margin-bottom:4px;word-wrap:break-word;">${displayName}</div>
                     <div class="cart-item-price" style="font-size:0.85rem;color:#ff9800;">₦${price.toLocaleString()}</div>
                 </div>
-                <div class="cart-item-actions" style="display:flex;align-items:center;gap:12px;">
+                <div class="cart-item-actions" style="display:flex;align-items:center;gap:12px;flex-shrink:0;">
                     <button onclick="updateQuantity('${item.key}', -1)" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,152,0,0.5);background:rgba(255,255,255,0.1);color:white;cursor:pointer;font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">−</button>
                     <span class="cart-item-quantity" style="min-width:30px;text-align:center;font-weight:bold;font-size:1rem;">${item.quantity}</span>
                     <button onclick="updateQuantity('${item.key}', 1)" style="width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,152,0,0.5);background:rgba(255,255,255,0.1);color:white;cursor:pointer;font-weight:bold;display:flex;align-items:center;justify-content:center;font-size:1.2rem;">+</button>
@@ -266,7 +266,7 @@ function updateCartUI() {
 }
 
 // ============================================
-// CART SIDEBAR TOGGLE
+// CART SIDEBAR TOGGLE - FIXED: Checkout button visible on mobile
 // ============================================
 
 function toggleCart() {
@@ -284,6 +284,13 @@ function toggleCart() {
         if (overlay) overlay.classList.add('active');
         document.body.style.overflow = 'hidden';
         updateCartUI();
+        // 🔧 FIX: Scroll to bottom of cart after opening to show checkout button
+        setTimeout(() => {
+            const cartItems = document.getElementById('cart-items');
+            if (cartItems) {
+                cartItems.scrollTop = cartItems.scrollHeight;
+            }
+        }, 300);
     }
 }
 
@@ -390,23 +397,19 @@ function addAddToCartButtonsToMenu() {
         for (var i = 0; i < menuItems.length; i++) {
             var menuItemEl = menuItems[i];
             
-            // Get the item ID from data-id attribute
             var itemId = menuItemEl.dataset.id;
             if (!itemId) {
                 console.warn('⚠️ Menu item has no data-id:', menuItemEl);
                 continue;
             }
             
-            // Skip if already has buttons
             if (menuItemEl.querySelector('.add-to-cart-btn') || menuItemEl.querySelector('.chat-to-order-btn')) {
                 continue;
             }
             
-            // Get item name from title
             var titleEl = menuItemEl.querySelector('.item-title');
             var fullItemName = titleEl ? titleEl.textContent.trim() : 'Item';
             
-            // Check if item is unavailable
             var isUnavailable = menuItemEl.classList.contains('unavailable-item') || 
                                 menuItemEl.querySelector('.unavailable-overlay') !== null ||
                                 menuItemEl.querySelector('.unavailable-badge') !== null;
@@ -424,7 +427,6 @@ function addAddToCartButtonsToMenu() {
                 footer.appendChild(buttonContainer);
             }
             
-            // If unavailable
             if (isUnavailable) {
                 buttonContainer.innerHTML = `
                     <button class="add-to-cart-btn" disabled style="background: #666; cursor: not-allowed; opacity: 0.6;">
@@ -434,7 +436,6 @@ function addAddToCartButtonsToMenu() {
                 continue;
             }
             
-            // Case 1: Has variants
             if (variants.length > 0) {
                 var variantsHtml = '';
                 for (var v = 0; v < variants.length; v++) {
@@ -444,7 +445,6 @@ function addAddToCartButtonsToMenu() {
                     variantsHtml += `<button class="variant-btn ${isSelected}" data-price="${price}" data-variant="${variantText}">${variants[v].text}</button>`;
                 }
                 
-                // Get first variant price
                 var initialPrice = variants[0]?.price || 0;
                 var initialVariant = variants[0]?.text || '';
                 
@@ -493,7 +493,6 @@ function addAddToCartButtonsToMenu() {
                     }
                 });
             }
-            // Case 2: Simple price
             else if (simplePrice > 0) {
                 buttonContainer.innerHTML = `
                     <button class="add-to-cart-btn" data-id="${itemId}" data-name="${fullItemName}" data-price="${simplePrice}">
@@ -515,7 +514,6 @@ function addAddToCartButtonsToMenu() {
                     }
                 });
             }
-            // Case 3: Market price - Chat to Order
             else {
                 var priceDisplayEl = menuItemEl.querySelector('.item-price');
                 var priceDisplay = priceDisplayEl ? priceDisplayEl.textContent : '';
@@ -547,12 +545,10 @@ document.addEventListener('DOMContentLoaded', function() {
     window.openWhatsAppChat = openWhatsAppChat;
     window.showToast = showToast;
     
-    // Clear any corrupted cart data
     try {
         const saved = localStorage.getItem('urbancity_cart');
         if (saved) {
             const parsed = JSON.parse(saved);
-            // If items have invalid data, clear it
             if (parsed.items && parsed.items.some(item => item.name === null || item.price === undefined)) {
                 console.warn('⚠️ Corrupted cart data found, clearing...');
                 localStorage.removeItem('urbancity_cart');
