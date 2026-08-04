@@ -340,7 +340,7 @@
         <div class="checkout-form">
             <h2><i class="fas fa-truck"></i> Delivery Information</h2>
             <div class="notice">
-                <i class="fas fa-info-circle"></i> ₦500 takeaway fee applies to ALL orders
+                <i class="fas fa-info-circle"></i> ₦300 takeaway fee applies to ALL orders
             </div>
             
             <div class="form-group">
@@ -426,7 +426,7 @@
             </div>
             <div class="order-total" style="margin-top: 10px;">
                 <span>Takeaway Fee:</span>
-                <span id="takeaway-fee">₦500</span>
+                <span id="takeaway-fee">₦300</span>
             </div>
             <div class="order-total" style="border-top: none;">
                 <span>Total:</span>
@@ -470,8 +470,6 @@
         // ============================================
         let lastOrderData = null;
         let currentOrderType = 'delivery';
-        let cartData = { items: [], total: 0 };
-        let supabase = null;
 
         // FIX: Global close function
         window.closeSuccessModal = function() {
@@ -491,7 +489,9 @@
             const SUPABASE_URL = 'https://bpeyueppcksrbhugltjt.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZXl1ZXBwY2tzcmJodWdsdGp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2NTQ4NzIsImV4cCI6MjA4MDIzMDg3Mn0.5CnMyogeIbvM7medccj3ZPgUcDm6W52asIqQDC7EKAM';
             
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            
+            let cartData = { items: [], total: 0 };
             
             function loadSavedCustomerInfo() {
                 const savedInfo = localStorage.getItem('urbancity_customer_info');
@@ -553,7 +553,7 @@
                 if (!savedCart) {
                     document.getElementById('order-items').innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     document.getElementById('order-subtotal').textContent = '₦0';
-                    document.getElementById('order-total').textContent = '₦500';
+                    document.getElementById('order-total').textContent = '₦300';
                     return;
                 }
                 
@@ -566,8 +566,10 @@
                     
                     if (orderItemsEl && cartData.items && cartData.items.length > 0) {
                         orderItemsEl.innerHTML = cartData.items.map(item => {
-                            let displayName = item.name || 'Item';
-                            if (item.variant) displayName = `${displayName} (${item.variant})`;
+                            let displayName = item.displayName || item.name || 'Item';
+                            if (item.variant && !displayName.includes(item.variant)) {
+                                displayName = `${displayName} (${item.variant})`;
+                            }
                             return `
                                 <div class="order-item">
                                     <span>${item.quantity}x ${displayName}</span>
@@ -579,6 +581,7 @@
                         orderItemsEl.innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     }
                     
+                    // Calculate subtotal
                     const subtotal = cartData.items.reduce((sum, item) => {
                         return sum + ((item.price || 0) * (item.quantity || 0));
                     }, 0);
@@ -598,7 +601,7 @@
             function updateTotalDisplay() {
                 const orderTotalEl = document.getElementById('order-total');
                 const subtotal = cartData?.total || 0;
-                const total = subtotal + 500;
+                const total = subtotal + 300;
                 if (orderTotalEl) {
                     orderTotalEl.textContent = `₦${total.toLocaleString()}`;
                 }
@@ -632,8 +635,10 @@
             function generateReceiptHTML(orderData) {
                 const date = new Date().toLocaleString();
                 const itemsHtml = orderData.items.map(item => {
-                    let itemName = item.name || 'Item';
-                    if (item.variant) itemName = `${itemName} (${item.variant})`;
+                    let itemName = item.displayName || item.name || 'Item';
+                    if (item.variant && !itemName.includes(item.variant)) {
+                        itemName = `${itemName} (${item.variant})`;
+                    }
                     return `<div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee;">
                                 <span>${item.quantity}x ${itemName}</span>
                                 <span>₦${((item.price || 0) * (item.quantity || 0)).toLocaleString()}</span>
@@ -674,7 +679,7 @@
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Takeaway Fee:</span>
-                                <span>₦500</span>
+                                <span>₦300</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
                                 <span>TOTAL:</span>
@@ -689,7 +694,6 @@
                 `;
             }
             
-            // FIX: saveOrderToSupabase - Convert 'pickup' to 'takeaway' for Supabase
             async function saveOrderToSupabase(orderData) {
                 try {
                     // FIX: Convert 'pickup' to 'takeaway' for Supabase check constraint
@@ -708,7 +712,7 @@
                             order_type: orderTypeForDb,
                             items: orderData.items,
                             subtotal: orderData.subtotal,
-                            takeaway_fee: 500,
+                            takeaway_fee: 300,
                             total: orderData.total,
                             payment_method: orderData.paymentMethod,
                             payment_status: orderData.paymentStatus || 'pending',
@@ -783,8 +787,10 @@
                         const restaurantWhatsApp = '2348105442629';
                         
                         const itemsList = orderData.items.map(item => {
-                            let itemName = item.name || 'Item';
-                            if (item.variant) itemName = `${itemName} (${item.variant})`;
+                            let itemName = item.displayName || item.name || 'Item';
+                            if (item.variant && !itemName.includes(item.variant)) {
+                                itemName = `${itemName} (${item.variant})`;
+                            }
                             return `${item.quantity}x ${itemName} - ₦${((item.price || 0) * (item.quantity || 0)).toLocaleString()}`;
                         }).join('\n');
                         
@@ -853,7 +859,6 @@
                 document.getElementById('closeModalBtn').onclick = window.closeSuccessModal;
             }
             
-            // FIX: placeOrder with pickup/delivery fix
             async function placeOrder() {
                 const savedCart = localStorage.getItem('urbancity_cart');
                 if (!savedCart) {
@@ -916,7 +921,7 @@
                     orderType: currentOrderType,
                     items: cartData.items,
                     subtotal: cartData.total,
-                    total: cartData.total + 500,
+                    total: cartData.total + 300,
                     paymentMethod: paymentMethod,
                     paymentStatus: 'pending',
                     pickupLocation: currentOrderType === 'pickup' ? address : null,
