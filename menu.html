@@ -3069,93 +3069,107 @@ if (item.variants && item.variants.length > 0) {
             }
             itemContent.appendChild(itemFooter);
             
-            // ADD TO CART BUTTON - FIXED
+            // ADD TO CART BUTTON - WITH AVAILABILITY CHECK
 const addToCartBtn = document.createElement('button');
 addToCartBtn.className = 'add-to-cart-btn';
-addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
-addToCartBtn.addEventListener('click', function() {
-    // === GET ITEM NAME FROM TITLE ===
-    const titleEl = menuItem.querySelector('.item-title');
-    let itemName = titleEl ? titleEl.textContent.trim() : item.name || 'Item';
-    itemName = itemName.replace(/₦[\d,]+/g, '').trim();
+
+// ============================================
+// CHECK IF ITEM IS AVAILABLE
+// ============================================
+if (item.is_available === false) {
+    // DISABLE the button for unavailable items
+    addToCartBtn.disabled = true;
+    addToCartBtn.innerHTML = '<i class="fas fa-times-circle"></i> Unavailable';
+    addToCartBtn.style.background = '#666';
+    addToCartBtn.style.cursor = 'not-allowed';
+    addToCartBtn.style.opacity = '0.5';
+    addToCartBtn.style.width = '100%';
+    addToCartBtn.style.justifyContent = 'center';
+    addToCartBtn.style.pointerEvents = 'none';
+    addToCartBtn.style.border = '1px solid #888';
+} else {
+    // ENABLED for available items
+    addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
     
-    // === GET PRICE - PRIORITIZE SELECTED VARIANT ===
-    const selectedVariant = itemContent.querySelector('.variant-btn.selected');
-    let price = 0;
-    let variantName = null;
-    
-    if (selectedVariant) {
-        try {
-            const variantData = JSON.parse(selectedVariant.dataset.variant);
-            price = variantData.price || parseInt(selectedVariant.dataset.price) || 0;
-            variantName = variantData.size || variantData.display || selectedVariant.dataset.size || null;
-            console.log('🔘 Selected variant:', { price, variantName });
-        } catch(e) {
-            // Fallback: try to get from text
-            const variantText = selectedVariant.textContent.trim();
-            const match = variantText.match(/₦([\d,]+)/);
+    addToCartBtn.addEventListener('click', function() {
+        // === GET ITEM NAME FROM TITLE ===
+        const titleEl = menuItem.querySelector('.item-title');
+        let itemName = titleEl ? titleEl.textContent.trim() : item.name || 'Item';
+        itemName = itemName.replace(/₦[\d,]+/g, '').trim();
+        
+        // === GET PRICE - PRIORITIZE SELECTED VARIANT ===
+        const selectedVariant = itemContent.querySelector('.variant-btn.selected');
+        let price = 0;
+        let variantName = null;
+        
+        if (selectedVariant) {
+            try {
+                const variantData = JSON.parse(selectedVariant.dataset.variant);
+                price = variantData.price || parseInt(selectedVariant.dataset.price) || 0;
+                variantName = variantData.size || variantData.display || selectedVariant.dataset.size || null;
+                console.log('🔘 Selected variant:', { price, variantName });
+            } catch(e) {
+                const variantText = selectedVariant.textContent.trim();
+                const match = variantText.match(/₦([\d,]+)/);
+                if (match) {
+                    price = parseInt(match[1].replace(/,/g, ''));
+                }
+                variantName = variantText.replace(/₦[\d,]+/g, '').trim();
+            }
+        } else if (item.variants && item.variants.length > 0) {
+            const firstVariant = item.variants[0];
+            price = firstVariant.price || 0;
+            variantName = firstVariant.size || null;
+            console.log('🔘 Using first variant as default:', { price, variantName });
+        }
+        
+        // === FALLBACK: Try price tag ===
+        if (price === 0 || isNaN(price)) {
+            const priceTag = menuItem.querySelector('.item-price');
+            if (priceTag) {
+                const priceText = priceTag.textContent;
+                const match = priceText.match(/₦([\d,]+)/);
+                if (match) {
+                    price = parseInt(match[1].replace(/,/g, ''));
+                }
+            }
+        }
+        
+        // === FALLBACK: Try item object ===
+        if (price === 0 && item.price) {
+            price = item.price;
+        }
+        if (price === 0 && item.price_display) {
+            const match = item.price_display.match(/₦([\d,]+)/);
             if (match) {
                 price = parseInt(match[1].replace(/,/g, ''));
             }
-            variantName = variantText.replace(/₦[\d,]+/g, '').trim();
         }
-    } else if (item.variants && item.variants.length > 0) {
-        // If no variant selected, use the first one
-        const firstVariant = item.variants[0];
-        price = firstVariant.price || 0;
-        variantName = firstVariant.size || null;
-        console.log('🔘 Using first variant as default:', { price, variantName });
-    }
-    
-    // === FALLBACK: Try price tag if variant didn't give price ===
-    if (price === 0 || isNaN(price)) {
-        const priceTag = menuItem.querySelector('.item-price');
-        if (priceTag) {
-            const priceText = priceTag.textContent;
-            const match = priceText.match(/₦([\d,]+)/);
-            if (match) {
-                price = parseInt(match[1].replace(/,/g, ''));
-            }
+        
+        console.log('🛒 Adding to cart:', { 
+            itemId: item.item_id || item.id, 
+            itemName: itemName, 
+            price: price, 
+            variantName: variantName 
+        });
+        
+        if (price === 0 || isNaN(price)) {
+            showToast('⚠️ Please select a valid option for this item');
+            return;
         }
-    }
-    
-    // === FALLBACK: Try item object ===
-    if (price === 0 && item.price) {
-        price = item.price;
-    }
-    if (price === 0 && item.price_display) {
-        const match = item.price_display.match(/₦([\d,]+)/);
-        if (match) {
-            price = parseInt(match[1].replace(/,/g, ''));
+        
+        if (!itemName || itemName === '') {
+            itemName = item.name || 'Menu Item';
         }
-    }
-    
-    // === LOG FOR DEBUGGING ===
-    console.log('🛒 Adding to cart:', { 
-        itemId: item.item_id || item.id, 
-        itemName: itemName, 
-        price: price, 
-        variantName: variantName 
+        
+        if (typeof addToCart === 'function') {
+            addToCart(item.item_id || item.id, itemName, price, variantName);
+        } else {
+            console.error('❌ addToCart function not available');
+            showToast('⚠️ Error adding item to cart');
+        }
     });
-    
-    // === VALIDATE ===
-    if (price === 0 || isNaN(price)) {
-        showToast('⚠️ Please select a valid option for this item');
-        return;
-    }
-    
-    if (!itemName || itemName === '') {
-        itemName = item.name || 'Menu Item';
-    }
-    
-    // === ADD TO CART ===
-    if (typeof addToCart === 'function') {
-        addToCart(item.item_id || item.id, itemName, price, variantName);
-    } else {
-        console.error('❌ addToCart function not available');
-        showToast('⚠️ Error adding item to cart');
-    }
-});
+}
 itemContent.appendChild(addToCartBtn);
             
             // ============================================
