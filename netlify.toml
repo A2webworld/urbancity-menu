@@ -1,3 +1,13 @@
+# ============================================
+# FUNCTIONS CONFIGURATION
+# ============================================
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# ============================================
+# CORS HEADERS FOR menu.json
+# ============================================
 [[headers]]
   for = "/menu.json"
   [headers.values]
@@ -5,3 +15,13 @@
     Access-Control-Allow-Methods = "GET, OPTIONS"
     Access-Control-Allow-Headers = "Content-Type, Cache-Control, Accept"
     Access-Control-Max-Age = "86400"
+
+# ============================================
+# CORS HEADERS FOR FUNCTIONS (Optional)
+# ============================================
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization"

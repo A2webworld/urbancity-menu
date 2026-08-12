@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <!-- ============================================ -->
+    <!-- PAYSTACK SCRIPT -->
+    <!-- ============================================ -->
+    <script src="https://js.paystack.co/v1/inline.js"></script>
     <style>
         * {
             margin: 0;
@@ -265,6 +269,19 @@
             font-size: 14px;
         }
         
+        /* Paystack badge */
+        .paystack-badge {
+            display: inline-block;
+            background: #0a2748;
+            color: #fff;
+            font-size: 9px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        
         @media (max-width: 768px) {
             .radio-group {
                 flex-direction: row;
@@ -340,7 +357,7 @@
         <div class="checkout-form">
             <h2><i class="fas fa-truck"></i> Delivery Information</h2>
             <div class="notice">
-                <i class="fas fa-info-circle"></i> ₦500 takeaway fee applies to ALL orders
+                <i class="fas fa-info-circle"></i> ₦550 takeaway fee applies to ALL orders
             </div>
             
             <div class="form-group">
@@ -398,6 +415,13 @@
             
             <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
             <div class="payment-methods">
+                <!-- ============================================ -->
+                <!-- PAYSTACK PAYMENT OPTION -->
+                <!-- ============================================ -->
+                <div class="payment-method" data-method="paystack">
+                    <i class="fas fa-credit-card" style="color: #0a2748;"></i>
+                    <span>Pay with Card <span class="paystack-badge">Paystack</span></span>
+                </div>
                 <div class="payment-method" data-method="card">
                     <i class="fas fa-credit-card"></i>
                     <span>Card Payment</span>
@@ -426,7 +450,7 @@
             </div>
             <div class="order-total" style="margin-top: 10px;">
                 <span>Takeaway Fee:</span>
-                <span id="takeaway-fee">₦500</span>
+                <span id="takeaway-fee">₦550</span>
             </div>
             <div class="order-total" style="border-top: none;">
                 <span>Total:</span>
@@ -470,6 +494,7 @@
         // ============================================
         let lastOrderData = null;
         let currentOrderType = 'delivery';
+        let isProcessingPayment = false;
 
         // FIX: Global close function
         window.closeSuccessModal = function() {
@@ -553,7 +578,7 @@
                 if (!savedCart) {
                     document.getElementById('order-items').innerHTML = '<div style="text-align:center;color:#888;padding:20px;">Your cart is empty</div>';
                     document.getElementById('order-subtotal').textContent = '₦0';
-                    document.getElementById('order-total').textContent = '₦500';
+                    document.getElementById('order-total').textContent = '₦550';
                     return;
                 }
                 
@@ -601,7 +626,7 @@
             function updateTotalDisplay() {
                 const orderTotalEl = document.getElementById('order-total');
                 const subtotal = cartData?.total || 0;
-                const total = subtotal + 500;
+                const total = subtotal + 550;
                 if (orderTotalEl) {
                     orderTotalEl.textContent = `₦${total.toLocaleString()}`;
                 }
@@ -679,7 +704,7 @@
                             </div>
                             <div style="display: flex; justify-content: space-between;">
                                 <span>Takeaway Fee:</span>
-                                <span>₦500</span>
+                                <span>₦550</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem;">
                                 <span>TOTAL:</span>
@@ -712,7 +737,7 @@
                             order_type: orderTypeForDb,
                             items: orderData.items,
                             subtotal: orderData.subtotal,
-                            takeaway_fee: 500,
+                            takeaway_fee: 550,
                             total: orderData.total,
                             payment_method: orderData.paymentMethod,
                             payment_status: orderData.paymentStatus || 'pending',
@@ -728,6 +753,67 @@
                     console.error('Failed to save order:', error);
                     return false;
                 }
+            }
+
+            // ============================================
+            // PAYSTACK PAYMENT FUNCTION WITH VERIFICATION
+            // ============================================
+            function payWithPaystack(orderData) {
+                return new Promise((resolve, reject) => {
+                    try {
+                        const paystackKey = 'pk_live_d0682fd15714fbe5112823a47b1f2e45a2319526';
+                        
+                        const handler = PaystackPop.setup({
+                            key: paystackKey,
+                            email: orderData.customer.email || orderData.customer.phone + '@urbancity.com',
+                            amount: orderData.total * 100,
+                            currency: 'NGN',
+                            ref: orderData.orderId,
+                            callback: async function(response) {
+                                console.log('✅ Paystack payment successful:', response);
+                                
+                                try {
+                                    // ============================================
+                                    // VERIFY PAYMENT WITH NETLIFY FUNCTION
+                                    // ============================================
+                                    const verifyResponse = await fetch('/.netlify/functions/verify-payment', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json'
+                                        },
+                                        body: JSON.stringify({ reference: response.reference })
+                                    });
+                                    
+                                    const verification = await verifyResponse.json();
+                                    console.log('✅ Payment verification result:', verification);
+                                    
+                                    if (verification.data && verification.data.status === 'success') {
+                                        resolve({
+                                            success: true,
+                                            reference: response.reference,
+                                            transaction: verification.data
+                                        });
+                                    } else {
+                                        reject(new Error('Payment verification failed: ' + (verification.message || 'Unknown error')));
+                                    }
+                                } catch (error) {
+                                    console.error('❌ Verification error:', error);
+                                    reject(new Error('Verification failed: ' + error.message));
+                                }
+                            },
+                            onClose: function() {
+                                console.log('❌ Paystack payment modal closed');
+                                reject(new Error('Payment was cancelled'));
+                            }
+                        });
+                        
+                        handler.openIframe();
+                        
+                    } catch (error) {
+                        console.error('Paystack error:', error);
+                        reject(error);
+                    }
+                });
             }
 
             async function payWithMonnify(orderData) {
@@ -909,19 +995,22 @@
                 
                 const paymentMethod = selectedMethod.dataset.method;
                 
+                // Get email (use phone if no email)
+                const email = document.getElementById('email').value.trim() || `${phone}@urbancity.com`;
+                
                 const orderData = {
                     orderId: 'URBAN-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
                     customer: {
                         fullname: fullname,
                         phone: phone,
-                        email: document.getElementById('email').value.trim(),
+                        email: email,
                         address: address,
                         instructions: instructions
                     },
                     orderType: currentOrderType,
                     items: cartData.items,
                     subtotal: cartData.total,
-                    total: cartData.total + 500,
+                    total: cartData.total + 550,
                     paymentMethod: paymentMethod,
                     paymentStatus: 'pending',
                     pickupLocation: currentOrderType === 'pickup' ? address : null,
@@ -932,7 +1021,44 @@
                 saveCustomerInfo();
                 updateInstructionsDisplay();
                 
-                if (paymentMethod === 'card' || paymentMethod === 'opay' || paymentMethod === 'ussd') {
+                // ============================================
+                // PAYSTACK PAYMENT (WITH VERIFICATION)
+                // ============================================
+                if (paymentMethod === 'paystack') {
+                    try {
+                        const placeOrderBtn = document.getElementById('placeOrderBtn');
+                        placeOrderBtn.disabled = true;
+                        placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Payment...';
+                        
+                        // Initiate Paystack payment
+                        const paymentResult = await payWithPaystack(orderData);
+                        
+                        if (paymentResult.success) {
+                            // Payment successful and verified - save order
+                            orderData.paymentStatus = 'completed';
+                            orderData.paymentReference = paymentResult.reference;
+                            
+                            const saved = await saveOrderToSupabase(orderData);
+                            if (saved) {
+                                localStorage.removeItem('urbancity_cart');
+                                openSuccessModal(orderData);
+                            } else {
+                                alert('Payment successful but order failed to save. Please contact support.');
+                            }
+                        }
+                        
+                    } catch (error) {
+                        console.error('Paystack payment error:', error);
+                        alert(error.message || 'Payment failed. Please try again.');
+                        const placeOrderBtn = document.getElementById('placeOrderBtn');
+                        placeOrderBtn.disabled = false;
+                        placeOrderBtn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
+                    }
+                }
+                // ============================================
+                // MONNIFY PAYMENT
+                // ============================================
+                else if (paymentMethod === 'card' || paymentMethod === 'opay' || paymentMethod === 'ussd') {
                     orderData.paymentStatus = 'pending';
                     const saved = await saveOrderToSupabase(orderData);
                     if (saved) {
@@ -941,6 +1067,9 @@
                         alert('Failed to save order. Please try again.');
                     }
                 } 
+                // ============================================
+                // CASH PAYMENT
+                // ============================================
                 else if (paymentMethod === 'cash') {
                     orderData.paymentStatus = 'pending';
                     const saved = await saveOrderToSupabase(orderData);

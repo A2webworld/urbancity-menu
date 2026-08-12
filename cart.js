@@ -323,6 +323,9 @@ function updateCartCount() {
     }
 }
 
+// ============================================
+// FIXED: UPDATE CART UI WITH MINI CHECKOUT BUTTON AT TOP
+// ============================================
 function updateCartUI() {
     updateCartCount();
     
@@ -347,6 +350,44 @@ function updateCartUI() {
     }
     
     let html = '';
+    
+    // ============================================
+    // NEW: MINI CHECKOUT BUTTON AT TOP (FIXED POSITION)
+    // ============================================
+    html += `
+        <div class="mini-checkout-top" style="
+            padding: 10px 0 14px 0;
+            margin-bottom: 12px;
+            border-bottom: 2px solid rgba(255,152,0,0.3);
+            background: rgba(255,152,0,0.05);
+            border-radius: 0 0 10px 10px;
+        ">
+            <button onclick="proceedToCheckout()" style="
+                width: 100%;
+                padding: 12px;
+                background: linear-gradient(135deg, #ff9800, #ff5722);
+                color: white;
+                border: none;
+                border-radius: 30px;
+                font-size: 15px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                box-shadow: 0 3px 12px rgba(255,152,0,0.3);
+            "
+            onmouseover="this.style.transform='scale(1.02)'" 
+            onmouseout="this.style.transform='scale(1)'">
+                <i class="fas fa-arrow-right"></i> Proceed to Checkout
+                <span style="font-size: 0.8rem; opacity: 0.8;">(${cart.items.length} items)</span>
+            </button>
+        </div>
+    `;
+    
+    // Cart items
     cart.items.forEach((item) => {
         const price = item.price || 0;
         const displayName = item.displayName || (item.variant ? `${item.name} (${item.variant})` : item.name);

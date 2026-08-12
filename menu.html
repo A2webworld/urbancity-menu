@@ -2570,7 +2570,7 @@
 
             <div class="takeaway-notice">
                 <i class="fas fa-shopping-bag"></i> 
-                Notice: All takeaway orders attract a ₦500 fee
+                Notice: All takeaway orders attract a ₦550 fee
             </div>
 
             <div class="cart-icon" onclick="toggleCart()">
@@ -3140,48 +3140,94 @@
             itemContent.appendChild(priceDisplayDiv);
             
             // ============================================
-            // ADD TO CART BUTTON
-            // ============================================
-            const addToCartBtn = document.createElement('button');
-            addToCartBtn.className = 'add-to-cart-btn';
-            
-            if (item.is_available === false) {
-                addToCartBtn.disabled = true;
-                addToCartBtn.innerHTML = '<i class="fas fa-times-circle"></i> Unavailable';
-                addToCartBtn.style.background = '#666';
-                addToCartBtn.style.opacity = '0.5';
-                addToCartBtn.style.cursor = 'not-allowed';
+// ADD TO CART BUTTON - FIXED FOR ITEMS WITHOUT VARIANTS
+// ============================================
+const addToCartBtn = document.createElement('button');
+addToCartBtn.className = 'add-to-cart-btn';
+
+if (item.is_available === false) {
+    addToCartBtn.disabled = true;
+    addToCartBtn.innerHTML = '<i class="fas fa-times-circle"></i> Unavailable';
+    addToCartBtn.style.background = '#666';
+    addToCartBtn.style.opacity = '0.5';
+    addToCartBtn.style.cursor = 'not-allowed';
+} else {
+    addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
+    addToCartBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        
+        let price = 0;
+        let variantName = null;
+        
+        // ============================================
+        // CHECK IF ITEM HAS VARIANTS
+        // ============================================
+        if (item.variants && item.variants.length > 0) {
+            // Item HAS variants - get selected variant
+            const selectedVariant = itemContent.querySelector('.variant-btn.selected');
+            if (selectedVariant) {
+                price = parseInt(selectedVariant.dataset.price) || 0;
+                variantName = selectedVariant.dataset.size || null;
             } else {
-                addToCartBtn.innerHTML = '<i class="fas fa-cart-plus"></i> Add to Cart';
-                addToCartBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    
-                    const selectedVariant = itemContent.querySelector('.variant-btn.selected');
-                    let price = 0;
-                    let variantName = null;
-                    
-                    if (selectedVariant) {
-                        price = parseInt(selectedVariant.dataset.price) || 0;
-                        variantName = selectedVariant.dataset.size || null;
-                    } else if (item.variants && item.variants.length > 0) {
-                        const firstVariant = item.variants[0];
-                        price = firstVariant.price || 0;
-                        variantName = firstVariant.size || null;
-                    }
-                    
-                    if (price === 0 || isNaN(price)) {
-                        showToast('⚠️ Please select a valid option');
-                        return;
-                    }
-                    
-                    if (typeof addToCart === 'function') {
-                        addToCart(item.item_id || item.id, item.name, price, variantName);
-                    } else {
-                        showToast('⚠️ Error adding to cart');
-                    }
-                });
+                // Fallback: use first variant
+                const firstVariant = item.variants[0];
+                price = firstVariant.price || 0;
+                variantName = firstVariant.size || null;
             }
-            itemContent.appendChild(addToCartBtn);
+        } else {
+            // ============================================
+            // ITEM HAS NO VARIANTS - use item price directly
+            // ============================================
+            // Try to get price from item object
+            if (item.price) {
+                price = item.price;
+            } else if (item.price_display) {
+                // Try to extract price from price_display
+                const match = item.price_display.match(/₦([\d,]+)/);
+                if (match) {
+                    price = parseInt(match[1].replace(/,/g, ''));
+                }
+            }
+            
+            // If still 0, try from the price badge
+            if (price === 0) {
+                const priceTag = menuItem.querySelector('.item-price');
+                if (priceTag) {
+                    const priceText = priceTag.textContent;
+                    const match = priceText.match(/₦([\d,]+)/);
+                    if (match) {
+                        price = parseInt(match[1].replace(/,/g, ''));
+                    }
+                }
+            }
+            
+            variantName = null; // No variant for items without variants
+        }
+        
+        // ============================================
+        // VALIDATE AND ADD TO CART
+        // ============================================
+        console.log('🛒 Adding to cart:', { 
+            itemId: item.item_id || item.id, 
+            itemName: item.name, 
+            price: price, 
+            variantName: variantName,
+            hasVariants: item.variants && item.variants.length > 0
+        });
+        
+        if (price === 0 || isNaN(price)) {
+            showToast('⚠️ Price not available for this item');
+            return;
+        }
+        
+        if (typeof addToCart === 'function') {
+            addToCart(item.item_id || item.id, item.name, price, variantName);
+        } else {
+            showToast('⚠️ Error adding to cart');
+        }
+    });
+}
+itemContent.appendChild(addToCartBtn);
             
             menuItem.appendChild(itemContent);
             
