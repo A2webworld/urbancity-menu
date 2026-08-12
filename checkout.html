@@ -282,6 +282,18 @@
             letter-spacing: 0.3px;
         }
         
+        /* Monnify disabled badge */
+        .coming-soon-badge {
+            display: inline-block;
+            background: #666;
+            color: #fff;
+            font-size: 8px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 6px;
+            font-weight: 500;
+        }
+        
         @media (max-width: 768px) {
             .radio-group {
                 flex-direction: row;
@@ -422,18 +434,24 @@
                     <i class="fas fa-credit-card" style="color: #0a2748;"></i>
                     <span>Pay with Card <span class="paystack-badge">Paystack</span></span>
                 </div>
-                <div class="payment-method" data-method="card">
-                    <i class="fas fa-credit-card"></i>
-                    <span>Card Payment</span>
+                <!-- ============================================ -->
+                <!-- MONNIFY OPTIONS - TEMPORARILY DISABLED -->
+                <!-- ============================================ -->
+                <div class="payment-method" data-method="card" style="opacity:0.5; cursor:not-allowed;">
+                    <i class="fas fa-credit-card" style="opacity:0.5;"></i>
+                    <span>Card Payment <span class="coming-soon-badge">Coming Soon</span></span>
                 </div>
-                <div class="payment-method" data-method="opay">
-                    <i class="fas fa-wallet"></i>
-                    <span>Pay With OPay & Any Bank</span>
+                <div class="payment-method" data-method="opay" style="opacity:0.5; cursor:not-allowed;">
+                    <i class="fas fa-wallet" style="opacity:0.5;"></i>
+                    <span>Pay With OPay & Any Bank <span class="coming-soon-badge">Coming Soon</span></span>
                 </div>
-                <div class="payment-method" data-method="ussd">
-                    <i class="fas fa-phone-alt"></i>
-                    <span>Pay with USSD</span>
+                <div class="payment-method" data-method="ussd" style="opacity:0.5; cursor:not-allowed;">
+                    <i class="fas fa-phone-alt" style="opacity:0.5;"></i>
+                    <span>Pay with USSD <span class="coming-soon-badge">Coming Soon</span></span>
                 </div>
+                <!-- ============================================ -->
+                <!-- CASH PAYMENT -->
+                <!-- ============================================ -->
                 <div class="payment-method" data-method="cash">
                     <i class="fas fa-money-bill-wave"></i>
                     <span>Cash on Pickup</span>
@@ -756,12 +774,48 @@
             }
 
             // ============================================
-            // PAYSTACK PAYMENT FUNCTION WITH VERIFICATION
+            // PAYSTACK PAYMENT FUNCTION - FIXED
             // ============================================
             function payWithPaystack(orderData) {
                 return new Promise((resolve, reject) => {
                     try {
                         const paystackKey = 'pk_live_d0682fd15714fbe5112823a47b1f2e45a2319526';
+                        
+                        // Define callback as a separate named function
+                        const paymentCallback = function(response) {
+                            console.log('✅ Paystack payment successful:', response);
+                            
+                            // Verify payment with Netlify function
+                            fetch('/.netlify/functions/verify-payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({ reference: response.reference })
+                            })
+                            .then(res => res.json())
+                            .then(verification => {
+                                console.log('✅ Payment verification result:', verification);
+                                if (verification.data && verification.data.status === 'success') {
+                                    resolve({
+                                        success: true,
+                                        reference: response.reference,
+                                        transaction: verification.data
+                                    });
+                                } else {
+                                    reject(new Error('Payment verification failed: ' + (verification.message || 'Unknown error')));
+                                }
+                            })
+                            .catch(error => {
+                                console.error('❌ Verification error:', error);
+                                reject(new Error('Verification failed: ' + error.message));
+                            });
+                        };
+                        
+                        const onClose = function() {
+                            console.log('❌ Paystack payment modal closed');
+                            reject(new Error('Payment was cancelled'));
+                        };
                         
                         const handler = PaystackPop.setup({
                             key: paystackKey,
@@ -769,42 +823,8 @@
                             amount: orderData.total * 100,
                             currency: 'NGN',
                             ref: orderData.orderId,
-                            callback: async function(response) {
-                                console.log('✅ Paystack payment successful:', response);
-                                
-                                try {
-                                    // ============================================
-                                    // VERIFY PAYMENT WITH NETLIFY FUNCTION
-                                    // ============================================
-                                    const verifyResponse = await fetch('/.netlify/functions/verify-payment', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json'
-                                        },
-                                        body: JSON.stringify({ reference: response.reference })
-                                    });
-                                    
-                                    const verification = await verifyResponse.json();
-                                    console.log('✅ Payment verification result:', verification);
-                                    
-                                    if (verification.data && verification.data.status === 'success') {
-                                        resolve({
-                                            success: true,
-                                            reference: response.reference,
-                                            transaction: verification.data
-                                        });
-                                    } else {
-                                        reject(new Error('Payment verification failed: ' + (verification.message || 'Unknown error')));
-                                    }
-                                } catch (error) {
-                                    console.error('❌ Verification error:', error);
-                                    reject(new Error('Verification failed: ' + error.message));
-                                }
-                            },
-                            onClose: function() {
-                                console.log('❌ Paystack payment modal closed');
-                                reject(new Error('Payment was cancelled'));
-                            }
+                            callback: paymentCallback,
+                            onClose: onClose
                         });
                         
                         handler.openIframe();
@@ -816,46 +836,14 @@
                 });
             }
 
+            // ============================================
+            // MONNIFY - TEMPORARILY DISABLED
+            // ============================================
             async function payWithMonnify(orderData) {
-                try {
-                    const placeOrderBtn = document.getElementById('placeOrderBtn');
-                    placeOrderBtn.disabled = true;
-                    placeOrderBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-
-                    const paymentPayload = {
-                        amount: orderData.total,
-                        customerEmail: orderData.customer.email || orderData.customer.phone + '@urbancity.com',
-                        customerName: orderData.customer.fullname,
-                        orderReference: orderData.orderId
-                    };
-
-                    const response = await fetch('/.netlify/functions/monnify-payment', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(paymentPayload)
-                    });
-
-                    const result = await response.json();
-
-                    if (result.success && result.checkoutUrl) {
-                        sessionStorage.setItem('pendingOrder', JSON.stringify({
-                            orderData: orderData,
-                            paymentReference: result.paymentReference
-                        }));
-                        window.location.href = result.checkoutUrl;
-                    } else {
-                        throw new Error(result.message || 'Payment initialization failed');
-                    }
-
-                } catch (error) {
-                    console.error('Monnify payment error:', error);
-                    alert('Payment initialization failed: ' + error.message);
-                    const placeOrderBtn = document.getElementById('placeOrderBtn');
-                    placeOrderBtn.disabled = false;
-                    placeOrderBtn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
-                }
+                // Monnify is not available in the menu site
+                // Show user-friendly message
+                alert('⚠️ Monnify payment is currently unavailable. Please use "Pay with Card (Paystack)" or "Cash on Pickup".');
+                return false;
             }
             
             function shareToWhatsApp(orderData) {
@@ -1056,16 +1044,13 @@
                     }
                 }
                 // ============================================
-                // MONNIFY PAYMENT
+                // MONNIFY - TEMPORARILY DISABLED
                 // ============================================
                 else if (paymentMethod === 'card' || paymentMethod === 'opay' || paymentMethod === 'ussd') {
-                    orderData.paymentStatus = 'pending';
-                    const saved = await saveOrderToSupabase(orderData);
-                    if (saved) {
-                        await payWithMonnify(orderData);
-                    } else {
-                        alert('Failed to save order. Please try again.');
-                    }
+                    alert('⚠️ This payment method is currently unavailable. Please use "Pay with Card (Paystack)" or "Cash on Pickup".');
+                    const placeOrderBtn = document.getElementById('placeOrderBtn');
+                    placeOrderBtn.disabled = false;
+                    placeOrderBtn.innerHTML = '<i class="fas fa-check-circle"></i> Place Order';
                 } 
                 // ============================================
                 // CASH PAYMENT
