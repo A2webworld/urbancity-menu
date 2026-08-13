@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Swiper CSS for Slider -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- ============================================ -->
+<!-- CACHE CONTROL - PREVENT BROWSER CACHING -->
+<!-- ============================================ -->
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
     <!-- PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -2664,7 +2670,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="cart.js"></script>
+    <script src="cart.js?v=4"></script>
     <script>
         // Supabase configuration
         const SUPABASE_URL = 'https://bpeyueppcksrbhugltjt.supabase.co';
@@ -2970,6 +2976,51 @@
             });
             if (menuData.categories.length > 0) showCategory(menuData.categories[0].id);
         }
+
+                // ============================================
+        // AUTO-REFRESH MENU - FETCH UPDATES EVERY 2 MINUTES
+        // ============================================
+        let autoRefreshInterval = null;
+
+        function startAutoRefresh() {
+            // Clear any existing interval
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            
+            // Refresh every 2 minutes (120000 ms)
+            autoRefreshInterval = setInterval(function() {
+                console.log('🔄 Auto-refreshing menu data...');
+                
+                // Reload menu from Supabase
+                loadMenu();
+                
+                // Also reload cart buttons
+                if (typeof addAddToCartButtonsToMenu === 'function') {
+                    setTimeout(function() {
+                        addAddToCartButtonsToMenu();
+                    }, 500);
+                }
+                
+                // Show a subtle notification
+                showToast('🔄 Menu updated!', 'info');
+            }, 120000); // 2 minutes
+        }
+
+        // ============================================
+        // VISIBILITY CHANGE - Refresh when tab becomes visible
+        // ============================================
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log('👁️ Tab visible, refreshing menu...');
+                loadMenu();
+                setTimeout(function() {
+                    if (typeof addAddToCartButtonsToMenu === 'function') {
+                        addAddToCartButtonsToMenu();
+                    }
+                }, 500);
+            }
+        });
 
         function addCommentToItem(itemId, name, rating, comment) {
             const comments = JSON.parse(localStorage.getItem(`comments_${itemId}`) || '[]');
@@ -3480,7 +3531,7 @@ itemContent.appendChild(addToCartBtn);
         };
 
         // Background Animation
-        document.addEventListener('DOMContentLoaded', function() {
+                document.addEventListener('DOMContentLoaded', function() {
             const backgrounds = document.querySelectorAll('.background-slide');
             let currentBg = 0;
             document.getElementById('bg1').style.backgroundImage = "url('logo.jpg')";
@@ -3494,6 +3545,26 @@ itemContent.appendChild(addToCartBtn);
             loadMenu();
             setupEventListeners();
             initPWA();
+            
+            // ============================================
+            // START AUTO-REFRESH AFTER PAGE LOADS
+            // ============================================
+            startAutoRefresh();
+        });
+
+        // ============================================
+        // VISIBILITY CHANGE - Refresh when tab becomes visible
+        // ============================================
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log('👁️ Tab visible, refreshing menu...');
+                loadMenu();
+                setTimeout(function() {
+                    if (typeof addAddToCartButtonsToMenu === 'function') {
+                        addAddToCartButtonsToMenu();
+                    }
+                }, 500);
+            }
         });
 
         function setupEventListeners() {
@@ -3785,14 +3856,33 @@ itemContent.appendChild(addToCartBtn);
         });
 
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(function(registration) {
-                    console.log('✅ Service Worker registered successfully:', registration);
-                })
-                .catch(function(error) {
-                    console.log('❌ Service Worker registration failed:', error);
-                });
-        }
+    // ============================================
+    // REGISTER WITH UPDATE CHECK
+    // ============================================
+    navigator.serviceWorker.register('/sw.js')
+        .then(function(registration) {
+            console.log('✅ Service Worker registered successfully:', registration);
+            
+            // ============================================
+            // CHECK FOR UPDATES EVERY 2 MINUTES
+            // ============================================
+            setInterval(function() {
+                registration.update();
+                console.log('🔄 Checking for Service Worker updates...');
+            }, 120000); // 2 minutes
+        })
+        .catch(function(error) {
+            console.log('❌ Service Worker registration failed:', error);
+        });
+    
+    // ============================================
+    // LISTEN FOR CONTROLLER CHANGE (new SW takes over)
+    // ============================================
+    navigator.serviceWorker.addEventListener('controllerchange', function() {
+        console.log('🔄 Service Worker controller changed, reloading...');
+        window.location.reload();
+    });
+}
 
         document.addEventListener('DOMContentLoaded', function() {
             initPWA();
