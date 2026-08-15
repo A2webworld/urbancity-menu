@@ -2978,34 +2978,34 @@
         }
 
                 // ============================================
-        // AUTO-REFRESH MENU - FETCH UPDATES EVERY 2 MINUTES
+        // AUTO-REFRESH MENU - FETCH UPDATES EVERY 45 MINUTES
         // ============================================
         let autoRefreshInterval = null;
 
-        function startAutoRefresh() {
-            // Clear any existing interval
-            if (autoRefreshInterval) {
-                clearInterval(autoRefreshInterval);
-            }
-            
-            // Refresh every 2 minutes (120000 ms)
-            autoRefreshInterval = setInterval(function() {
-                console.log('🔄 Auto-refreshing menu data...');
-                
-                // Reload menu from Supabase
-                loadMenu();
-                
-                // Also reload cart buttons
-                if (typeof addAddToCartButtonsToMenu === 'function') {
-                    setTimeout(function() {
-                        addAddToCartButtonsToMenu();
-                    }, 500);
-                }
-                
-                // Show a subtle notification
-                showToast('🔄 Menu updated!', 'info');
-            }, 120000); // 2 minutes
+function startAutoRefresh() {
+    // Clear any existing interval
+    if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
+    }
+    
+    // Refresh every 45 minutes (2700000 ms)
+    autoRefreshInterval = setInterval(function() {
+        console.log('🔄 Auto-refreshing menu data...');
+        
+        // Reload menu from Supabase
+        loadMenu();
+        
+        // Also reload cart buttons
+        if (typeof addAddToCartButtonsToMenu === 'function') {
+            setTimeout(function() {
+                addAddToCartButtonsToMenu();
+            }, 500);
         }
+        
+        // Show a subtle notification
+        showToast('🔄 Menu updated!', 'info');
+    }, 2700000); // 45 minutes
+}
 
         // ============================================
         // VISIBILITY CHANGE - Refresh when tab becomes visible
