@@ -741,10 +741,26 @@
                 `;
             }
             
+            // ============================================
+            // FIXED: Save Order to Supabase with proper status
+            // ============================================
             async function saveOrderToSupabase(orderData) {
                 try {
                     // FIX: Convert 'pickup' to 'takeaway' for Supabase check constraint
                     const orderTypeForDb = orderData.orderType === 'pickup' ? 'takeaway' : orderData.orderType;
+                    
+                    // Ensure payment_status is set correctly
+                    const paymentStatus = orderData.paymentStatus || 'pending';
+                    
+                    // Ensure order_status is set to 'pending' for new orders
+                    const orderStatus = 'pending';
+                    
+                    console.log('💾 Saving order to Supabase with:', {
+                        orderId: orderData.orderId,
+                        orderType: orderTypeForDb,
+                        paymentStatus: paymentStatus,
+                        orderStatus: orderStatus
+                    });
                     
                     const { error } = await supabase
                         .from('orders')
@@ -762,17 +778,28 @@
                             takeaway_fee: 550,
                             total: orderData.total,
                             payment_method: orderData.paymentMethod,
-                            payment_status: orderData.paymentStatus || 'pending',
-                            order_status: 'pending',
+                            payment_status: paymentStatus,
+                            order_status: orderStatus,
                             special_instructions: orderData.customer.instructions || null,
                             created_at: new Date().toISOString()
                         }]);
                     
-                    if (error) throw error;
-                    console.log('✅ Order saved to Supabase');
+                    if (error) {
+                        console.error('❌ Supabase insert error:', error);
+                        throw error;
+                    }
+                    
+                    console.log('✅ Order saved to Supabase successfully!');
+                    
+                    // ============================================
+                    // TRIGGER REAL-TIME NOTIFICATION TO POS
+                    // ============================================
+                    // The Supabase real-time listener will automatically pick up the new order
+                    // No need for additional triggers
+                    
                     return true;
                 } catch (error) {
-                    console.error('Failed to save order:', error);
+                    console.error('❌ Failed to save order:', error);
                     return false;
                 }
             }
@@ -1026,8 +1053,10 @@
                         const paymentResult = await payWithPaystack(orderData);
                         
                         if (paymentResult.success) {
-                            // Payment successful and verified - save order
-                            orderData.paymentStatus = 'completed';
+                            // ============================================
+                            // FIX: Payment successful - set correct status
+                            // ============================================
+                            orderData.paymentStatus = 'completed';  // Set to completed
                             orderData.paymentReference = paymentResult.reference;
                             
                             const saved = await saveOrderToSupabase(orderData);
