@@ -426,6 +426,143 @@
         }
 
         /* ============================================ */
+/* RESTAURANT HOURS - ANIMATED */
+/* ============================================ */
+.restaurant-hours {
+    background: linear-gradient(135deg, rgba(255,152,0,0.12), rgba(255,87,34,0.12));
+    border: 2px solid rgba(255,152,0,0.25);
+    border-radius: 16px;
+    padding: 16px 24px;
+    margin: 12px auto 18px;
+    max-width: 520px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: glowPulse 2.5s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.restaurant-hours::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, transparent, rgba(255,152,0,0.05), transparent, rgba(255,87,34,0.05), transparent);
+    animation: spinGlow 8s linear infinite;
+}
+
+@keyframes spinGlow {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes glowPulse {
+    0% { box-shadow: 0 0 15px rgba(255,152,0,0.05), inset 0 0 15px rgba(255,152,0,0.02); }
+    50% { box-shadow: 0 0 35px rgba(255,152,0,0.2), inset 0 0 25px rgba(255,152,0,0.05); }
+    100% { box-shadow: 0 0 15px rgba(255,152,0,0.05), inset 0 0 15px rgba(255,152,0,0.02); }
+}
+
+.restaurant-hours .hours-content {
+    position: relative;
+    z-index: 2;
+}
+
+.restaurant-hours .hours-status {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.restaurant-hours .hours-status .status-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    animation: blinkDot 1.8s ease-in-out infinite;
+}
+
+.restaurant-hours .hours-status .status-dot.open {
+    background: #4caf50;
+    box-shadow: 0 0 20px rgba(76, 175, 80, 0.6);
+}
+
+.restaurant-hours .hours-status .status-dot.closed {
+    background: #e74c3c;
+    box-shadow: 0 0 20px rgba(231, 76, 60, 0.6);
+}
+
+@keyframes blinkDot {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.restaurant-hours .hours-status .status-text {
+    font-size: 1rem;
+}
+
+.restaurant-hours .hours-status .status-text.open {
+    color: #4caf50;
+}
+
+.restaurant-hours .hours-status .status-text.closed {
+    color: #e74c3c;
+}
+
+.restaurant-hours .hours-times {
+    font-size: 0.95rem;
+    color: #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.restaurant-hours .hours-times .day-label {
+    color: #ff9800;
+    font-weight: 600;
+}
+
+.restaurant-hours .hours-times .time-range {
+    color: #fff;
+    font-weight: 500;
+    background: rgba(255,152,0,0.15);
+    padding: 2px 14px;
+    border-radius: 20px;
+}
+
+.restaurant-hours .hours-times .separator {
+    color: #666;
+}
+
+/* Mobile adjustment */
+@media (max-width: 480px) {
+    .restaurant-hours {
+        padding: 12px 16px;
+        max-width: 100%;
+        margin: 10px 0 14px;
+    }
+    .restaurant-hours .hours-status {
+        font-size: 0.95rem;
+        gap: 8px;
+    }
+    .restaurant-hours .hours-times {
+        font-size: 0.8rem;
+        gap: 5px;
+    }
+    .restaurant-hours .hours-times .time-range {
+        padding: 2px 10px;
+    }
+}
+
+        /* ============================================ */
         /* ANIMATED ORDER BUTTON */
         /* ============================================ */
         .order-btn-container {
@@ -1830,6 +1967,20 @@
         <i class="fas fa-sun"></i>
     </button>
 
+    <!-- Restaurant Hours -->
+<div class="restaurant-hours" id="restaurantHours">
+    <div class="hours-content">
+        <div class="hours-status">
+            <span class="status-dot" id="statusDot"></span>
+            <span class="status-text" id="statusText">Loading...</span>
+        </div>
+        <div class="hours-times">
+            <span class="day-label" id="dayLabel">Today</span>
+            <span class="time-range" id="timeRange">10:00am - 9:30pm</span>
+        </div>
+    </div>
+</div>
+
     <!-- Background Animation -->
     <div class="background-container">
         <div class="background-slide active" id="bg1"></div>
@@ -2277,6 +2428,70 @@
             currentBg = (currentBg + 1) % backgrounds.length;
             backgrounds[currentBg].classList.add('active');
         }, 8000);
+
+        // ============================================
+// RESTAURANT HOURS FUNCTION
+// ============================================
+function updateRestaurantHours() {
+    const now = new Date();
+    const day = now.getDay(); // 0 = Sunday, 1 = Monday, ...
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const currentTime = hours + minutes / 60;
+    
+    let openTime, closeTime, dayName;
+    
+    if (day === 0) {
+        // Sunday
+        openTime = 15; // 3:00pm
+        closeTime = 21.5; // 9:30pm
+        dayName = 'Sunday';
+    } else {
+        // Monday - Saturday
+        openTime = 10; // 10:00am
+        closeTime = 21.5; // 9:30pm
+        const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        dayName = dayNames[day - 1];
+    }
+    
+    const isOpen = currentTime >= openTime && currentTime < closeTime;
+    
+    const statusDot = document.getElementById('statusDot');
+    const statusText = document.getElementById('statusText');
+    const dayLabel = document.getElementById('dayLabel');
+    const timeRange = document.getElementById('timeRange');
+    
+    if (statusDot) {
+        statusDot.className = `status-dot ${isOpen ? 'open' : 'closed'}`;
+    }
+    
+    if (statusText) {
+        statusText.textContent = isOpen ? '🟢 OPEN NOW' : '🔴 CLOSED';
+        statusText.className = `status-text ${isOpen ? 'open' : 'closed'}`;
+    }
+    
+    if (dayLabel) {
+        dayLabel.textContent = dayName;
+    }
+    
+    if (timeRange) {
+        const formatTime = (hour) => {
+            const h = Math.floor(hour);
+            const m = Math.round((hour - h) * 60);
+            const ampm = h >= 12 ? 'pm' : 'am';
+            const h12 = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+            return `${h12}:${String(m).padStart(2, '0')}${ampm}`;
+        };
+        timeRange.textContent = `${formatTime(openTime)} - ${formatTime(closeTime)}`;
+    }
+}
+
+// Update hours on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateRestaurantHours();
+    // Update every minute
+    setInterval(updateRestaurantHours, 60000);
+});
 
         // ============================================
 // PIZZA SWIPER
